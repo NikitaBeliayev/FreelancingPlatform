@@ -1,0 +1,36 @@
+variables:
+  FF_POSIXLY_CORRECT_ESCAPES: "true"
+
+stages:
+  - build
+  - test
+  - cleanup
+
+build_project:
+  stage: build
+  script:
+    - dotnet restore
+    - dotnet build
+  only:
+    - merge_requests
+    - branches
+  tags:
+    - c-sharp-student-lab
+
+unit_tests:
+  stage: test
+  script:
+    - dotnet test
+  only:
+    - merge_requests
+    - branches
+  tags:
+    - c-sharp-student-lab
+
+cleanup:
+  stage: cleanup
+  script:
+    - rm -rf *
+  when: always
+  tags:
+    - c-sharp-student-lab
