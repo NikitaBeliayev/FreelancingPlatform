@@ -1,0 +1,67 @@
+using Application.Abstraction.Data;
+using Application.Users.GetById;
+using Domain.Users;
+using Moq;
+
+namespace ApplicationTests.GetUserByIdQueryHandler;
+
+[TestFixture]
+public class CreateUserQueryHandlerTests
+{
+    [Test]
+    public async Task Handle_WithValidUserId_ShouldReturnUserDTO()
+    {
+        // Arrange
+        var userRepositoryMock = new Mock<IUserRepository>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+
+        var handler = new CreateUserQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object);
+
+        var userId = Guid.NewGuid();
+        var query = new GetUserByIdQuery(userId);
+        
+        string firstName = "John";
+        string lastName = "Doe";
+
+        var user = new User(userId, Name.BuildName(firstName).Value!, Name.BuildName(lastName).Value!);
+        userRepositoryMock.Setup(repo => repo.GetByIdAsync(userId, CancellationToken.None))
+            .ReturnsAsync(user);
+
+        // Act
+        var result = await handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        Assert.IsTrue(result.IsSuccess);
+        Assert.IsNotNull(result.Value);
+        Assert.That(result.Value?.Id, Is.EqualTo(userId));
+        Assert.That(result.Value?.FirstName, Is.EqualTo(firstName));
+        Assert.That(result.Value?.LastName, Is.EqualTo(lastName));
+
+        userRepositoryMock.Verify(repo => repo.GetByIdAsync(userId, CancellationToken.None), Times.Once);
+    }
+
+    [Test]
+    public async Task Handle_WithInvalidUserId_ShouldReturnNullUserDTO()
+    {
+        // Arrange
+        var userRepositoryMock = new Mock<IUserRepository>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+
+        var handler = new CreateUserQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object);
+
+        var invalidUserId = Guid.NewGuid();
+        var query = new GetUserByIdQuery(invalidUserId);
+
+        userRepositoryMock.Setup(repo => repo.GetByIdAsync(invalidUserId, CancellationToken.None))
+            .ReturnsAsync((User)null!);
+
+        // Act
+        var result = await handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        Assert.IsTrue(result.IsSuccess);
+        Assert.IsNull(result.Value);
+
+        userRepositoryMock.Verify(repo => repo.GetByIdAsync(invalidUserId, CancellationToken.None), Times.Once);
+    }
+}

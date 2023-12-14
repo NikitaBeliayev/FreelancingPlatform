@@ -1,4 +1,5 @@
 ﻿using Application.Users;
+using Application.Users.Create;
 using Application.Users.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
