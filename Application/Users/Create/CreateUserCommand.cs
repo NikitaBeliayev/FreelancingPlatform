@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Users.GetById
+namespace Application.Users.Create
 {
-    public record CreateUserCommand(UserDTO user): ICommand<UserDTO>
+    public record CreateUserCommand(UserDTO User): ICommand<UserDTO>
     {
     }
 }

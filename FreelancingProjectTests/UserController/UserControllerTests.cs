@@ -1,28 +1,28 @@
-using FreelancingPlatform.Controllers;
 using Shared;
 using Application.Users;
+using Application.Users.Create;
 using Application.Users.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace Tests;
+namespace Tests.UserController;
 
 [TestFixture]
 public class UserControllerTests
 {
-    private UserController _userController = null!;
+    private FreelancingPlatform.Controllers.UserController _userController = null!;
     private Mock<ISender> _senderMock = null!;
 
     [SetUp]
     public void Setup()
     {
         _senderMock = new Mock<ISender>();
-        _userController = new UserController(_senderMock.Object);
+        _userController = new FreelancingPlatform.Controllers.UserController(_senderMock.Object);
     }
 
     [Test]
-    public async Task GetReturnsOkResultWhenUserExists()
+    public async Task Get_ReturnsOkResult_WhenUserExists()
     {
         // Arrange
         var userId = Guid.NewGuid();
@@ -41,7 +41,7 @@ public class UserControllerTests
     }
 
     [Test]
-    public async Task GetReturnsBadRequestWhenUserDoesNotExist()
+    public async Task Get_ReturnsBadRequest_WhenUserDoesNotExist()
     {
         // Arrange
         var userId = Guid.NewGuid();
@@ -63,7 +63,7 @@ public class UserControllerTests
     }
 
     [Test]
-    public async Task PostReturnsOkResultWhenUserIsCreatedSuccessfully()
+    public async Task Post_ReturnsOkResult_WhenUserIsCreatedSuccessfully()
     {
         // Arrange
         var userDto = new UserDTO();
@@ -81,7 +81,7 @@ public class UserControllerTests
     }
 
     [Test]
-    public async Task PostReturnsBadRequestWhenUserCreationFails()
+    public async Task Post_ReturnsBadRequest_WhenUserCreationFails()
     {
         // Arrange
         var userDto = new UserDTO();

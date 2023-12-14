@@ -9,14 +9,14 @@ using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace Application.Users.GetById
+namespace Application.Users.Create
 {
-    public class CreateUserCommandHundler : ICommandHundler<CreateUserCommand, UserDTO>
+    public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDTO>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateUserCommandHundler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+        public CreateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
@@ -24,11 +24,11 @@ namespace Application.Users.GetById
 
         public async Task<Result<UserDTO>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
         {
-            var firstName = Name.BuildName(command.user.FirstName);
+            var firstName = Name.BuildName(command.User.FirstName);
             if (!firstName.IsSuccess)
                 return Result<UserDTO>.Failure(null, firstName.Error);
 
-            var lastName = Name.BuildName(command.user.LastName);
+            var lastName = Name.BuildName(command.User.LastName);
             if (!lastName.IsSuccess)
                 return Result<UserDTO>.Failure(null, lastName.Error);
 

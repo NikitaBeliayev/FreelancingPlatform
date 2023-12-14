@@ -11,12 +11,12 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Application.Users.GetById
 {
-    public class CreateUserQueryHundler : IQueryHundler<GetUserByIdQuery, UserDTO>
+    public class CreateUserQueryHandler : IQueryHundler<GetUserByIdQuery, UserDTO>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateUserQueryHundler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+        public CreateUserQueryHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
