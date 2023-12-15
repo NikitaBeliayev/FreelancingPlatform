@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Persistence;
 using Persistence.Repositories;
 using Scrutor;
+using Serilog;
 using System.Reflection;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -43,6 +44,8 @@ builder
     .Services.AddMediatR(
         x => x.RegisterServicesFromAssembly(Application.MetaData.AssemblyInfo.Assembly));
 
+builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,6 +60,8 @@ using (var serviceScope = app.Services.CreateScope())
     var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
     appDbContext.Database.Migrate();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

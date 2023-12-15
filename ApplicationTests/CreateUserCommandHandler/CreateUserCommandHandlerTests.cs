@@ -1,7 +1,9 @@
 using Application.Abstraction.Data;
 using Application.Users;
 using Application.Users.Create;
+using Application.Users.GetById;
 using Domain.Users;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace ApplicationTests.CreateUserCommandHandler;
@@ -18,8 +20,9 @@ public class CreateUserCommandHandlerTests
         string lastName = "Doe";
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var logger = new Mock<ILogger<CreateUserQueryHandler>>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object);
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object);
 
         var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
 
@@ -48,8 +51,9 @@ public class CreateUserCommandHandlerTests
         string lastName = "Doe";
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var logger = new Mock<ILogger<CreateUserQueryHandler>>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object);
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object);
 
         var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
 
@@ -75,8 +79,9 @@ public class CreateUserCommandHandlerTests
         string lastName = "Doe";
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var logger = new Mock<ILogger<CreateUserQueryHandler>>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object);
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object);
 
         var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
         
