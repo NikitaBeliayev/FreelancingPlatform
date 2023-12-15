@@ -4,7 +4,6 @@ variables:
 stages:
   - build
   - test
-  - cleanup
 
 build_project:
   stage: build
@@ -15,7 +14,7 @@ build_project:
     - merge_requests
     - branches
   tags:
-    - c-sharp-student-lab
+    - runner-docker
 
 unit_tests:
   stage: test
@@ -25,12 +24,4 @@ unit_tests:
     - merge_requests
     - branches
   tags:
-    - c-sharp-student-lab
-
-cleanup:
-  stage: cleanup
-  script:
-    - rm -rf *
-  when: always
-  tags:
-    - c-sharp-student-lab
+    - runner-docker
