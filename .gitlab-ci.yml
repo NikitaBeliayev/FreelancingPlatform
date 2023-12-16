@@ -1,4 +1,9 @@
+
+services:
+  - docker:dind
+
 variables:
+  DOCKER_DRIVER: overlay
   FF_POSIXLY_CORRECT_ESCAPES: "true"
 
 stages:
