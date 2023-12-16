@@ -1,6 +1,6 @@
 
 services:
-  - docker:19.03.12-dind
+  - docker:20.10.17-dind
 
 
 variables:
@@ -42,7 +42,7 @@ build_and_push_to_registry:
     - docker login -u $AZURE_REGISTRY_USER -p $AZURE_REGISTRY_PASSWORD $AZURE_REGISTRY_SERVER
     - docker build -t $AZURE_REGISTRY_SERVER/freelancingplatform:latest .
     - docker push $AZURE_REGISTRY_SERVER/freelancingplatform:latest
-  image: docker:19.03.12
+  image: docker:20.10.17
   only:
     - master
   tags:
