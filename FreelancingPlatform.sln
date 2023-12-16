@@ -13,23 +13,31 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{45BB53E3-B12F-411B-B3CB-033176A08CBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{5129062A-FE40-4BBC-B026-933F038D78E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{5129062A-FE40-4BBC-B026-933F038D78E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{0968E065-927C-438A-A62E-740489F25110}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{0968E065-927C-438A-A62E-740489F25110}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{B236CF3A-EC87-4D06-8C1C-8A1D4C6F87D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{B236CF3A-EC87-4D06-8C1C-8A1D4C6F87D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreelancingProjectTests", "FreelancingProjectTests\FreelancingProjectTests.csproj", "{509DA5E4-0434-48F4-A6C2-1A60F6AB9F78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreelancingProjectTests", "FreelancingProjectTests\FreelancingProjectTests.csproj", "{509DA5E4-0434-48F4-A6C2-1A60F6AB9F78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationTests", "ApplicationTests\ApplicationTests.csproj", "{0438731B-0F13-461B-AC7C-726889692057}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationTests", "ApplicationTests\ApplicationTests.csproj", "{0438731B-0F13-461B-AC7C-726889692057}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainTests", "DomainTests\DomainTests.csproj", "{65D74377-9D43-417B-92F7-E041874D2DD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainTests", "DomainTests\DomainTests.csproj", "{65D74377-9D43-417B-92F7-E041874D2DD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureTests", "InfrastructureTests\InfrastructureTests.csproj", "{B548205A-1827-4B16-8A63-BA68D92583B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfrastructureTests", "InfrastructureTests\InfrastructureTests.csproj", "{B548205A-1827-4B16-8A63-BA68D92583B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedTests", "SharedTests\SharedTests.csproj", "{8503261D-156E-4DA0-AE59-8D66E3ACF250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedTests", "SharedTests\SharedTests.csproj", "{8503261D-156E-4DA0-AE59-8D66E3ACF250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistenceTests", "PersistenceTests\PersistenceTests.csproj", "{368E8D30-5C31-47F4-89B3-C25F8896DAFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersistenceTests", "PersistenceTests\PersistenceTests.csproj", "{368E8D30-5C31-47F4-89B3-C25F8896DAFD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C356729-A034-48EF-933D-864367489856}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		.gitlab-ci.yml = .gitlab-ci.yml
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
