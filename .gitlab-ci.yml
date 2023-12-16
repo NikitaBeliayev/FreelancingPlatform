@@ -4,6 +4,7 @@ variables:
 stages:
   - build
   - test
+  - push
 
 build_project:
   stage: build
@@ -23,5 +24,16 @@ unit_tests:
   only:
     - merge_requests
     - branches
+  tags:
+    - runner-docker
+
+build_and_push_to_registry:
+  stage: push
+  script:
+    - docker login -u $AZURE_REGISTRY_USER -p $AZURE_REGISTRY_PASSWORD $AZURE_REGISTRY_SERVER
+    - docker build -t $AZURE_REGISTRY_SERVER/freelancingplatform:latest .
+    - docker push $AZURE_REGISTRY_SERVER/freelancingplatform:latest
+  only:
+    - master
   tags:
     - runner-docker
