@@ -1,3 +1,5 @@
+using NUnit.Framework.Legacy;
+
 namespace DomainTests.Name;
 
 [TestFixture]
@@ -13,8 +15,8 @@ public class NameTests
         var result = Domain.Users.Name.BuildName(validValue);
 
         // Assert
-        Assert.IsTrue(result.IsSuccess);
-        Assert.IsNotNull(result.Value);
+        ClassicAssert.IsTrue(result.IsSuccess);
+        ClassicAssert.IsNotNull(result.Value);
         Assert.That(result.Value?.Value, Is.EqualTo(validValue));
     }
 
@@ -28,8 +30,8 @@ public class NameTests
         var result = Domain.Users.Name.BuildName(invalidValue);
 
         // Assert
-        Assert.IsFalse(result.IsSuccess);
-        Assert.IsNull(result.Value);
+        ClassicAssert.IsFalse(result.IsSuccess);
+        ClassicAssert.IsNull(result.Value);
         Assert.That(result.Error, Is.EqualTo(Domain.Users.NameErrors.NullOrEmpty));
     }
 }

@@ -5,6 +5,7 @@ using Application.Users.GetById;
 using Domain.Users;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NUnit.Framework.Legacy;
 
 namespace ApplicationTests.CreateUserCommandHandler;
 
@@ -33,8 +34,8 @@ public class CreateUserCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        Assert.IsTrue(result.IsSuccess);
-        Assert.IsNotNull(result.Value);
+        ClassicAssert.IsTrue(result.IsSuccess);
+        ClassicAssert.IsNotNull(result.Value);
         Assert.That(result.Value!.FirstName, Is.EqualTo(firstName));
         Assert.That(result.Value!.LastName, Is.EqualTo(lastName));
 
@@ -61,9 +62,9 @@ public class CreateUserCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        Assert.IsFalse(result.IsSuccess);
-        Assert.IsNull(result.Value);
-        Assert.IsNotNull(result.Error);
+        ClassicAssert.IsFalse(result.IsSuccess);
+        ClassicAssert.IsNull(result.Value);
+        ClassicAssert.IsNotNull(result.Error);
         Assert.That(result.Error, Is.EqualTo(NameErrors.NullOrEmpty));
 
         userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>()), Times.Never);
@@ -84,14 +85,14 @@ public class CreateUserCommandHandlerTests
         var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object);
 
         var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
-        
+
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        Assert.IsFalse(result.IsSuccess);
-        Assert.IsNull(result.Value);
-        Assert.IsNotNull(result.Error);
+        ClassicAssert.IsFalse(result.IsSuccess);
+        ClassicAssert.IsNull(result.Value);
+        ClassicAssert.IsNotNull(result.Error);
         Assert.That(result.Error, Is.EqualTo(NameErrors.NullOrEmpty));
 
         userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>()), Times.Never);

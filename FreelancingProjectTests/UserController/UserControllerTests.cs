@@ -1,10 +1,11 @@
-using Shared;
 using Application.Users;
 using Application.Users.Create;
 using Application.Users.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using NUnit.Framework.Legacy;
+using Shared;
 
 namespace Tests.UserController;
 
@@ -35,7 +36,7 @@ public class UserControllerTests
         var result = await _userController.Get(userId, CancellationToken.None) as ObjectResult;
 
         // Assert
-        Assert.NotNull(result);
+        ClassicAssert.NotNull(result);
         Assert.That(result?.StatusCode, Is.EqualTo(200));
         Assert.That(result?.Value, Is.EqualTo(userDto));
     }
@@ -55,8 +56,8 @@ public class UserControllerTests
         var receivedError = result?.Value as Error;
 
         // Assert
-        Assert.NotNull(result);
-        Assert.NotNull(receivedError);
+        ClassicAssert.NotNull(result);
+        ClassicAssert.NotNull(receivedError);
         Assert.That(result?.StatusCode, Is.EqualTo(400));
         Assert.That(receivedError?.msg, Is.EqualTo("User not found"));
         Assert.That(receivedError?.Code, Is.EqualTo("400"));
@@ -75,7 +76,7 @@ public class UserControllerTests
         var result = await _userController.Post(userDto, CancellationToken.None) as ObjectResult;
 
         // Assert
-        Assert.NotNull(result);
+        ClassicAssert.NotNull(result);
         Assert.That(result?.StatusCode, Is.EqualTo(200));
         Assert.That(result?.Value, Is.EqualTo(userDto));
     }
@@ -95,8 +96,8 @@ public class UserControllerTests
         var receivedError = result?.Value as Error;
 
         // Assert
-        Assert.NotNull(result);
-        Assert.NotNull(receivedError);
+        ClassicAssert.NotNull(result);
+        ClassicAssert.NotNull(receivedError);
         Assert.That(result?.StatusCode, Is.EqualTo(400));
         Assert.That(receivedError?.msg, Is.EqualTo("User creation failed"));
         Assert.That(receivedError?.Code, Is.EqualTo("400"));
