@@ -2,6 +2,7 @@ using Application.Abstraction.Data;
 using Application.Users.GetById;
 using Domain.Users;
 using Moq;
+using NUnit.Framework.Legacy;
 
 namespace ApplicationTests.GetUserByIdQueryHandler;
 
@@ -19,7 +20,7 @@ public class CreateUserQueryHandlerTests
 
         var userId = Guid.NewGuid();
         var query = new GetUserByIdQuery(userId);
-        
+
         string firstName = "John";
         string lastName = "Doe";
 
@@ -31,8 +32,8 @@ public class CreateUserQueryHandlerTests
         var result = await handler.Handle(query, CancellationToken.None);
 
         // Assert
-        Assert.IsTrue(result.IsSuccess);
-        Assert.IsNotNull(result.Value);
+        ClassicAssert.IsTrue(result.IsSuccess);
+        ClassicAssert.IsNotNull(result.Value);
         Assert.That(result.Value?.Id, Is.EqualTo(userId));
         Assert.That(result.Value?.FirstName, Is.EqualTo(firstName));
         Assert.That(result.Value?.LastName, Is.EqualTo(lastName));
@@ -59,8 +60,8 @@ public class CreateUserQueryHandlerTests
         var result = await handler.Handle(query, CancellationToken.None);
 
         // Assert
-        Assert.IsTrue(result.IsSuccess);
-        Assert.IsNull(result.Value);
+        ClassicAssert.IsTrue(result.IsSuccess);
+        ClassicAssert.IsNull(result.Value);
 
         userRepositoryMock.Verify(repo => repo.GetByIdAsync(invalidUserId, CancellationToken.None), Times.Once);
     }
