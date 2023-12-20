@@ -49,12 +49,8 @@ builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Confi
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 using (var serviceScope = app.Services.CreateScope())
 {
@@ -63,8 +59,6 @@ using (var serviceScope = app.Services.CreateScope())
 }
 
 app.UseSerilogRequestLogging();
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
