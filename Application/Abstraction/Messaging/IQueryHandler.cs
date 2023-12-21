@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Abstraction.Messaging
 {
-    public interface IQueryHundler<TQuery, TResult>: IRequestHandler<TQuery, Result<TResult>>
+    public interface IQueryHandler<TQuery, TResult>: IRequestHandler<TQuery, Result<TResult>>
         where TQuery : IQuery<TResult>
     {
     }
