@@ -11,7 +11,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Application.Users.GetById
 {
-    public class CreateUserQueryHandler : IQueryHundler<GetUserByIdQuery, UserDTO>
+    public class CreateUserQueryHandler : IQueryHandler<GetUserByIdQuery, UserDTO>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
