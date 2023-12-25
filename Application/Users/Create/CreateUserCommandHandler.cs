@@ -1,6 +1,7 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using Application.Users.GetById;
+using AutoMapper;
 using Domain.Users;
 using Microsoft.Extensions.Logging;
 using Shared;
@@ -18,12 +19,14 @@ namespace Application.Users.Create
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CreateUserQueryHandler> _logger;
+        private readonly IMapper _mapper;
 
-        public CreateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserQueryHandler> logger)
+        public CreateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserQueryHandler> logger, IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<Result<UserDTO>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
@@ -53,7 +56,7 @@ namespace Application.Users.Create
             if (result != null)
             {
                 _logger.LogInformation($"User with Id = {command.User.Id} created successfully");
-                return Result<UserDTO>.Success(new UserDTO(result.Id, result.FirstName.Value, result.LastName.Value));
+                return Result<UserDTO>.Success(_mapper.Map<UserDTO>(result));
             }
 
             _logger.LogError("User creation failed, something wrong");
