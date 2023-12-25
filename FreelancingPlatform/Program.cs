@@ -12,6 +12,8 @@ using System.Reflection;
 using FreelancingPlatform.OptionsConfiguration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using static System.Net.Mime.MediaTypeNames;
+using AutoMapper;
+using Infrastructure.Automapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https:git //aka.ms/aspnetcore/swashbuckle

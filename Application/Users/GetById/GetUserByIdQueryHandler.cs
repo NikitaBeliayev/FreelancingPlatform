@@ -1,5 +1,6 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
+using AutoMapper;
 using Domain.Users;
 using Shared;
 using System;
@@ -15,11 +16,13 @@ namespace Application.Users.GetById
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public CreateUserQueryHandler(IUserRepository userRepository, IUnitOfWork unitOfWork)
+        public CreateUserQueryHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task<Result<UserDTO>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
@@ -27,7 +30,7 @@ namespace Application.Users.GetById
             var result = await _userRepository.GetByIdAsync(query.UserId);
 
             return result != null
-                ? Result<UserDTO>.Success(new UserDTO(result.Id, result.FirstName.Value, result.LastName.Value))
+                ? Result<UserDTO>.Success(_mapper.Map<UserDTO>(result))
                 : Result<UserDTO>.Success(null);
         }
     }

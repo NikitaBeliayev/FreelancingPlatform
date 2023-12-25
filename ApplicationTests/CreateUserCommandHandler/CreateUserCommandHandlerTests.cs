@@ -2,7 +2,9 @@ using Application.Abstraction.Data;
 using Application.Users;
 using Application.Users.Create;
 using Application.Users.GetById;
+using AutoMapper;
 using Domain.Users;
+using Infrastructure.Automapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Legacy;
@@ -23,7 +25,11 @@ public class CreateUserCommandHandlerTests
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         var logger = new Mock<ILogger<CreateUserQueryHandler>>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object);
+        var myProfile = new AutoMapperProfiles.AutoMapperProfile();
+        var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+        var _mapper = new Mapper(configuration);
+
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
         var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
 
@@ -54,7 +60,11 @@ public class CreateUserCommandHandlerTests
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         var logger = new Mock<ILogger<CreateUserQueryHandler>>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object);
+        var myProfile = new AutoMapperProfiles.AutoMapperProfile();
+        var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+        var _mapper = new Mapper(configuration);
+
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
         var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
 
@@ -82,7 +92,11 @@ public class CreateUserCommandHandlerTests
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         var logger = new Mock<ILogger<CreateUserQueryHandler>>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object);
+        var myProfile = new AutoMapperProfiles.AutoMapperProfile();
+        var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+        var _mapper = new Mapper(configuration);
+
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
         var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
 

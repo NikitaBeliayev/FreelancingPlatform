@@ -1,6 +1,8 @@
 using Application.Abstraction.Data;
 using Application.Users.GetById;
+using AutoMapper;
 using Domain.Users;
+using Infrastructure.Automapper;
 using Moq;
 using NUnit.Framework.Legacy;
 
@@ -16,7 +18,12 @@ public class CreateUserQueryHandlerTests
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
 
-        var handler = new CreateUserQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object);
+        var myProfile = new AutoMapperProfiles.AutoMapperProfile();
+        var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+        var _mapper = new Mapper(configuration);
+
+
+        var handler = new CreateUserQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object, _mapper);
 
         var userId = Guid.NewGuid();
         var query = new GetUserByIdQuery(userId);
@@ -48,7 +55,11 @@ public class CreateUserQueryHandlerTests
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
 
-        var handler = new CreateUserQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object);
+        var myProfile = new AutoMapperProfiles.AutoMapperProfile();
+        var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
+        var _mapper = new Mapper(configuration);
+
+        var handler = new CreateUserQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object, _mapper);
 
         var invalidUserId = Guid.NewGuid();
         var query = new GetUserByIdQuery(invalidUserId);
