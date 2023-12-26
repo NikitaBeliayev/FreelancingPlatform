@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using static System.Net.Mime.MediaTypeNames;
 using AutoMapper;
 using Infrastructure.Automapper;
+using FreelancingPlatform.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,8 @@ builder
 builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
+
+app.UseGlobalExceptionMiddleware();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
