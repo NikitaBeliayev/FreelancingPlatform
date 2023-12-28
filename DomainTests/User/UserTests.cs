@@ -14,9 +14,12 @@ public class UserTests
         // Act
         var user = new Domain.Users.User(userId, firstName, lastName);
 
-        // Assert
-        Assert.That(user.Id, Is.EqualTo(userId));
-        Assert.That(user.FirstName, Is.EqualTo(firstName));
-        Assert.That(user.LastName, Is.EqualTo(lastName));
-    }
+        Assert.Multiple(() =>
+        {
+            // Assert
+            Assert.That(user.Id, Is.EqualTo(userId));
+            Assert.That(user.FirstName, Is.EqualTo(firstName));
+            Assert.That(user.LastName, Is.EqualTo(lastName));
+        });
+	}
 }

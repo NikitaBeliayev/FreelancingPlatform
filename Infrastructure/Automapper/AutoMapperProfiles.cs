@@ -16,7 +16,7 @@ namespace Infrastructure.Automapper
             public AutoMapperProfile()
             {
                 CreateMap<Name, string>().ConvertUsing(new NameConverter());
-                CreateMap<User, UserDTO>().ReverseMap();
+                CreateMap<User, UserDto>().ReverseMap();
 
             }
         }

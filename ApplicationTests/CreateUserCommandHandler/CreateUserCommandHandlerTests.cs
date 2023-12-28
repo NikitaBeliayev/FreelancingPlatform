@@ -31,7 +31,7 @@ public class CreateUserCommandHandlerTests
 
         var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
-        var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
+        var command = new CreateUserCommand(new UserDto(userGuid, firstName, lastName));
 
         userRepositoryMock.Setup(repo => repo.CreateAsync(It.IsAny<User>()))
             .ReturnsAsync(new User(Guid.NewGuid(), Name.BuildName(firstName).Value!, Name.BuildName(lastName).Value!));
@@ -42,8 +42,11 @@ public class CreateUserCommandHandlerTests
         // Assert
         ClassicAssert.IsTrue(result.IsSuccess);
         ClassicAssert.IsNotNull(result.Value);
-        Assert.That(result.Value!.FirstName, Is.EqualTo(firstName));
-        Assert.That(result.Value!.LastName, Is.EqualTo(lastName));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Value!.FirstName, Is.EqualTo(firstName));
+            Assert.That(result.Value!.LastName, Is.EqualTo(lastName));
+        });
 
         userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>()), Times.Once);
         unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -66,7 +69,7 @@ public class CreateUserCommandHandlerTests
 
         var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
-        var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
+        var command = new CreateUserCommand(new UserDto(userGuid, firstName, lastName));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -86,8 +89,8 @@ public class CreateUserCommandHandlerTests
     {
         // Arrange
         var userGuid = Guid.NewGuid();
-        string firstName = null!;
-        string lastName = "Doe";
+        string firstName = "Doe";
+        string lastName = null!;
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
         var logger = new Mock<ILogger<CreateUserQueryHandler>>();
@@ -98,7 +101,7 @@ public class CreateUserCommandHandlerTests
 
         var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
-        var command = new CreateUserCommand(new UserDTO(userGuid, firstName, lastName));
+        var command = new CreateUserCommand(new UserDto(userGuid, firstName, lastName));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);

@@ -25,7 +25,7 @@ namespace Persistence.Repositories
 
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _context.Set<User>().SingleOrDefaultAsync(x => x.Id == id);
+            return await _context.Set<User>().SingleOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
         }
     }
 }

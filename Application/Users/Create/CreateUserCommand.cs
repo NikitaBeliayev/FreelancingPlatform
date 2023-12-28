@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Users.Create
 {
-    public record CreateUserCommand(UserDTO User): ICommand<UserDTO>
+    public record CreateUserCommand(UserDto User): ICommand<UserDto>
     {
     }
 }
