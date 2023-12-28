@@ -1,16 +1,14 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
+using Application.Helpers;
 using Application.Users.GetById;
 using AutoMapper;
 using Domain.Users;
 using Microsoft.Extensions.Logging;
 using Shared;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Application.Users.Create
 {
@@ -18,10 +16,10 @@ namespace Application.Users.Create
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<CreateUserQueryHandler> _logger;
+        private readonly ILogger<CreateUserCommandHandler> _logger;
         private readonly IMapper _mapper;
 
-        public CreateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserQueryHandler> logger, IMapper mapper)
+        public CreateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserCommandHandler> logger, IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
@@ -33,34 +31,48 @@ namespace Application.Users.Create
         {
             _logger.LogInformation("User creation has been requested");
 
+            var email = EmailAddress.BuildEmail(command.User.EmailAddress);
+            if (!email.IsSuccess)
+            {
+                return ResponseHelper.LogAndReturnError<UserDto>("Invalid email", email.Error);
+            }
+
             var firstName = Name.BuildName(command.User.FirstName);
             if (!firstName.IsSuccess)
             {
-                _logger.LogError("User creation failed, invalid firstname - {ErrorMessage}", firstName.Error.msg);
-                return Result<UserDto>.Failure(null, firstName.Error);
+                return ResponseHelper.LogAndReturnError<UserDto>("Invalid firstname", firstName.Error);
             }
 
             var lastName = Name.BuildName(command.User.LastName);
             if (!lastName.IsSuccess)
             {
-                _logger.LogError("User creation failed, invalid lastname - {ErrorMessage}", lastName.Error.msg);
-                return Result<UserDto>.Failure(null, lastName.Error);
+                return ResponseHelper.LogAndReturnError<UserDto>("Invalid lastname", lastName.Error);
             }
 
-            User newUser = new(Guid.NewGuid(), firstName.Value!, lastName.Value!);
+            var password = Password.BuildPassword(command.User.Password);
+            if (!password.IsSuccess)
+            {
+                return ResponseHelper.LogAndReturnError<UserDto>("Invalid password", password.Error);
+            }
+
+            User newUser = new(
+                Guid.NewGuid(),
+                email.Value!,
+                firstName.Value!,
+                lastName.Value!,
+                password.Value!
+            );
+
             var result = await _userRepository.CreateAsync(newUser);
-
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-
 
             if (result != null)
             {
-                _logger.LogInformation("User with Id = {UserId} created successfully", command.User.Id);
+                _logger.LogInformation("User created successfully: Id = {UserId}", result.Id);
                 return Result<UserDto>.Success(_mapper.Map<UserDto>(result));
             }
 
-            _logger.LogError("User creation failed, something wrong");
-            return Result<UserDto>.Failure(null, new Error("Users.CreateUserCommandHundler", "Something wrong"));
+            return ResponseHelper.LogAndReturnError<UserDto>("User creation failed, something wrong", new Error("Users.CreateUserCommandHandler", "Something wrong"));
         }
     }
 }

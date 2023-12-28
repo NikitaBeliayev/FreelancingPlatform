@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Legacy;
 
-namespace ApplicationTests.CreateUserCommandHandler;
+namespace ApplicationTests.CreateUserCommandHandlerTest;
 
 [TestFixture]
 public class CreateUserCommandHandlerTests
@@ -19,22 +19,25 @@ public class CreateUserCommandHandlerTests
     {
         // Arrange
         var userGuid = Guid.NewGuid();
+        string email = "john.doe@example.com";
         string firstName = "John";
         string lastName = "Doe";
+        string password = "epasswoR!d1";
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
-        var logger = new Mock<ILogger<CreateUserQueryHandler>>();
-
+        var logger = new Mock<ILogger<CreateUserCommandHandler>>();
         var myProfile = new AutoMapperProfiles.AutoMapperProfile();
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
         var _mapper = new Mapper(configuration);
 
         var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
-        var command = new CreateUserCommand(new UserDto(userGuid, firstName, lastName));
+        var command = new CreateUserCommand(new UserDto(userGuid, email, firstName, lastName, password));
 
         userRepositoryMock.Setup(repo => repo.CreateAsync(It.IsAny<User>()))
-            .ReturnsAsync(new User(Guid.NewGuid(), Name.BuildName(firstName).Value!, Name.BuildName(lastName).Value!));
+            .ReturnsAsync(new User(userGuid, EmailAddress.BuildEmail(email).Value!,
+                                   Name.BuildName(firstName).Value!, Name.BuildName(lastName).Value!,
+                                   Password.BuildPassword(password).Value!));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -46,6 +49,8 @@ public class CreateUserCommandHandlerTests
         {
             Assert.That(result.Value!.FirstName, Is.EqualTo(firstName));
             Assert.That(result.Value!.LastName, Is.EqualTo(lastName));
+            Assert.That(result.Value!.EmailAddress, Is.EqualTo(email));
+            Assert.That(result.Value!.Password, Is.EqualTo(password));
         });
 
         userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>()), Times.Once);
@@ -57,19 +62,20 @@ public class CreateUserCommandHandlerTests
     {
         // Arrange
         var userGuid = Guid.NewGuid();
+        string email = "john.doe@example.com";
         string firstName = null!;
         string lastName = "Doe";
+        string password = "epasswoR!d1";
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
-        var logger = new Mock<ILogger<CreateUserQueryHandler>>();
-
+        var logger = new Mock<ILogger<CreateUserCommandHandler>>();
         var myProfile = new AutoMapperProfiles.AutoMapperProfile();
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
         var _mapper = new Mapper(configuration);
 
         var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
-        var command = new CreateUserCommand(new UserDto(userGuid, firstName, lastName));
+        var command = new CreateUserCommand(new UserDto(userGuid, email, firstName, lastName, password));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
@@ -89,19 +95,20 @@ public class CreateUserCommandHandlerTests
     {
         // Arrange
         var userGuid = Guid.NewGuid();
-        string firstName = "Doe";
-        string lastName = null!;
+        string email = "john.doe@example.com";
+        string firstName = null!;
+        string lastName = "Doe";
+        string password = "epasswoR!d1";
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();
-        var logger = new Mock<ILogger<CreateUserQueryHandler>>();
-
+        var logger = new Mock<ILogger<CreateUserCommandHandler>>();
         var myProfile = new AutoMapperProfiles.AutoMapperProfile();
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
         var _mapper = new Mapper(configuration);
 
         var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
 
-        var command = new CreateUserCommand(new UserDto(userGuid, firstName, lastName));
+        var command = new CreateUserCommand(new UserDto(userGuid, email, firstName, lastName, password));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);
