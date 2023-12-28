@@ -9,12 +9,17 @@ namespace Domain.Users
 {
     public class User : Entity
     {
+        public EmailAddress Email { get; set; }
         public Name FirstName { get; set; }
         public Name LastName { get; set; }
-        public User(Guid id, Name firstName, Name lastName) : base(id)
+        public Password Password { get; set; }
+
+        public User(Guid id, EmailAddress email, Name firstName, Name lastName, Password password) : base(id)
         {
+            Email = email;
             FirstName = firstName;
             LastName = lastName;
+            Password = password;
         }
     }
 }

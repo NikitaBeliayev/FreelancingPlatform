@@ -23,6 +23,20 @@ namespace Persistence.Configuration
                     value => Name.BuildName(value).Value!
                 )
                 .IsRequired();
+
+            builder.Property(p => p.Email)
+                .HasConversion(
+                    emailAddress => emailAddress.Value,
+                    value => EmailAddress.BuildEmail(value).Value!
+                )
+                .IsRequired();
+
+            builder.Property(p => p.Password)
+                .HasConversion(
+                    password => password.Value,
+                    value => Password.BuildPassword(value).Value!
+                )
+                .IsRequired();
         }
     }
 }
