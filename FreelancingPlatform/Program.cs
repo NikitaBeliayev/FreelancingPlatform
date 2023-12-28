@@ -37,7 +37,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
                     builder.Configuration.GetConnectionString("DefaultConnection"),
                     providerOptions => providerOptions.EnableRetryOnFailure())
             );
-//builder.Services.AddTransient<UserDTO>();
 builder
     .Services
     .Scan(
@@ -49,9 +48,6 @@ builder
         .UsingRegistrationStrategy(RegistrationStrategy.Skip)
         .AsImplementedInterfaces()
         .WithScopedLifetime());
-
-//builder.Services.AddTransient<IUserRepository, UserRepository>();
-//builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 builder
     .Services.AddMediatR(

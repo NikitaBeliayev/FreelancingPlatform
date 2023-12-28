@@ -28,7 +28,7 @@ namespace FreelancingPlatform.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> Post([FromBody]UserDTO user, CancellationToken cancellationToken)
+        public async Task<IActionResult> Post([FromBody]UserDto user, CancellationToken cancellationToken)
         {
             var command = new CreateUserCommand(user);
             var result = await _sender.Send(command, cancellationToken);

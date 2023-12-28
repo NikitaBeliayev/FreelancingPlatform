@@ -27,8 +27,8 @@ public class UserControllerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
-        var userDto = new UserDTO();
-        var queryResult = Result<UserDTO>.Success(userDto);
+        var userDto = new UserDto();
+        var queryResult = Result<UserDto>.Success(userDto);
         _senderMock.Setup(x => x.Send(It.IsAny<GetUserByIdQuery>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(queryResult);
 
@@ -37,9 +37,12 @@ public class UserControllerTests
 
         // Assert
         ClassicAssert.NotNull(result);
-        Assert.That(result?.StatusCode, Is.EqualTo(200));
-        Assert.That(result?.Value, Is.EqualTo(userDto));
-    }
+        Assert.Multiple(() =>
+        {
+            Assert.That(result?.StatusCode, Is.EqualTo(200));
+            Assert.That(result?.Value, Is.EqualTo(userDto));
+        });
+	}
 
     [Test]
     public async Task Get_ReturnsBadRequest_WhenUserDoesNotExist()
@@ -47,7 +50,7 @@ public class UserControllerTests
         // Arrange
         var userId = Guid.NewGuid();
         var expectedError = new Error("400", "User not found");
-        var queryResult = Result<UserDTO>.Failure(null, expectedError);
+        var queryResult = Result<UserDto>.Failure(null, expectedError);
         _senderMock.Setup(x => x.Send(It.IsAny<GetUserByIdQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(queryResult);
 
@@ -58,17 +61,20 @@ public class UserControllerTests
         // Assert
         ClassicAssert.NotNull(result);
         ClassicAssert.NotNull(receivedError);
-        Assert.That(result?.StatusCode, Is.EqualTo(400));
-        Assert.That(receivedError?.msg, Is.EqualTo("User not found"));
-        Assert.That(receivedError?.Code, Is.EqualTo("400"));
-    }
+		Assert.Multiple(() =>
+		{
+			Assert.That(result?.StatusCode, Is.EqualTo(400));
+			Assert.That(receivedError?.msg, Is.EqualTo("User not found"));
+			Assert.That(receivedError?.Code, Is.EqualTo("400"));
+		});
+	}
 
     [Test]
     public async Task Post_ReturnsOkResult_WhenUserIsCreatedSuccessfully()
     {
         // Arrange
-        var userDto = new UserDTO();
-        var commandResult = Result<UserDTO>.Success(userDto);
+        var userDto = new UserDto();
+        var commandResult = Result<UserDto>.Success(userDto);
         _senderMock.Setup(x => x.Send(It.IsAny<CreateUserCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(commandResult);
 
@@ -77,17 +83,20 @@ public class UserControllerTests
 
         // Assert
         ClassicAssert.NotNull(result);
-        Assert.That(result?.StatusCode, Is.EqualTo(200));
-        Assert.That(result?.Value, Is.EqualTo(userDto));
-    }
+        Assert.Multiple(() =>
+		{
+			Assert.That(result?.StatusCode, Is.EqualTo(200));
+			Assert.That(result?.Value, Is.EqualTo(userDto));
+		});
+	}
 
     [Test]
     public async Task Post_ReturnsBadRequest_WhenUserCreationFails()
     {
         // Arrange
-        var userDto = new UserDTO();
+        var userDto = new UserDto();
         var expectedError = new Error("400", "User creation failed");
-        var commandResult = Result<UserDTO>.Failure(null, expectedError);
+        var commandResult = Result<UserDto>.Failure(null, expectedError);
         _senderMock.Setup(x => x.Send(It.IsAny<CreateUserCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(commandResult);
 
@@ -98,8 +107,11 @@ public class UserControllerTests
         // Assert
         ClassicAssert.NotNull(result);
         ClassicAssert.NotNull(receivedError);
-        Assert.That(result?.StatusCode, Is.EqualTo(400));
-        Assert.That(receivedError?.msg, Is.EqualTo("User creation failed"));
-        Assert.That(receivedError?.Code, Is.EqualTo("400"));
-    }
+		Assert.Multiple(() =>
+		{
+			Assert.That(result?.StatusCode, Is.EqualTo(400));
+			Assert.That(receivedError?.msg, Is.EqualTo("User creation failed"));
+			Assert.That(receivedError?.Code, Is.EqualTo("400"));
+		});
+	}
 }

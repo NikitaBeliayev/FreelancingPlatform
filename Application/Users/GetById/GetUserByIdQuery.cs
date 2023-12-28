@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Users.GetById
 {
-    public record GetUserByIdQuery(Guid UserId): IQuery<UserDTO>
+    public record GetUserByIdQuery(Guid UserId): IQuery<UserDto>
     {
     }
 }

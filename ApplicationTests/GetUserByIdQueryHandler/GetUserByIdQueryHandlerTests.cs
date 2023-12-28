@@ -41,9 +41,12 @@ public class CreateUserQueryHandlerTests
         // Assert
         ClassicAssert.IsTrue(result.IsSuccess);
         ClassicAssert.IsNotNull(result.Value);
-        Assert.That(result.Value?.Id, Is.EqualTo(userId));
-        Assert.That(result.Value?.FirstName, Is.EqualTo(firstName));
-        Assert.That(result.Value?.LastName, Is.EqualTo(lastName));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Value?.Id, Is.EqualTo(userId));
+            Assert.That(result.Value?.FirstName, Is.EqualTo(firstName));
+            Assert.That(result.Value?.LastName, Is.EqualTo(lastName));
+        });
 
         userRepositoryMock.Verify(repo => repo.GetByIdAsync(userId, CancellationToken.None), Times.Once);
     }

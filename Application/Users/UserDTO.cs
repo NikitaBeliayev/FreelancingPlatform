@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Application.Users
 {
-    public class UserDTO
+    public class UserDto
     {
         public Guid? Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
 
-        public UserDTO()
+        public UserDto()
         {           
         }
-        public UserDTO(Guid? id, string firstName, string secondName)
+        public UserDto(Guid? id, string firstName, string secondName)
         {
             Id = id;
             FirstName = firstName;

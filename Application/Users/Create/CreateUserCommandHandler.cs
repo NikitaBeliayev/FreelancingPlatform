@@ -14,7 +14,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Application.Users.Create
 {
-    public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDTO>
+    public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDto>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -29,22 +29,22 @@ namespace Application.Users.Create
             _mapper = mapper;
         }
 
-        public async Task<Result<UserDTO>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+        public async Task<Result<UserDto>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
         {
             _logger.LogInformation("User creation has been requested");
 
             var firstName = Name.BuildName(command.User.FirstName);
             if (!firstName.IsSuccess)
             {
-                _logger.LogError($"User creation failed, invalid firstname - {firstName.Error.msg}");
-                return Result<UserDTO>.Failure(null, firstName.Error);
+                _logger.LogError("User creation failed, invalid firstname - {ErrorMessage}", firstName.Error.msg);
+                return Result<UserDto>.Failure(null, firstName.Error);
             }
 
             var lastName = Name.BuildName(command.User.LastName);
             if (!lastName.IsSuccess)
             {
-                _logger.LogError($"User creation failed, invalid lastname - {lastName.Error.msg}");
-                return Result<UserDTO>.Failure(null, lastName.Error);
+                _logger.LogError("User creation failed, invalid lastname - {ErrorMessage}", lastName.Error.msg);
+                return Result<UserDto>.Failure(null, lastName.Error);
             }
 
             User newUser = new(Guid.NewGuid(), firstName.Value!, lastName.Value!);
@@ -55,12 +55,12 @@ namespace Application.Users.Create
 
             if (result != null)
             {
-                _logger.LogInformation($"User with Id = {command.User.Id} created successfully");
-                return Result<UserDTO>.Success(_mapper.Map<UserDTO>(result));
+                _logger.LogInformation("User with Id = {UserId} created successfully", command.User.Id);
+                return Result<UserDto>.Success(_mapper.Map<UserDto>(result));
             }
 
             _logger.LogError("User creation failed, something wrong");
-            return Result<UserDTO>.Failure(null, new Error("Users.CreateUserCommandHundler", "Something wrong"));
+            return Result<UserDto>.Failure(null, new Error("Users.CreateUserCommandHundler", "Something wrong"));
         }
     }
 }

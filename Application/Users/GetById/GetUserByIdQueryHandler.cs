@@ -12,7 +12,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Application.Users.GetById
 {
-    public class CreateUserQueryHandler : IQueryHandler<GetUserByIdQuery, UserDTO>
+    public class CreateUserQueryHandler : IQueryHandler<GetUserByIdQuery, UserDto>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -25,13 +25,13 @@ namespace Application.Users.GetById
             _mapper = mapper;
         }
 
-        public async Task<Result<UserDTO>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<UserDto>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
         {
             var result = await _userRepository.GetByIdAsync(query.UserId);
 
             return result != null
-                ? Result<UserDTO>.Success(_mapper.Map<UserDTO>(result))
-                : Result<UserDTO>.Success(null);
+                ? Result<UserDto>.Success(_mapper.Map<UserDto>(result))
+                : Result<UserDto>.Success(null);
         }
     }
 }
