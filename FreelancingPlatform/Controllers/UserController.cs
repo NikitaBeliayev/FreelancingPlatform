@@ -1,8 +1,10 @@
 ﻿using Application.Users;
 using Application.Users.Create;
 using Application.Users.GetById;
+using FreelancingPlatform.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Shared;
 
 namespace FreelancingPlatform.Controllers
 {
@@ -22,9 +24,8 @@ namespace FreelancingPlatform.Controllers
             var command = new GetUserByIdQuery(id);
             var result = await _sender.Send(command, cancellationToken);
 
-            return result.IsSuccess 
-                ? Ok(result.Value)
-                : BadRequest(result.Error);
+            ObjectResult response = ApiResponse<UserDto>.FromResult(result);
+            return response;
         }
 
         [HttpPost()]
@@ -33,9 +34,8 @@ namespace FreelancingPlatform.Controllers
             var command = new CreateUserCommand(user);
             var result = await _sender.Send(command, cancellationToken);
 
-            return result.IsSuccess
-                ? Ok(result.Value)
-                : BadRequest(result.Error);
+            ObjectResult response = ApiResponse<UserDto>.FromResult(result);
+            return response;
         }
     }
 }

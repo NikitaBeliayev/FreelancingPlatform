@@ -72,7 +72,7 @@ namespace Application.Users.Create
                 return Result<UserDto>.Success(_mapper.Map<UserDto>(result));
             }
 
-            return ResponseHelper.LogAndReturnError<UserDto>("User creation failed, something wrong", new Error("Users.CreateUserCommandHandler", "Something wrong"));
+            return ResponseHelper.LogAndReturnError<UserDto>("User creation failed, something wrong", new Error("Users.CreateUserCommandHandler", "Something wrong", 500));
         }
     }
 }

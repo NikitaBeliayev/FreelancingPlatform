@@ -1,4 +1,4 @@
-﻿using Application.Models;
+﻿using FreelancingPlatform.Models;
 
 namespace FreelancingPlatform.Middleware
 {

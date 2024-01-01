@@ -1,6 +1,8 @@
 using Application.Users;
 using Application.Users.Create;
 using Application.Users.GetById;
+using Domain.Users;
+using FreelancingPlatform.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -34,13 +36,14 @@ public class UserControllerTests
 
         // Act
         var result = await _userController.Get(userId, CancellationToken.None) as ObjectResult;
+        var response = result?.Value as ApiResponse<UserDto>;
 
         // Assert
         ClassicAssert.NotNull(result);
         Assert.Multiple(() =>
         {
             Assert.That(result?.StatusCode, Is.EqualTo(200));
-            Assert.That(result?.Value, Is.EqualTo(userDto));
+            Assert.That(response?.Data, Is.EqualTo(userDto));
         });
 	}
 
@@ -49,23 +52,22 @@ public class UserControllerTests
     {
         // Arrange
         var userId = Guid.NewGuid();
-        var expectedError = new Error("400", "User not found");
+        var expectedError = UserErrors.NotFound(userId);
         var queryResult = Result<UserDto>.Failure(null, expectedError);
         _senderMock.Setup(x => x.Send(It.IsAny<GetUserByIdQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(queryResult);
 
         // Act
         var result = await _userController.Get(userId, CancellationToken.None) as ObjectResult;
-        var receivedError = result?.Value as Error;
+        var response = result?.Value as ApiResponse<UserDto>;
 
         // Assert
         ClassicAssert.NotNull(result);
-        ClassicAssert.NotNull(receivedError);
+        ClassicAssert.NotNull(response);
 		Assert.Multiple(() =>
 		{
-			Assert.That(result?.StatusCode, Is.EqualTo(400));
-			Assert.That(receivedError?.msg, Is.EqualTo("User not found"));
-			Assert.That(receivedError?.Code, Is.EqualTo("400"));
+			Assert.That(result?.StatusCode, Is.EqualTo(expectedError.StatusCode));
+			Assert.That(response?.StatusCode, Is.EqualTo(expectedError.StatusCode));
 		});
 	}
 
@@ -80,13 +82,14 @@ public class UserControllerTests
 
         // Act
         var result = await _userController.Post(userDto, CancellationToken.None) as ObjectResult;
+        var response = result?.Value as ApiResponse<UserDto>;
 
         // Assert
         ClassicAssert.NotNull(result);
         Assert.Multiple(() =>
 		{
 			Assert.That(result?.StatusCode, Is.EqualTo(200));
-			Assert.That(result?.Value, Is.EqualTo(userDto));
+			Assert.That(response?.Data, Is.EqualTo(userDto));
 		});
 	}
 
@@ -95,23 +98,22 @@ public class UserControllerTests
     {
         // Arrange
         var userDto = new UserDto();
-        var expectedError = new Error("400", "User creation failed");
+        var expectedError = new Error("Failed", "User creation failed", 400);
         var commandResult = Result<UserDto>.Failure(null, expectedError);
         _senderMock.Setup(x => x.Send(It.IsAny<CreateUserCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(commandResult);
 
         // Act
         var result = await _userController.Post(userDto, CancellationToken.None) as ObjectResult;
-        var receivedError = result?.Value as Error;
+        var response = result?.Value as ApiResponse<UserDto>;
 
         // Assert
         ClassicAssert.NotNull(result);
-        ClassicAssert.NotNull(receivedError);
+        ClassicAssert.NotNull(response);
 		Assert.Multiple(() =>
 		{
 			Assert.That(result?.StatusCode, Is.EqualTo(400));
-			Assert.That(receivedError?.msg, Is.EqualTo("User creation failed"));
-			Assert.That(receivedError?.Code, Is.EqualTo("400"));
+			Assert.That(response?.Message, Is.EqualTo("User creation failed"));
 		});
 	}
 }
