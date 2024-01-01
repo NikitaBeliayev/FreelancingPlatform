@@ -26,12 +26,9 @@ namespace FreelancingPlatform.Middleware
 				context.Response.ContentType = "application/json";
 				context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-				var response = new ApiResponse<object>
-				{
-					Success = false,
-					Message = "An internal server error occurred.",
-					Errors = ["Internal Server Error"]
-				};
+                var response = ApiResponse.Failure(
+                        "An internal server error occurred.",
+                        new() { "Internal Server Error" });
 
 				await context.Response.WriteAsJsonAsync(response);
 			}
