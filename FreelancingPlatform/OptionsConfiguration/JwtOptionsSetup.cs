@@ -15,10 +15,7 @@ namespace FreelancingPlatform.OptionsConfiguration
         }
         public void Configure(JwtOptions options)
         {
-            _configuration.GetSection("JwtSecretKey").Bind("SecretKey", options);
-            _configuration.GetSection("Jwt").Bind("Issuer", options);
-            _configuration.GetSection("Jwt").Bind("RefreshTokenLifeTimeInDays", options);
-            _configuration.GetSection("Jwt").Bind("AccessTokenLifeTimeInMinutes", options);
+            _configuration.GetSection("Jwt").Bind(options);
         }
     }
 }

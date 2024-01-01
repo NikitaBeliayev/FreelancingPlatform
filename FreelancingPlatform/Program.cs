@@ -11,10 +11,13 @@ using Serilog;
 using System.Reflection;
 using FreelancingPlatform.OptionsConfiguration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using static System.Net.Mime.MediaTypeNames;
 using AutoMapper;
 using Infrastructure.Automapper;
 using FreelancingPlatform.Middleware;
+using FreelancingPlatform.OptionsValidation;
+using Infrastructure.EmailProvider;
+using Microsoft.Extensions.Options;
+using Infrastructure.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<EmailProviderOptionsSetup>();
+
+builder.Services.AddSingleton<IValidateOptions
+    <EmailOptions>, EmailOptionsValidation>();
+builder.Services.AddSingleton<IValidateOptions
+    <JwtOptions>, JwtOptionsValidation>();
+
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
