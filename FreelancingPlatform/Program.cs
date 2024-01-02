@@ -18,6 +18,7 @@ using FreelancingPlatform.OptionsValidation;
 using Infrastructure.EmailProvider;
 using Microsoft.Extensions.Options;
 using Infrastructure.Authentication;
+using Infrastructure.DatabaseConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,11 +29,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<EmailProviderOptionsSetup>();
+builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
 
 builder.Services.AddSingleton<IValidateOptions
     <EmailOptions>, EmailOptionsValidation>();
 builder.Services.AddSingleton<IValidateOptions
     <JwtOptions>, JwtOptionsValidation>();
+builder.Services.AddSingleton<IValidateOptions
+    <DatabaseOptions>, DatabaseOptionsValidation>();
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
@@ -76,10 +80,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using (var serviceScope = app.Services.CreateScope())
+if (builder.Configuration.GetSection("Database").GetValue<bool>("ApplyAutomaticMigrations"))
 {
-    var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-    appDbContext.Database.Migrate();
+    using (var serviceScope = app.Services.CreateScope())
+    {
+        var appDbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+        appDbContext.Database.Migrate();
+    }
 }
 
 app.UseSerilogRequestLogging();
