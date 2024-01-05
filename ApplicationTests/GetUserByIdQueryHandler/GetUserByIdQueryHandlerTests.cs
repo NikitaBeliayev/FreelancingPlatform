@@ -23,7 +23,7 @@ public class CreateUserQueryHandlerTests
         var _mapper = new Mapper(configuration);
 
 
-        var handler = new CreateUserQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object, _mapper);
+        var handler = new Application.Users.GetById.GetUserByIdQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object, _mapper);
 
         var userId = Guid.NewGuid();
         var query = new GetUserByIdQuery(userId);
@@ -62,7 +62,7 @@ public class CreateUserQueryHandlerTests
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
         var _mapper = new Mapper(configuration);
 
-        var handler = new CreateUserQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object, _mapper);
+        var handler = new Application.Users.GetById.GetUserByIdQueryHandler(userRepositoryMock.Object, unitOfWorkMock.Object, _mapper);
 
         var invalidUserId = Guid.NewGuid();
         var query = new GetUserByIdQuery(invalidUserId);

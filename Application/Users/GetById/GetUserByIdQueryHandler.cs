@@ -3,22 +3,16 @@ using Application.Abstraction.Messaging;
 using AutoMapper;
 using Domain.Users;
 using Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Application.Users.GetById
 {
-    public class CreateUserQueryHandler : IQueryHandler<GetUserByIdQuery, UserDto>
+    public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserDto>
     {
         private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CreateUserQueryHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public GetUserByIdQueryHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;

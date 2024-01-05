@@ -18,7 +18,7 @@ namespace Domain.Users
             var validationResult = ValidateEmail(value);
 
             return validationResult.IsSuccess
-                ? Result<EmailAddress>.Success(new EmailAddress(value, isEmailValidated: true))
+                ? Result<EmailAddress>.Success(new EmailAddress(value.ToLower(), isEmailValidated: true))
                 : Result<EmailAddress>.Failure(null, validationResult.Error);
         }
 

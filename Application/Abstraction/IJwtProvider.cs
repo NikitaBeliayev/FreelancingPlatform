@@ -1,8 +1,9 @@
-﻿namespace Application.Abstraction
+﻿using Application.Models;
+
+namespace Application.Abstraction
 {
     public interface IJwtProvider
     {
-        string GenerateToken(Guid id, string email);
-        string GenerateRefreshToken(Guid id, string email);
+        JwtCredentials GenerateCredentials(Guid userId, string email);
     }
 }
