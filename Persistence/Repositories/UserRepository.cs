@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,11 @@ namespace Persistence.Repositories
             await _context.Set<User>().AddAsync(user);
 
             return user;
+        }
+
+        public async Task<User?> GetUserByAsync(Expression<Func<User, bool>> expression, CancellationToken cancellationToken = default)
+        {
+            return await _context.Users.FirstOrDefaultAsync(expression, cancellationToken);
         }
 
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

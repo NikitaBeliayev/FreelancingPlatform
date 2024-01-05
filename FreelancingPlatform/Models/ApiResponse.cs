@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shared;
 
 namespace FreelancingPlatform.Models
@@ -22,7 +21,7 @@ namespace FreelancingPlatform.Models
         public static ApiResponse<T> FromResult(Result<T> result, int statusCode = 200) => new(result.Value,
             result.IsSuccess,
             result.Error == Error.None ? "OK" : result.Error.Message,
-            result.Error == Error.None ? [] : [$"{result.Error.Code} (${result.Error.StatusCode}): {result.Error.Message}"],
+            result.Error == Error.None ? [] : [$"{result.Error.Code} ({result.Error.StatusCode}): {result.Error.Message}"],
             result.IsSuccess ? statusCode : result.Error.StatusCode);
 
         public static implicit operator ObjectResult(ApiResponse<T> response) =>

@@ -1,5 +1,6 @@
 ﻿using Shared;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Helpers
 {

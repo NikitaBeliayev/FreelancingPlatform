@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Users;
+using Application.Users.RequestDto;
+using Application.Users.ResponseDto;
 using AutoMapper;
 using Domain.Users;
 
@@ -33,6 +35,10 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => Name.BuildName(src.FirstName).Value!))
                     .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => Name.BuildName(src.LastName).Value!))
                     .ForMember(dest => dest.Password, opt => opt.MapFrom(src => Password.BuildPassword(src.Password).Value!));
+
+                CreateMap<User, UserRegistrationResponseDto>()
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Id));
             }
         }
     }

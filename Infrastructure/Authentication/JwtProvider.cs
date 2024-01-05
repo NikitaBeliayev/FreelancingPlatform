@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Application.Abstraction;
+using Application.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,55 +16,45 @@ namespace Infrastructure.Authentication
         {
             this._options = options.Value;
         }
-        public string GenerateToken(Guid id, string email)
+        public JwtCredentials GenerateCredentials(Guid userId, string email)
         {
-
             var claims = new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.Sub, id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,  email), 
             };
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
                 SecurityAlgorithms.HmacSha256);
             
-            var token = new JwtSecurityToken(
+            var accessToken = new JwtSecurityToken(
                 _options.Issuer,
                 default,
                 claims,
                 null,
                 DateTime.UtcNow.AddMinutes(_options.AccessTokenLifeTimeInMinutes),
                 signingCredentials
-                );
+            );
 
-            var jwtHandler = new JwtSecurityTokenHandler();
-
-            return jwtHandler.WriteToken(token);
-        }
-
-        public string GenerateRefreshToken(Guid id, string email)
-        {
-            var claims = new List<Claim>()
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email,  email),
-            };
-            var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
-                SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
+            var refreshToken = new JwtSecurityToken(
                 _options.Issuer,
                 default,
                 claims,
                 null,
-                DateTime.UtcNow.AddDays(_options.RefreshTokenLifeTimeInDays),
+                DateTime.UtcNow.AddMinutes(_options.RefreshTokenLifeTimeInDays),
                 signingCredentials
             );
-
+            
+            
             var jwtHandler = new JwtSecurityTokenHandler();
 
-            return jwtHandler.WriteToken(token);
+            return new JwtCredentials()
+            {
+                AccessToken = jwtHandler.WriteToken(accessToken),
+                RefreshToken = jwtHandler.WriteToken(refreshToken),
+                AccessTokenExpiresIn = DateTime.Now.AddMinutes(_options.AccessTokenLifeTimeInMinutes),
+                RefreshTokenExpiresIn = DateTime.Now.AddDays(_options.RefreshTokenLifeTimeInDays)
+            };
         }
-
     }
 }
