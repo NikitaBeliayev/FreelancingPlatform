@@ -62,5 +62,12 @@ namespace FreelancingPlatform.Controllers
             ObjectResult response = ApiResponse<UserLoginResponseDto>.FromResult(result);
             return response;
         }
+
+        [HttpGet("{userId:guid}/Confirm/Email/{token:guid}")]
+        public async Task<IActionResult> ConfirmEmail(Guid userId, Guid token)
+        {
+            return null;
+        }
+        
     }
 }

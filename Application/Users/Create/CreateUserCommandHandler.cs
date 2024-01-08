@@ -9,6 +9,7 @@ using Shared;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Domain.UserCommunicationChannels;
 
 namespace Application.Users.Create
 {
@@ -60,7 +61,8 @@ namespace Application.Users.Create
                 email.Value!,
                 firstName.Value!,
                 lastName.Value!,
-                password.Value!
+                password.Value!,
+                new List<UserCommunicationChannel>()
             );
 
             var result = await _userRepository.CreateAsync(newUser);

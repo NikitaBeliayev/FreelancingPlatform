@@ -1,9 +1,5 @@
-﻿using Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.UserCommunicationChannels;
+using Shared;
 
 namespace Domain.Users
 {
@@ -13,13 +9,21 @@ namespace Domain.Users
         public Name FirstName { get; set; }
         public Name LastName { get; set; }
         public Password Password { get; set; }
+        public ICollection<UserCommunicationChannel> CommunicationChannels { get; set; }
 
-        public User(Guid id, EmailAddress email, Name firstName, Name lastName, Password password) : base(id)
+        public User() : base(Guid.NewGuid())
+        {
+            
+        }
+
+        public User(Guid id, EmailAddress email, Name firstName, Name lastName, Password password,
+            ICollection<UserCommunicationChannel> collection) : base(id)
         {
             Email = email;
             FirstName = firstName;
             LastName = lastName;
             Password = password;
+            CommunicationChannels = collection;
         }
     }
 }

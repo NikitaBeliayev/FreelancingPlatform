@@ -3,6 +3,7 @@ using Application.Users;
 using Application.Users.Create;
 using Application.Users.GetById;
 using AutoMapper;
+using Domain.UserCommunicationChannels;
 using Domain.Users;
 using Infrastructure.Automapper;
 using Microsoft.Extensions.Logging;
@@ -37,7 +38,7 @@ public class CreateUserCommandHandlerTests
         userRepositoryMock.Setup(repo => repo.CreateAsync(It.IsAny<User>()))
             .ReturnsAsync(new User(userGuid, EmailAddress.BuildEmail(email).Value!,
                                    Name.BuildName(firstName).Value!, Name.BuildName(lastName).Value!,
-                                   Password.BuildPassword(password).Value!));
+                                   Password.BuildPassword(password).Value!, new List<UserCommunicationChannel>()));
 
         // Act
         var result = await handler.Handle(command, CancellationToken.None);

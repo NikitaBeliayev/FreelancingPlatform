@@ -1,3 +1,5 @@
+using Domain.UserCommunicationChannels;
+
 namespace DomainTests.User;
 
 [TestFixture]
@@ -14,7 +16,7 @@ public class UserTests
         Domain.Users.Password password = Domain.Users.Password.BuildPassword("Password123").Value!;
 
         // Act
-        var user = new Domain.Users.User(userId, email, firstName, lastName, password);
+        var user = new Domain.Users.User(userId, email, firstName, lastName, password, new List<UserCommunicationChannel>());
 
         Assert.Multiple(() =>
         {
