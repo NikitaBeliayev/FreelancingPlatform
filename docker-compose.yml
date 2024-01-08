@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  web:
+    image: registry.eimaen.pw/students-lab/freelancing-project
+    ports:
+      - 1337:5157
+    restart: unless-stopped
