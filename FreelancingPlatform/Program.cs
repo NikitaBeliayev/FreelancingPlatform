@@ -91,8 +91,6 @@ if (builder.Configuration.GetSection("Database").GetValue<bool>("ApplyAutomaticM
 
 app.UseSerilogRequestLogging();
 
-app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
