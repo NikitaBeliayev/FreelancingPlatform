@@ -4,5 +4,6 @@ services:
   web:
     image: registry.eimaen.pw/students-lab/freelancing-project
     ports:
-      - 1337:5157
+      - 13337:5157
+      - 13338:7093
     restart: unless-stopped
