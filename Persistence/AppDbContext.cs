@@ -1,11 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Domain.UserCommunicationChannels;
+using Domain.CommunicationChannels;
 using Domain.Users;
 
 namespace Persistence
@@ -18,6 +13,9 @@ namespace Persistence
         }
 
         public DbSet<User> Users => Set<User>();
+        public DbSet<CommunicationChannel> CommunicationChannels => Set<CommunicationChannel>();
+        public DbSet<UserCommunicationChannel> UserCommunicationChannels => Set<UserCommunicationChannel>();
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
