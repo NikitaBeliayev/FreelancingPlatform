@@ -4,6 +4,10 @@ services:
   web:
     image: registry.eimaen.pw/students-lab/freelancing-project
     ports:
-      - 13337:5157
-      - 13338:7093
+      - 13337:8080
+      - 13338:8081
+    environment:
+      DOTNET_ENVIRONMENT: 'Production'
+    volumes:
+      - '/opt/students-lab/appsettings.json:/app/appsettings.Production.json'
     restart: unless-stopped
