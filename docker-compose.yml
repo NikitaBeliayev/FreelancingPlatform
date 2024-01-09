@@ -3,11 +3,17 @@ version: '3.8'
 services:
   web:
     image: registry.eimaen.pw/students-lab/freelancing-project
-    ports:
-      - 13337:8080
-      - 13338:8081
+    networks:
+      - caddy
+    labels:
+      caddy: 'students-lab.eimaen.pw'
+      caddy.reverse_proxy: '{{upstreams 8080}}'
     environment:
       DOTNET_ENVIRONMENT: 'Production'
     volumes:
       - '/opt/students-lab/appsettings.json:/app/appsettings.Production.json'
     restart: unless-stopped
+
+networks:
+  caddy:
+    external: true
