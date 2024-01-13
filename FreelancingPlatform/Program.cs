@@ -1,17 +1,9 @@
-using Application.Abstraction.Data;
-using Application.Users;
-using Domain.Users;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Persistence;
-using Persistence.Repositories;
 using Scrutor;
 using Serilog;
-using System.Reflection;
 using FreelancingPlatform.OptionsConfiguration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using AutoMapper;
 using Infrastructure.Automapper;
 using FreelancingPlatform.Middleware;
 using FreelancingPlatform.OptionsValidation;
@@ -47,7 +39,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
+                options.UseNpgsql(
                     builder.Configuration.GetConnectionString("DefaultConnection"),
                     providerOptions => providerOptions.EnableRetryOnFailure())
             );
