@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateCommunicationChannel : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,8 @@ namespace Persistence.Migrations
                 name: "CommunicationChannels",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -24,20 +24,35 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserCommunicationChannels",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CommunicationChannelId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    ConfirmationToken = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CommunicationChannelId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    ConfirmationToken = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserCommunicationChannels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserCommunicationChannels_CommunicationChannels_CommunicationChannelId",
+                        name: "FK_UserCommunicationChannels_CommunicationChannels_Communicati~",
                         column: x => x.CommunicationChannelId,
                         principalTable: "CommunicationChannels",
                         principalColumn: "Id",
@@ -53,7 +68,7 @@ namespace Persistence.Migrations
             migrationBuilder.InsertData(
                 table: "CommunicationChannels",
                 columns: new[] { "Id", "Type" },
-                values: new object[] { new Guid("46a99c16-c350-49a3-aea1-83d3915843c5"), "Email" });
+                values: new object[] { new Guid("f12964b2-47f1-43ae-9171-6baba6cceda6"), "Email" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserCommunicationChannels_CommunicationChannelId",
@@ -74,6 +89,9 @@ namespace Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "CommunicationChannels");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
