@@ -1,4 +1,5 @@
-﻿using Domain.Users.UserDetails;
+﻿using Domain.Users;
+using Domain.Users.UserDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -42,6 +43,9 @@ namespace Persistence.Configuration
                 .WithOne(e => e.User)
                 .HasForeignKey(e => e.UserId)
                 .IsRequired();
+
+            builder.HasMany(e => e.Roles)
+                .WithMany(e => e.Users);
         }
     }
 }

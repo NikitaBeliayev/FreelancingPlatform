@@ -1,6 +1,15 @@
-﻿using Application.Users;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Application.Roles;
+using Application.Users;
+using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
 using AutoMapper;
+using Domain.Roles;
+using Domain.Users;
 using Domain.Users.UserDetails;
 
 namespace Infrastructure.Automapper
@@ -31,6 +40,18 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Password, opt => opt.MapFrom(src => Password.BuildPassword(src.Password).Value!));
 
                 CreateMap<User, UserRegistrationResponseDto>()
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Id));
+
+                CreateMap<RoleDto, Role>()
+                    .ForMember(dest => dest.Name,
+                        opt => opt.MapFrom(src => (RoleNames)Enum.Parse(typeof(RoleNames), src.Name)))
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Id));
+
+                CreateMap<Role, RoleDto>()
+                    .ForMember(dest => dest.Name,
+                        opt => opt.MapFrom(src => nameof(src.Name)))
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id));
             }

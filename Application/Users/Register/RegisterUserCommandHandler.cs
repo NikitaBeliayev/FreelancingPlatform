@@ -6,6 +6,7 @@ using Application.Helpers;
 using Application.Users.Create;
 using Application.Users.ResponseDto;
 using AutoMapper;
+using Domain.Roles;
 using Domain.UserCommunicationChannels;
 using Domain.Users.Repositories;
 using Domain.Users.UserDetails;
@@ -61,7 +62,8 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             firstName.Value!,
             lastName.Value!,
             password.Value!,
-            new List<UserCommunicationChannel>()
+            new List<UserCommunicationChannel>(),
+            new List<Role>()
         );
         
         var possibleUser = await _userRepository.GetUserByAsync(u => u.Email == email.Value, cancellationToken);
