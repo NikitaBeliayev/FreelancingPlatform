@@ -1,11 +1,7 @@
-﻿using Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Users.Errors;
+using Shared;
 
-namespace Domain.Users
+namespace Domain.Users.UserDetails
 {
     public sealed record Name
     {

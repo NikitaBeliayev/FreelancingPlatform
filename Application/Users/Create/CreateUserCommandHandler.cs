@@ -1,15 +1,12 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using Application.Helpers;
-using Application.Users.GetById;
 using AutoMapper;
-using Domain.Users;
 using Microsoft.Extensions.Logging;
 using Shared;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Domain.UserCommunicationChannels;
+using Domain.Users.UserDetails;
+using Domain.Users.Repositories;
 
 namespace Application.Users.Create
 {

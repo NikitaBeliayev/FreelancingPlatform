@@ -1,5 +1,5 @@
 ﻿using Domain.CommunicationChannels;
-using Domain.Users;
+using Domain.Users.UserDetails;
 using Shared;
 
 namespace Domain.UserCommunicationChannels;

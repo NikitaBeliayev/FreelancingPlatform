@@ -7,9 +7,7 @@ using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
 using FreelancingPlatform.Models;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Shared;
 
 namespace FreelancingPlatform.Controllers
 {

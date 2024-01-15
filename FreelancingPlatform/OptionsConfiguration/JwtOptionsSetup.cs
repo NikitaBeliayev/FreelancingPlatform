@@ -1,7 +1,5 @@
 ﻿using Infrastructure.Authentication;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using System.Configuration;
 
 namespace FreelancingPlatform.OptionsConfiguration
 {

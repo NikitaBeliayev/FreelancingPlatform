@@ -1,4 +1,5 @@
 using Domain.UserCommunicationChannels;
+using Domain.Users.UserDetails;
 
 namespace DomainTests.User;
 
@@ -10,13 +11,13 @@ public class UserTests
     {
         // Arrange
         Guid userId = Guid.NewGuid();
-        Domain.Users.EmailAddress email = Domain.Users.EmailAddress.BuildEmail("john.doe@example.com").Value!;
-        Domain.Users.Name firstName = Domain.Users.Name.BuildName("John").Value!;
-        Domain.Users.Name lastName = Domain.Users.Name.BuildName("Doe").Value!;
-        Domain.Users.Password password = Domain.Users.Password.BuildPassword("Password123").Value!;
+        EmailAddress email = EmailAddress.BuildEmail("john.doe@example.com").Value!;
+        Domain.Users.UserDetails.Name firstName = Domain.Users.UserDetails.Name.BuildName("John").Value!;
+        Domain.Users.UserDetails.Name lastName = Domain.Users.UserDetails.Name.BuildName("Doe").Value!;
+        Password password = Password.BuildPassword("Password123").Value!;
 
         // Act
-        var user = new Domain.Users.User(userId, email, firstName, lastName, password, new List<UserCommunicationChannel>());
+        var user = new Domain.Users.UserDetails.User(userId, email, firstName, lastName, password, new List<UserCommunicationChannel>());
 
         Assert.Multiple(() =>
         {

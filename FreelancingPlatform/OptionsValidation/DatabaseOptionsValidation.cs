@@ -1,5 +1,4 @@
 ﻿using Infrastructure.DatabaseConfiguration;
-using Infrastructure.EmailProvider;
 using Microsoft.Extensions.Options;
 
 namespace FreelancingPlatform.OptionsValidation

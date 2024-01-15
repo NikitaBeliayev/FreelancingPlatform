@@ -1,10 +1,11 @@
 using Application.Abstraction.Data;
 using Application.Users;
 using Application.Users.Create;
-using Application.Users.GetById;
 using AutoMapper;
 using Domain.UserCommunicationChannels;
-using Domain.Users;
+using Domain.Users.Errors;
+using Domain.Users.Repositories;
+using Domain.Users.UserDetails;
 using Infrastructure.Automapper;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -97,8 +98,8 @@ public class CreateUserCommandHandlerTests
         // Arrange
         var userGuid = Guid.NewGuid();
         string email = "john.doe@example.com";
-        string firstName = null!;
-        string lastName = "Doe";
+        string firstName = "Doe";
+        string lastName = null!;
         string password = "epasswoR!d1";
         var userRepositoryMock = new Mock<IUserRepository>();
         var unitOfWorkMock = new Mock<IUnitOfWork>();

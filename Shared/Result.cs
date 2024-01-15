@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shared
+﻿namespace Shared
 {
     public class Result<TValue>: Result
     {
         public TValue? Value { get; }
 
-        protected Result(TValue? value, bool isSuccess, Error error):
-            base(isSuccess, error)
+        protected Result(TValue? value, bool isSuccess, Error error): base(isSuccess, error)
         {
             Value = value;
         }

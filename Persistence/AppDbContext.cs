@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain.UserCommunicationChannels;
 using Domain.CommunicationChannels;
-using Domain.Users;
+using Domain.Users.UserDetails;
 
 namespace Persistence
 {

@@ -1,7 +1,7 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using AutoMapper;
-using Domain.Users;
+using Domain.Users.Repositories;
 using Shared;
 
 namespace Application.Users.GetById
@@ -21,7 +21,7 @@ namespace Application.Users.GetById
 
         public async Task<Result<UserDto>> Handle(GetUserByIdQuery query, CancellationToken cancellationToken)
         {
-            var result = await _userRepository.GetByIdAsync(query.UserId);
+            var result = await _userRepository.GetByIdAsync(query.UserId, cancellationToken);
 
             return result != null
                 ? Result<UserDto>.Success(_mapper.Map<UserDto>(result))
