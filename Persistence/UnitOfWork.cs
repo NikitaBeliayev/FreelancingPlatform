@@ -1,5 +1,4 @@
 ﻿using Application.Abstraction.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {

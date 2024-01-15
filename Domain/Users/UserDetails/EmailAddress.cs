@@ -1,6 +1,7 @@
-﻿using Shared;
+﻿using Domain.Users.Errors;
+using Shared;
 
-namespace Domain.Users
+namespace Domain.Users.UserDetails
 {
     public class EmailAddress
     {

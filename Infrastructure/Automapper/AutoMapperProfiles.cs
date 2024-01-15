@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.Users;
-using Application.Users.RequestDto;
+﻿using Application.Users;
 using Application.Users.ResponseDto;
 using AutoMapper;
-using Domain.Users;
+using Domain.Users.UserDetails;
 
 namespace Infrastructure.Automapper
 {

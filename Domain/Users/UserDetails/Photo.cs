@@ -1,8 +1,8 @@
-﻿using Shared;
-using System;
+﻿using Domain.Users.Errors;
+using Shared;
 using System.Text.RegularExpressions;
 
-namespace Domain.Users
+namespace Domain.Users.UserDetails
 {
     public class Photo
     {

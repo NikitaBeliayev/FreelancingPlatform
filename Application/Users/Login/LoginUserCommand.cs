@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using Application.Abstraction.Messaging;
+﻿using Application.Abstraction.Messaging;
 using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
 

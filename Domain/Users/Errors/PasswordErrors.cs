@@ -1,6 +1,6 @@
 ﻿using Shared;
 
-namespace Domain.Users
+namespace Domain.Users.Errors
 {
     public static class PasswordErrors
     {

@@ -1,4 +1,3 @@
-using Infrastructure.Authentication;
 using Infrastructure.DatabaseConfiguration;
 using Microsoft.Extensions.Options;
 

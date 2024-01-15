@@ -1,7 +1,7 @@
 using Application.Users;
 using Application.Users.Create;
 using Application.Users.GetById;
-using Domain.Users;
+using Domain.Users.Errors;
 using FreelancingPlatform.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

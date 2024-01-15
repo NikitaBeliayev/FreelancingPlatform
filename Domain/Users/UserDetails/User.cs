@@ -1,7 +1,7 @@
 ﻿using Domain.UserCommunicationChannels;
 using Shared;
 
-namespace Domain.Users
+namespace Domain.Users.UserDetails
 {
     public class User : Entity
     {
@@ -13,7 +13,6 @@ namespace Domain.Users
 
         public User() : base(Guid.NewGuid())
         {
-            
         }
 
         public User(Guid id, EmailAddress email, Name firstName, Name lastName, Password password,

@@ -3,13 +3,12 @@ using Application.Abstraction;
 using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using Application.Helpers;
-using Application.Models;
 using Application.Users.Create;
-using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
 using AutoMapper;
 using Domain.UserCommunicationChannels;
-using Domain.Users;
+using Domain.Users.Repositories;
+using Domain.Users.UserDetails;
 using Microsoft.Extensions.Logging;
 using Shared;
 
@@ -22,8 +21,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
     private readonly ILogger<CreateUserCommandHandler> _logger;
     private readonly IMapper _mapper;
     
-    public RegisterUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserCommandHandler> logger, IMapper mapper, 
-        IJwtProvider jwtProvider)
+    public RegisterUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserCommandHandler> logger, IMapper mapper)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;

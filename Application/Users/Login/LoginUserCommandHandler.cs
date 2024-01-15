@@ -4,7 +4,8 @@ using Application.Abstraction.Messaging;
 using Application.Helpers;
 using Application.Models;
 using Application.Users.ResponseDto;
-using Domain.Users;
+using Domain.Users.Repositories;
+using Domain.Users.UserDetails;
 using Shared;
 
 namespace Application.Users.LoginUser;

@@ -1,6 +1,5 @@
 ﻿using Domain.CommunicationChannels;
 using Domain.UserCommunicationChannels;
-using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Persistence.Configuration;
