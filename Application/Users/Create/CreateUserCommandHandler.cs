@@ -4,6 +4,10 @@ using Application.Helpers;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Shared;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Domain.Roles;
 using Domain.UserCommunicationChannels;
 using Domain.Users.UserDetails;
 using Domain.Users.Repositories;
@@ -59,7 +63,8 @@ namespace Application.Users.Create
                 firstName.Value!,
                 lastName.Value!,
                 password.Value!,
-                new List<UserCommunicationChannel>()
+                new List<UserCommunicationChannel>(), 
+                new List<Role>()
             );
 
             var result = await _userRepository.CreateAsync(newUser);

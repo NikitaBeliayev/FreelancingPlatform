@@ -1,3 +1,4 @@
+using Domain.Roles;
 using Domain.UserCommunicationChannels;
 using Domain.Users.UserDetails;
 
@@ -17,7 +18,9 @@ public class UserTests
         Password password = Password.BuildPassword("Password123").Value!;
 
         // Act
-        var user = new Domain.Users.UserDetails.User(userId, email, firstName, lastName, password, new List<UserCommunicationChannel>());
+        var user = new Domain.Users.UserDetails.User(userId, email, firstName, lastName, password, 
+            new List<UserCommunicationChannel>(),
+            new List<Role>());
 
         Assert.Multiple(() =>
         {
