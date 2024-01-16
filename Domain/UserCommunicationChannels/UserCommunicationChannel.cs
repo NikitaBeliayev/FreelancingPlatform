@@ -10,7 +10,7 @@ public class UserCommunicationChannel : Entity
     public Guid UserId { get; set; }
     
     public CommunicationChannel CommunicationChannel { get; set; }
-    public Guid CommunicationChannelId { get; set; }
+    public int CommunicationChannelId { get; set; }
     public bool IsConfirmed { get; set; }
     public Guid ConfirmationToken { get; set; }
 
@@ -20,7 +20,7 @@ public class UserCommunicationChannel : Entity
     }
 
     public UserCommunicationChannel(Guid id, User user, Guid userId, bool isConfirmed, Guid confirmationToken, CommunicationChannel communicationChannel,
-        Guid communicationChannelId) : base(id)
+        int communicationChannelId) : base(id)
     {
         User = user;
         UserId = userId;

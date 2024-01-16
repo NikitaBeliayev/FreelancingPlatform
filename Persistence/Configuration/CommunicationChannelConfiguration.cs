@@ -10,7 +10,7 @@ public class CommunicationChannelConfiguration : IEntityTypeConfiguration<Commun
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasData(new CommunicationChannel(Guid.NewGuid(), CommunicationChannelType.Email,
+        builder.HasData(new CommunicationChannel(1, CommunicationChannelType.Email,
             new List<UserCommunicationChannel>()));
             
         builder.HasMany(e => e.UserCommunicationChannels)
