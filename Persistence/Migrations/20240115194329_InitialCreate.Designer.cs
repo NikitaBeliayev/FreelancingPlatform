@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240114182506_RolesCreationMigration")]
-    partial class RolesCreationMigration
+    [Migration("20240115194329_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,9 +27,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.CommunicationChannels.CommunicationChannel", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -42,7 +44,7 @@ namespace Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e4072092-78e1-4b86-8a10-7e6d2cddd85c"),
+                            Id = 1,
                             Type = "Email"
                         });
                 });
@@ -87,8 +89,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CommunicationChannelId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("CommunicationChannelId")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("ConfirmationToken")
                         .HasColumnType("uuid");
@@ -108,7 +110,7 @@ namespace Persistence.Migrations
                     b.ToTable("UserCommunicationChannels");
                 });
 
-            modelBuilder.Entity("Domain.Users.User", b =>
+            modelBuilder.Entity("Domain.Users.UserDetails.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -158,7 +160,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Users.User", "User")
+                    b.HasOne("Domain.Users.UserDetails.User", "User")
                         .WithMany("CommunicationChannels")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -177,7 +179,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Users.User", null)
+                    b.HasOne("Domain.Users.UserDetails.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -189,7 +191,7 @@ namespace Persistence.Migrations
                     b.Navigation("UserCommunicationChannels");
                 });
 
-            modelBuilder.Entity("Domain.Users.User", b =>
+            modelBuilder.Entity("Domain.Users.UserDetails.User", b =>
                 {
                     b.Navigation("CommunicationChannels");
                 });
