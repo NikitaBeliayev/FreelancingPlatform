@@ -35,7 +35,7 @@ namespace Persistence.Configuration
             builder.Property(p => p.Password)
                 .HasConversion(
                     password => password.Value,
-                    value => Password.BuildPassword(value).Value!
+                    value => Password.BuildHashed(value).Value!
                 )
                 .IsRequired();
 

@@ -21,13 +21,16 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<CreateUserCommandHandler> _logger;
     private readonly IMapper _mapper;
+    private readonly IHashProvider _hashProvider;
     
-    public RegisterUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserCommandHandler> logger, IMapper mapper)
+    public RegisterUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserCommandHandler> logger, IMapper mapper, 
+        IHashProvider hashProvider)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
         _mapper = mapper;
+        _hashProvider = hashProvider;
     }
     public async Task<Result<UserRegistrationResponseDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
@@ -55,7 +58,8 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
         {
             return ResponseHelper.LogAndReturnError<UserRegistrationResponseDto>("Invalid password", password.Error);
         }
-        
+        password = Password.BuildHashed(_hashProvider.GetHash(password.Value!.Value));
+
         User newUser = new(
             Guid.NewGuid(),
             email.Value!,

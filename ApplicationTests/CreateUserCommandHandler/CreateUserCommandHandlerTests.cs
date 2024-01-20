@@ -1,3 +1,4 @@
+using Application.Abstraction;
 using Application.Abstraction.Data;
 using Application.Users;
 using Application.Users.Create;
@@ -8,6 +9,7 @@ using Domain.Users.Errors;
 using Domain.Users.Repositories;
 using Domain.Users.UserDetails;
 using Infrastructure.Automapper;
+using Infrastructure.HashProvider;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Legacy;
@@ -31,9 +33,10 @@ public class CreateUserCommandHandlerTests
         var logger = new Mock<ILogger<CreateUserCommandHandler>>();
         var myProfile = new AutoMapperProfiles.AutoMapperProfile();
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
-        var _mapper = new Mapper(configuration);
+        var mapper = new Mapper(configuration);
+        var hashPrivider = new Mock<IHashProvider>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, mapper, hashPrivider.Object);
 
         var command = new CreateUserCommand(new UserDto(userGuid, email, firstName, lastName, password));
 
@@ -76,9 +79,10 @@ public class CreateUserCommandHandlerTests
         var logger = new Mock<ILogger<CreateUserCommandHandler>>();
         var myProfile = new AutoMapperProfiles.AutoMapperProfile();
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
-        var _mapper = new Mapper(configuration);
+        var mapper = new Mapper(configuration);
+        var hashPrivider = new Mock<IHashProvider>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, mapper, hashPrivider.Object);
 
         var command = new CreateUserCommand(new UserDto(userGuid, email, firstName, lastName, password));
 
@@ -109,9 +113,10 @@ public class CreateUserCommandHandlerTests
         var logger = new Mock<ILogger<CreateUserCommandHandler>>();
         var myProfile = new AutoMapperProfiles.AutoMapperProfile();
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
-        var _mapper = new Mapper(configuration);
+        var mapper = new Mapper(configuration);
+        var hashPrivider = new Mock<IHashProvider>();
 
-        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, _mapper);
+        var handler = new Application.Users.Create.CreateUserCommandHandler(userRepositoryMock.Object, unitOfWorkMock.Object, logger.Object, mapper, hashPrivider.Object);
 
         var command = new CreateUserCommand(new UserDto(userGuid, email, firstName, lastName, password));
 

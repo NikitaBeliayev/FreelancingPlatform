@@ -5,7 +5,7 @@ namespace Domain.Users.UserDetails
 {
     public class Password
     {
-        public string Value { get; }
+        public string Value { get; set; }
 
         private Password(string value) => Value = value;
 
@@ -16,6 +16,10 @@ namespace Domain.Users.UserDetails
             return validationResult.IsSuccess
                 ? Result<Password>.Success(new Password(value))
                 : Result<Password>.Failure(null, validationResult.Error);
+        }
+        public static Result<Password> BuildHashed(string value)
+        {
+            return Result<Password>.Success(new Password(value));
         }
 
         private static Result ValidatePassword(string value)
