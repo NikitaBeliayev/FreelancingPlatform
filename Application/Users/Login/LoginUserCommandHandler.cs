@@ -14,11 +14,13 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
 {
     private readonly IUserRepository _userRepository;
     private readonly IJwtProvider _jwtProvider;
+    private readonly IHashProvider _hashProvider;
 
-    public LoginUserCommandHandler(IUserRepository userRepository, IJwtProvider jwtProvider)
+    public LoginUserCommandHandler(IUserRepository userRepository, IJwtProvider jwtProvider, IHashProvider hashProvider)
     {
         _userRepository = userRepository;
         _jwtProvider = jwtProvider;
+        _hashProvider = hashProvider;
     }
     public async Task<Result<UserLoginResponseDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
@@ -44,7 +46,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
             return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("Invalid password format", password.Error);
         }
 
-        if (possibleUser.Password.Value != password.Value!.Value)
+        if (possibleUser.Password.Value != _hashProvider.GetHash(password.Value!.Value))
         {
             return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("Invalid password", new Error("User.LoginUserCommandHandler",
                 "Invalid password", (int)HttpStatusCode.Unauthorized));

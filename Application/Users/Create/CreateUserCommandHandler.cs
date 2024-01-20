@@ -11,6 +11,7 @@ using Domain.Roles;
 using Domain.UserCommunicationChannels;
 using Domain.Users.UserDetails;
 using Domain.Users.Repositories;
+using Application.Abstraction;
 
 namespace Application.Users.Create
 {
@@ -20,13 +21,15 @@ namespace Application.Users.Create
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CreateUserCommandHandler> _logger;
         private readonly IMapper _mapper;
+        private readonly IHashProvider _hashProvider;
 
-        public CreateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserCommandHandler> logger, IMapper mapper)
+        public CreateUserCommandHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, ILogger<CreateUserCommandHandler> logger, IMapper mapper, IHashProvider hashProvider)
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _logger = logger;
             _mapper = mapper;
+            _hashProvider = hashProvider;
         }
 
         public async Task<Result<UserDto>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
@@ -56,6 +59,7 @@ namespace Application.Users.Create
             {
                 return ResponseHelper.LogAndReturnError<UserDto>("Invalid password", password.Error);
             }
+            password = Password.BuildHashed(_hashProvider.GetHash(password.Value!.Value));
 
             User newUser = new(
                 Guid.NewGuid(),

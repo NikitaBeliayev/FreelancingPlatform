@@ -11,6 +11,7 @@ using Infrastructure.EmailProvider;
 using Microsoft.Extensions.Options;
 using Infrastructure.Authentication;
 using Infrastructure.DatabaseConfiguration;
+using Infrastructure.HashProvider;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<EmailProviderOptionsSetup>();
 builder.Services.ConfigureOptions<DatabaseOptionsSetup>();
+builder.Services.ConfigureOptions<HashOptionsSetup>();
 
 builder.Services.AddSingleton<IValidateOptions
     <EmailOptions>, EmailOptionsValidation>();
@@ -29,6 +31,8 @@ builder.Services.AddSingleton<IValidateOptions
     <JwtOptions>, JwtOptionsValidation>();
 builder.Services.AddSingleton<IValidateOptions
     <DatabaseOptions>, DatabaseOptionsValidation>();
+builder.Services.AddSingleton<IValidateOptions
+    <HashOptions>, HashOptionsValidation>();
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
