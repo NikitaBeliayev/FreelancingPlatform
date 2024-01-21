@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain.UserCommunicationChannels;
 using Domain.CommunicationChannels;
+using Domain.Roles;
 using Domain.Users.UserDetails;
 
 namespace Persistence
@@ -15,6 +16,7 @@ namespace Persistence
         public DbSet<User> Users => Set<User>();
         public DbSet<CommunicationChannel> CommunicationChannels => Set<CommunicationChannel>();
         public DbSet<UserCommunicationChannel> UserCommunicationChannels => Set<UserCommunicationChannel>();
+        public DbSet<Role> Role => Set<Role>();
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

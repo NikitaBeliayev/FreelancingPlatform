@@ -13,8 +13,8 @@ namespace FreelancingPlatform.OptionsValidation
         }
         public ValidateOptionsResult Validate(string? name, EmailOptions options)
         {
-            if (options.Port is not 587 || 
-                options.Port is not 25 || 
+            if (options.Port is not 587 &&
+                options.Port is not 25 && 
                 options.Port is not 465)
             {
                 _logger.LogError("Incorrect ports are set for the mail client.");

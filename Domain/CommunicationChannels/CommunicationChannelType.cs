@@ -2,5 +2,5 @@
 
 public enum CommunicationChannelType
 {
-    Email,
+    Email = 1,
 }
