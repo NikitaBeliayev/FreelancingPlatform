@@ -45,7 +45,7 @@ namespace Infrastructure.Automapper
 
                 CreateMap<RoleDto, Role>()
                     .ForMember(dest => dest.Name,
-                        opt => opt.MapFrom(src => (RoleNames)Enum.Parse(typeof(RoleNames), src.Name)))
+                        opt => opt.MapFrom(src => (RoleNameType)Enum.Parse(typeof(RoleNameType), src.Name)))
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id));
 

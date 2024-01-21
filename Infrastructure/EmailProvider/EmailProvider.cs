@@ -32,6 +32,13 @@ namespace Infrastructure.EmailProvider
             _fromAddress = new MailAddress(_emailOptions.SenderEmail);
             _toAddress = new MailAddress(emailModel.Recipient.Value);
 
+            string emailBody = emailModel.Body ?? "";
+            if (emailModel.ConfirmationEmail is not null)
+            {
+                emailBody = _emailOptions.ConfirmationEmailBody
+                    .Replace("{UserId:Guid}", emailModel.ConfirmationEmail.UserId.ToString())
+                    .Replace("{ConfirmationToken:Guid}", emailModel.ConfirmationEmail.UserId.ToString());
+            }
             using (var smtpClient = new SmtpClient()
                    {
                        Credentials = new NetworkCredential(
@@ -46,7 +53,7 @@ namespace Infrastructure.EmailProvider
             {
                 using var message = new MailMessage(_fromAddress, _toAddress)
                 {
-                    Body = emailModel.Body
+                    Body = emailBody
                 };
 
                 if (emailModel.CopyTo is not null)

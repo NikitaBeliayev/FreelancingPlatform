@@ -2,7 +2,7 @@
 using Application.Users.Create;
 using Application.Users.GetById;
 using Application.Users.LoginUser;
-using Application.Users.RegisterUser;
+using Application.Users.Register;
 using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
 using FreelancingPlatform.Models;
