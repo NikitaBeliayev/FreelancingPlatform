@@ -3,7 +3,7 @@ using Domain.UserCommunicationChannels;
 using Domain.UserCommunicationChannels.Repositories;
 using Domain.Users.UserDetails;
 
-namespace Persistence.Repositories;
+namespace Infrastructure.Database.Repositories;
 
 public class UserCommunicationChannelRepository : IUserCommunicationChannelRepository
 {

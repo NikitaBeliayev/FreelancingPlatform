@@ -4,7 +4,7 @@ using Domain.CommunicationChannels;
 using Domain.Roles;
 using Domain.Users.UserDetails;
 
-namespace Persistence
+namespace Infrastructure.Database
 {
     public class AppDbContext : DbContext
     {

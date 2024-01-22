@@ -1,10 +1,10 @@
 ﻿using Application.Abstraction;
 using Domain.Users.UserDetails;
+using Infrastructure.Database;
 using Infrastructure.HashProvider;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using Persistence;
 
 
 var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false).Build();

@@ -1,7 +1,7 @@
 ﻿using Domain.CommunicationChannels;
 using Domain.CommunicationChannels.Repositories;
 
-namespace Persistence.Repositories;
+namespace Infrastructure.Database.Repositories;
 
 public class CommunicationChannelRepository : ICommunicationChannelRepository
 {
