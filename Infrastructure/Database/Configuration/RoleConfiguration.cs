@@ -5,7 +5,7 @@ using Domain.Users.UserDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Persistence.Configuration;
+namespace Infrastructure.Database.Configuration;
 
 public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {

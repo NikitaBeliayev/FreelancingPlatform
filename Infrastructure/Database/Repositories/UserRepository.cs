@@ -3,7 +3,7 @@ using Domain.Users.UserDetails;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Persistence.Repositories
+namespace Infrastructure.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {

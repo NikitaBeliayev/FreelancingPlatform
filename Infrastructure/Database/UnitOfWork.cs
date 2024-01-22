@@ -1,6 +1,6 @@
 ﻿using Application.Abstraction.Data;
 
-namespace Persistence
+namespace Infrastructure.Database
 {
     public class UnitOfWork : IUnitOfWork
     {

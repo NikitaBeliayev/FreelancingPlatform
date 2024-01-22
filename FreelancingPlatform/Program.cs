@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Persistence;
 using Scrutor;
 using Serilog;
 using FreelancingPlatform.OptionsConfiguration;
@@ -10,6 +9,7 @@ using FreelancingPlatform.OptionsValidation;
 using Infrastructure.EmailProvider;
 using Microsoft.Extensions.Options;
 using Infrastructure.Authentication;
+using Infrastructure.Database;
 using Infrastructure.DatabaseConfiguration;
 using Infrastructure.HashProvider;
 
@@ -51,8 +51,7 @@ builder
     .Services
     .Scan(
         x => x.FromAssemblies(
-                Infrastructure.MetaData.AssemblyInfo.Assembly,
-                Persistence.MetaData.AssemblyInfo.Assembly
+                Infrastructure.MetaData.AssemblyInfo.Assembly
             )
         .AddClasses(false)
         .UsingRegistrationStrategy(RegistrationStrategy.Skip)
