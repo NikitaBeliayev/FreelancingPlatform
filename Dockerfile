@@ -14,7 +14,6 @@ COPY ["Application/Application.csproj", "Application/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["Shared/Shared.csproj", "Shared/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
-COPY ["Persistence/Persistence.csproj", "Persistence/"]
 RUN dotnet restore "./FreelancingPlatform/./FreelancingPlatform.csproj"
 COPY . .
 WORKDIR "/src/FreelancingPlatform"
