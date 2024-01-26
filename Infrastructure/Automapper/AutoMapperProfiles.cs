@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Objectives.ObjectiveStatus;
 using Application.Roles;
 using Application.Users;
 using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
 using AutoMapper;
+using Domain.Objectives.ObjectiveStatus;
 using Domain.Roles;
 using Domain.Users;
 using Domain.Users.UserDetails;
@@ -52,6 +54,18 @@ namespace Infrastructure.Automapper
                 CreateMap<Role, RoleDto>()
                     .ForMember(dest => dest.Name,
                         opt => opt.MapFrom(src => nameof(src.Name)))
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Id));
+
+                CreateMap<ObjectiveStatusDTO, ObjectiveStatus>()
+                    .ForMember(dest => dest.Title,
+                        opt => opt.MapFrom(src => (ObjectiveStatusTitleType)Enum.Parse(typeof(ObjectiveStatusTitleType), src.Title)))
+                    .ForMember(dest => dest.Id, 
+                        opt => opt.MapFrom(src => src.Id));
+
+                CreateMap<ObjectiveStatus, ObjectiveStatusDTO>()
+                    .ForMember(dest => dest.Title,
+                        opt => opt.MapFrom(src => nameof(src.Title)))
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id));
             }
