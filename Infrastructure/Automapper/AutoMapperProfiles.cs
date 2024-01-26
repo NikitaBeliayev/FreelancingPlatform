@@ -1,16 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Objectives.ObjectiveStatus;
 using Application.Roles;
+using Application.Objectives.TaskTypes;
 using Application.Users;
 using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
 using AutoMapper;
 using Domain.Objectives.ObjectiveStatus;
 using Domain.Roles;
+using Domain.Objectives.ObjectiveTypes;
 using Domain.Users;
 using Domain.Users.UserDetails;
 
@@ -57,6 +59,20 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id));
 
+                CreateMap<ObjectiveTypeDto, ObjectiveType>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.TypeTitle,
+                        opt => opt.MapFrom(src => (ObjectiveTypeVariations)Enum.Parse(typeof(ObjectiveTypeVariations), src.TypeTitle)))
+                    .ForMember(dest => dest.ETA, opt => opt.MapFrom(src => src.ETA))
+                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
+
+                CreateMap<ObjectiveType, ObjectiveTypeDto>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.TypeTitle,
+                        opt => opt.MapFrom(src => nameof(src.TypeTitle)))
+                    .ForMember(dest => dest.ETA, opt => opt.MapFrom(src => src.ETA))
+                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
+                
                 CreateMap<ObjectiveStatusDTO, ObjectiveStatus>()
                     .ForMember(dest => dest.Title,
                         opt => opt.MapFrom(src => (ObjectiveStatusTitleType)Enum.Parse(typeof(ObjectiveStatusTitleType), src.Title)))
