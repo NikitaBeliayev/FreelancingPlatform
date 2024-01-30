@@ -1,4 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Abstraction;
@@ -16,17 +18,21 @@ namespace Infrastructure.Authentication
         {
             this._options = options.Value;
         }
-        public JwtCredentials GenerateCredentials(Guid userId, string email)
+
+        public JwtCredentials GenerateCredentials(Guid userId, string email, IEnumerable<string> roles)
         {
-            var claims = new List<Claim>()
+            var claims = new List<Claim>
             {
-                new(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new(JwtRegisteredClaimNames.Email,  email), 
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, email),
             };
+
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
                 SecurityAlgorithms.HmacSha256);
-            
+
             var accessToken = new JwtSecurityToken(
                 _options.Issuer,
                 default,
@@ -44,12 +50,11 @@ namespace Infrastructure.Authentication
                 DateTime.UtcNow.AddMinutes(_options.RefreshTokenLifeTimeInDays),
                 signingCredentials
             );
-            
-            
+
             var jwtHandler = new JwtSecurityTokenHandler();
 
-            return new JwtCredentials()
-            {
+            return new JwtCredentials
+            { 
                 AccessToken = jwtHandler.WriteToken(accessToken),
                 RefreshToken = jwtHandler.WriteToken(refreshToken),
                 AccessTokenExpiresIn = DateTime.Now.AddMinutes(_options.AccessTokenLifeTimeInMinutes),
