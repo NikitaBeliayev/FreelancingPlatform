@@ -2,5 +2,5 @@
 
 public interface ICommunicationChannelRepository
 {
-    Task<CommunicationChannel> GetCommunicationChannelByIdAsync(int id, CancellationToken cancellationToken);
+    void ChangeStateToUnchanged(CommunicationChannel communicationChannel);
 }

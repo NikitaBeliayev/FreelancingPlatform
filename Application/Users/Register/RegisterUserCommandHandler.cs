@@ -74,7 +74,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             return ResponseHelper.LogAndReturnError<UserRegistrationResponseDto>("Invalid password", password.Error);
         }
 
-        List<RoleName> roleNameCollection = new List<RoleName>();
+        var roles = new List<Role>();
         foreach (var role in request.RegistrationDto.Roles)
         {
             var roleName = RoleName.BuildRoleName(role);
@@ -82,17 +82,22 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             {
                 return ResponseHelper.LogAndReturnError<UserRegistrationResponseDto>("Invalid role id", roleName.Error);
             }
-            roleNameCollection.Add(roleName.Value!);
+            roles.Add(new Role()
+            {
+                Id = role,
+                Name = RoleName.BuildRoleName(role).Value!
+            });
         }
 
-        ICollection<Role> roles =
-            await _roleRepository.GetRolesByNameCollectionAsync(roleNameCollection, cancellationToken);
-
-        CommunicationChannel? communicationChannel = await _communicationChannelRepository
-            .GetCommunicationChannelByIdAsync((int)CommunicationChannelType.Email, cancellationToken);
+        _roleRepository.ChangeStateToUnchangedForCollection(roles);
+        CommunicationChannel communicationChannel = new CommunicationChannel()
+        {
+            Id = (int)CommunicationChannelType.Email,
+            Type = CommunicationChannelType.Email
+        };
+        _communicationChannelRepository.ChangeStateToUnchanged(communicationChannel);
         
         password = Password.BuildHashed(_hashProvider.GetHash(password.Value!.Value));
-
         User newUser = new(
             Guid.NewGuid(),
             email.Value!,

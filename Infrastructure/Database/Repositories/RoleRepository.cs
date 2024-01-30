@@ -1,4 +1,5 @@
-﻿using Domain.Roles;
+﻿using Application.Roles;
+using Domain.Roles;
 using Domain.Roles.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,14 +13,11 @@ public class RoleRepository : IRoleRepository
     {
         _dbContext = dbContext;
     }
-
-    public async Task<Role?> GetRoleByIdAsync(int id, CancellationToken cancellationToken = default)
+    public void ChangeStateToUnchangedForCollection(IEnumerable<Role> roles)
     {
-        return await _dbContext.Role.FindAsync(id, cancellationToken);
-    }
-
-    public async Task<ICollection<Role>> GetRolesByNameCollectionAsync(IEnumerable<RoleName> idCollection, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Role.Where(role => idCollection.Contains(role.Name)).ToListAsync(cancellationToken);
+        foreach (var role in roles)
+        {
+            _dbContext.Role.Entry(role).State = EntityState.Unchanged;
+        }
     }
 }
