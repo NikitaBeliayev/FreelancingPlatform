@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Objectives.ObjectiveStatus;
 using Application.Roles;
 using Application.Objectives.TaskTypes;
+using Application.Payments;
 using Application.Users;
 using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
@@ -13,6 +14,7 @@ using AutoMapper;
 using Domain.Objectives.ObjectiveStatus;
 using Domain.Roles;
 using Domain.Objectives.ObjectiveTypes;
+using Domain.Payments;
 using Domain.Users;
 using Domain.Users.UserDetails;
 
@@ -84,6 +86,20 @@ namespace Infrastructure.Automapper
                         opt => opt.MapFrom(src => nameof(src.Title)))
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id));
+                
+                CreateMap<PaymentDto, Payment>()
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Name,
+                        opt => opt.MapFrom(src
+                            => (PaymentType)Enum.Parse(typeof(PaymentType), src.Name)));
+
+                CreateMap<Payment, PaymentDto>()
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Name,
+                        opt => opt.MapFrom(src => nameof(src.Name)));
+
             }
         }
     }
