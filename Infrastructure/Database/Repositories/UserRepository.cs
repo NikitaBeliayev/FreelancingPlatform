@@ -1,4 +1,5 @@
-﻿using Domain.Users.Repositories;
+﻿using Domain.Roles;
+using Domain.Users.Repositories;
 using Domain.Users.UserDetails;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -22,7 +23,7 @@ namespace Infrastructure.Database.Repositories
 
         public async Task<User?> GetUserByAsync(Expression<Func<User, bool>> expression, CancellationToken cancellationToken = default)
         {
-            return await _context.Users.FirstOrDefaultAsync(expression, cancellationToken);
+            return await _context.Users.Include(u => u.Roles).FirstOrDefaultAsync(expression, cancellationToken);
         }
 
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

@@ -36,57 +36,13 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CommunicationChannels");
+                    b.ToTable("CommunicationChannels", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
                             Type = "Email"
-                        });
-                });
-
-            modelBuilder.Entity("Domain.Objectives.ObjectiveStatus.ObjectiveStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ObjectiveStatuses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Title = "Draft"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Title = "InProgress"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Title = "WaitingForAssignment"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Title = "WaitingForApproval"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Title = "Done"
                         });
                 });
 
@@ -104,7 +60,7 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Role", (string)null);
 
                     b.HasData(
                         new
@@ -148,7 +104,7 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserCommunicationChannels");
+                    b.ToTable("UserCommunicationChannels", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Users.UserDetails.User", b =>
@@ -175,7 +131,7 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -190,7 +146,7 @@ namespace Infrastructure.Database.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("RoleUser", (string)null);
                 });
 
             modelBuilder.Entity("Domain.UserCommunicationChannels.UserCommunicationChannel", b =>
