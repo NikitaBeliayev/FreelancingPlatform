@@ -13,6 +13,12 @@ namespace Infrastructure.Database
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
+           
+        }
+
+        static AppDbContext()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
 
         public DbSet<User> Users => Set<User>();
