@@ -1,5 +1,4 @@
-﻿using Domain.Users;
-using Domain.Users.UserDetails;
+﻿using Domain.Users.UserDetails;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

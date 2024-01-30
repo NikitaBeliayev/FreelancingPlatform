@@ -1,5 +1,6 @@
 ﻿using Domain.CommunicationChannels;
 using Domain.CommunicationChannels.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repositories;
 
@@ -11,9 +12,8 @@ public class CommunicationChannelRepository : ICommunicationChannelRepository
     {
         _dbContext = dbContext;
     }
-    
-    public async Task<CommunicationChannel> GetCommunicationChannelByIdAsync(int id, CancellationToken cancellationToken)
+    public void ChangeStateToUnchanged(CommunicationChannel communicationChannel)
     {
-        return await _dbContext.CommunicationChannels.FindAsync(id, cancellationToken);
+        _dbContext.Entry(communicationChannel).State = EntityState.Unchanged;
     }
 }
