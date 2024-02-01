@@ -5,7 +5,7 @@ namespace Domain.Roles;
 
 public sealed record class RoleName
 {
-    public string Value { get; set; }
+    public string Value { get;}
 
     private RoleName(RoleNameType roleType)
     {

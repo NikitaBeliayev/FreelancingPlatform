@@ -12,7 +12,7 @@ public sealed record class ObjectiveTypeTitle
 		Title = objectiveTypeVariations.ToString();
 	}
 
-	public string Title { get; set; }
+	public string Title { get; }
 
 	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitle(int objectiveType)
 	{

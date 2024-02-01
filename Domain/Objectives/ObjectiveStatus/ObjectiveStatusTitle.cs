@@ -4,7 +4,7 @@ namespace Domain.Objectives.ObjectiveStatus
 {
     public class ObjectiveStatusTitle
     {
-        public string Value {  get; set; }
+        public string Value {  get; }
 
         private ObjectiveStatusTitle(ObjectiveStatusTitleType statusType)
         {
