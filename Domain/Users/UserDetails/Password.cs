@@ -5,7 +5,7 @@ namespace Domain.Users.UserDetails
 {
     public class Password
     {
-        public string Value { get; set; }
+        public string Value { get;}
 
         private Password(string value) => Value = value;
 

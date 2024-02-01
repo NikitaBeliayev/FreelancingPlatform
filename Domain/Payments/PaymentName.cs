@@ -5,7 +5,7 @@ namespace Domain.Payments;
 
 public class PaymentName
 {
-    public string Value { get; set; }
+    public string Value { get; }
 
     private PaymentName(PaymentType paymentType)
     {

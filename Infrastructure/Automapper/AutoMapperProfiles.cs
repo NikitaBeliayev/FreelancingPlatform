@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Objectives.Category;
 using Application.Objectives.ObjectiveStatus;
 using Application.Roles;
 using Application.Objectives.TaskTypes;
@@ -11,6 +12,8 @@ using Application.Users;
 using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
 using AutoMapper;
+using Domain.Category;
+using Domain.Objectives;
 using Domain.Objectives.ObjectiveStatus;
 using Domain.Roles;
 using Domain.Objectives.ObjectiveTypes;
@@ -99,6 +102,18 @@ namespace Infrastructure.Automapper
                         opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Name,
                         opt => opt.MapFrom(src => nameof(src.Name)));
+
+                CreateMap<Category, CategoryDto>()
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Title,
+                        opt => opt.MapFrom(src => src.Title));
+
+                CreateMap<CategoryDto, Category>()
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Title,
+                        opt => opt.MapFrom(src => CategoryName.BuildCategoryName(src.Title)));
 
             }
         }
