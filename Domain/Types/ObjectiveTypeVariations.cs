@@ -1,4 +1,4 @@
-﻿namespace Domain.Objectives.ObjectiveTypes;
+﻿namespace Domain.Types;
 
 public enum ObjectiveTypeVariations
 {

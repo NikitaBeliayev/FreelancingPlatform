@@ -2,7 +2,7 @@
 
 namespace Application.Objectives.ObjectiveStatus
 {
-    public class ObjectiveStatusDTO
+    public class ObjectiveStatusDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

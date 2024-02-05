@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Objectives;
 
-namespace Domain.Objectives.ObjectiveStatus
+namespace Domain.Statuses
 {
     public class ObjectiveStatus
     {
         public int Id { get; set; }
         public ObjectiveStatusTitle Title { get; set; }
-        public ICollection<Objective> Objectives = new List<Objective>(); // replase string with objective after implemntaion
+        public ICollection<Objective> Objectives { get; } = new List<Objective>();
+    
 
         public ObjectiveStatus()
         {

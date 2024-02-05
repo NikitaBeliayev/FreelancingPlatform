@@ -1,9 +1,8 @@
 ﻿using Domain.Objectives;
-using Domain.Objectives.ObjectiveStatus;
-using Domain.Roles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection;
+using Domain.Statuses;
 
 namespace Infrastructure.Database.Configuration
 {

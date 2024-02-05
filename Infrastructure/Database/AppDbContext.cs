@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Domain.UserCommunicationChannels;
 using Domain.CommunicationChannels;
+using Domain.Objectives;
 using Domain.Roles;
+using Domain.Statuses;
+using Domain.Types;
 using Domain.Users.UserDetails;
-using Domain.Objectives.ObjectiveTypes;
-using Domain.Objectives.ObjectiveStatus;
 
 namespace Infrastructure.Database
 {
@@ -25,8 +26,7 @@ namespace Infrastructure.Database
         public DbSet<CommunicationChannel> CommunicationChannels => Set<CommunicationChannel>();
         public DbSet<UserCommunicationChannel> UserCommunicationChannels => Set<UserCommunicationChannel>();
         public DbSet<Role> Role => Set<Role>();
-        public DbSet<ObjectiveType> ObjectiveType => Set<ObjectiveType>();
-        public DbSet<ObjectiveStatus> ObjectiveStatuses => Set<ObjectiveStatus>();
+        public DbSet<Objective> Objectives => Set<Objective>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

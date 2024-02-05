@@ -15,6 +15,19 @@ namespace Infrastructure.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Category",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Category", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CommunicationChannels",
                 columns: table => new
                 {
@@ -47,7 +60,7 @@ namespace Infrastructure.Database.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TypeTitle = table.Column<string>(type: "text", nullable: false),
-                    ETA = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Eta = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Duration = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -61,8 +74,7 @@ namespace Infrastructure.Database.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Objectives = table.Column<string[]>(type: "text[]", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,19 +113,36 @@ namespace Infrastructure.Database.Migrations
                 name: "Objective",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    ObjectiveTypeId = table.Column<int>(type: "integer", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    PaymentId = table.Column<int>(type: "integer", nullable: false),
+                    PaymentAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    ObjectiveStatusId = table.Column<int>(type: "integer", nullable: false),
+                    TypeId = table.Column<int>(type: "integer", nullable: false),
+                    Attachments = table.Column<byte[]>(type: "bytea", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Objective", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Objective_ObjectiveType_ObjectiveTypeId",
-                        column: x => x.ObjectiveTypeId,
+                        name: "FK_Objective_ObjectiveStatuses_ObjectiveStatusId",
+                        column: x => x.ObjectiveStatusId,
+                        principalTable: "ObjectiveStatuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Objective_ObjectiveType_TypeId",
+                        column: x => x.TypeId,
                         principalTable: "ObjectiveType",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Objective_Payment_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "Payment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,6 +196,30 @@ namespace Infrastructure.Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CategoryObjective",
+                columns: table => new
+                {
+                    CategoriesId = table.Column<int>(type: "integer", nullable: false),
+                    ObjectivesId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryObjective", x => new { x.CategoriesId, x.ObjectivesId });
+                    table.ForeignKey(
+                        name: "FK_CategoryObjective_Category_CategoriesId",
+                        column: x => x.CategoriesId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategoryObjective_Objective_ObjectivesId",
+                        column: x => x.ObjectivesId,
+                        principalTable: "Objective",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "CommunicationChannels",
                 columns: new[] { "Id", "Type" },
@@ -186,12 +239,12 @@ namespace Infrastructure.Database.Migrations
 
             migrationBuilder.InsertData(
                 table: "ObjectiveType",
-                columns: new[] { "Id", "Duration", "ETA", "TypeTitle" },
+                columns: new[] { "Id", "Duration", "Eta", "TypeTitle" },
                 values: new object[,]
                 {
-                    { 1, 8, new DateTime(2024, 2, 1, 16, 43, 43, 197, DateTimeKind.Local).AddTicks(1294), "Individual" },
-                    { 2, 8, new DateTime(2024, 2, 1, 16, 43, 43, 197, DateTimeKind.Local).AddTicks(1333), "Group" },
-                    { 3, 8, new DateTime(2024, 2, 1, 16, 43, 43, 197, DateTimeKind.Local).AddTicks(1337), "Team" }
+                    { 1, 8, new DateTime(2024, 2, 7, 1, 18, 48, 552, DateTimeKind.Local).AddTicks(831), "Individual" },
+                    { 2, 8, new DateTime(2024, 2, 7, 1, 18, 48, 552, DateTimeKind.Local).AddTicks(882), "Group" },
+                    { 3, 8, new DateTime(2024, 2, 7, 1, 18, 48, 552, DateTimeKind.Local).AddTicks(885), "Team" }
                 });
 
             migrationBuilder.InsertData(
@@ -205,9 +258,30 @@ namespace Infrastructure.Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Objective_ObjectiveTypeId",
+                name: "IX_Category_Title",
+                table: "Category",
+                column: "Title",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategoryObjective_ObjectivesId",
+                table: "CategoryObjective",
+                column: "ObjectivesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Objective_ObjectiveStatusId",
                 table: "Objective",
-                column: "ObjectiveTypeId");
+                column: "ObjectiveStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Objective_PaymentId",
+                table: "Objective",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Objective_TypeId",
+                table: "Objective",
+                column: "TypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleUser_UsersId",
@@ -229,13 +303,7 @@ namespace Infrastructure.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Objective");
-
-            migrationBuilder.DropTable(
-                name: "ObjectiveStatuses");
-
-            migrationBuilder.DropTable(
-                name: "Payment");
+                name: "CategoryObjective");
 
             migrationBuilder.DropTable(
                 name: "RoleUser");
@@ -244,7 +312,10 @@ namespace Infrastructure.Database.Migrations
                 name: "UserCommunicationChannels");
 
             migrationBuilder.DropTable(
-                name: "ObjectiveType");
+                name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "Objective");
 
             migrationBuilder.DropTable(
                 name: "Role");
@@ -254,6 +325,15 @@ namespace Infrastructure.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "ObjectiveStatuses");
+
+            migrationBuilder.DropTable(
+                name: "ObjectiveType");
+
+            migrationBuilder.DropTable(
+                name: "Payment");
         }
     }
 }

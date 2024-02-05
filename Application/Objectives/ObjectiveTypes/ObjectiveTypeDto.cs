@@ -1,6 +1,6 @@
 ﻿using Domain.Objectives.ObjectiveTypes;
 
-namespace Application.Objectives.TaskTypes;
+namespace Application.Objectives.ObjectiveTypes;
 public class ObjectiveTypeDto
 {
 	public int Id { get; set; }

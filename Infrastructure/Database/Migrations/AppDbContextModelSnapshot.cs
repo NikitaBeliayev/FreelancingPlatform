@@ -22,7 +22,22 @@ namespace Infrastructure.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Category.Category", b =>
+            modelBuilder.Entity("CategoryObjective", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ObjectivesId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CategoriesId", "ObjectivesId");
+
+                    b.HasIndex("ObjectivesId");
+
+                    b.ToTable("CategoryObjective");
+                });
+
+            modelBuilder.Entity("Domain.Categories.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,114 +83,42 @@ namespace Infrastructure.Database.Migrations
 
             modelBuilder.Entity("Domain.Objectives.Objective", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<byte[]>("Attachments")
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ObjectiveStatusId")
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<decimal>("PaymentAmount")
+                        .HasColumnType("numeric");
 
-                    b.Property<int?>("ObjectiveTypeId")
+                    b.Property<int>("PaymentId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ObjectiveTypeId");
-
-                    b.ToTable("Objective");
-                });
-
-            modelBuilder.Entity("Domain.Objectives.ObjectiveStatus.ObjectiveStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("TypeId")
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ObjectiveStatuses");
+                    b.HasIndex("ObjectiveStatusId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Title = "Draft"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Title = "InProgress"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Title = "WaitingForAssignment"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Title = "WaitingForApproval"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Title = "Done"
-                        });
-                });
+                    b.HasIndex("PaymentId");
 
-            modelBuilder.Entity("Domain.Objectives.ObjectiveTypes.ObjectiveType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                    b.HasIndex("TypeId");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("ETA")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("TypeTitle")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ObjectiveType");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Duration = 8,
-                            ETA = new DateTime(2024, 2, 2, 20, 30, 11, 963, DateTimeKind.Local).AddTicks(5864),
-                            TypeTitle = "Individual"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Duration = 8,
-                            ETA = new DateTime(2024, 2, 2, 20, 30, 11, 963, DateTimeKind.Local).AddTicks(5916),
-                            TypeTitle = "Group"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Duration = 8,
-                            ETA = new DateTime(2024, 2, 2, 20, 30, 11, 963, DateTimeKind.Local).AddTicks(5920),
-                            TypeTitle = "Team"
-                        });
+                    b.ToTable("Objectives");
                 });
 
             modelBuilder.Entity("Domain.Payments.Payment", b =>
@@ -189,10 +132,6 @@ namespace Infrastructure.Database.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string[]>("Objectives")
-                        .IsRequired()
-                        .HasColumnType("text[]");
 
                     b.HasKey("Id");
 
@@ -230,6 +169,96 @@ namespace Infrastructure.Database.Migrations
                         {
                             Id = 3,
                             Name = "Implementer"
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Statuses.ObjectiveStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ObjectiveStatus");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Title = "Draft"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Title = "InProgress"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Title = "WaitingForAssignment"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Title = "WaitingForApproval"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Title = "Done"
+                        });
+                });
+
+            modelBuilder.Entity("Domain.Types.ObjectiveType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Eta")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("TypeTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ObjectiveType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Duration = 8,
+                            Eta = new DateTime(2024, 2, 7, 7, 10, 43, 136, DateTimeKind.Local).AddTicks(4936),
+                            TypeTitle = "Individual"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Duration = 8,
+                            Eta = new DateTime(2024, 2, 7, 7, 10, 43, 136, DateTimeKind.Local).AddTicks(5083),
+                            TypeTitle = "Group"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Duration = 8,
+                            Eta = new DateTime(2024, 2, 7, 7, 10, 43, 136, DateTimeKind.Local).AddTicks(5088),
+                            TypeTitle = "Team"
                         });
                 });
 
@@ -287,6 +316,21 @@ namespace Infrastructure.Database.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ObjectiveUser", b =>
+                {
+                    b.Property<Guid>("ObjectivesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ObjectivesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ObjectiveUser");
+                });
+
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.Property<int>("RolesId")
@@ -302,11 +346,46 @@ namespace Infrastructure.Database.Migrations
                     b.ToTable("RoleUser");
                 });
 
+            modelBuilder.Entity("CategoryObjective", b =>
+                {
+                    b.HasOne("Domain.Categories.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Objectives.Objective", null)
+                        .WithMany()
+                        .HasForeignKey("ObjectivesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Objectives.Objective", b =>
                 {
-                    b.HasOne("Domain.Objectives.ObjectiveTypes.ObjectiveType", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("ObjectiveTypeId");
+                    b.HasOne("Domain.Statuses.ObjectiveStatus", "ObjectiveStatus")
+                        .WithMany("Objectives")
+                        .HasForeignKey("ObjectiveStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Payments.Payment", "Payment")
+                        .WithMany("Objectives")
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Types.ObjectiveType", "Type")
+                        .WithMany("Objectives")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ObjectiveStatus");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Domain.UserCommunicationChannels.UserCommunicationChannel", b =>
@@ -326,6 +405,21 @@ namespace Infrastructure.Database.Migrations
                     b.Navigation("CommunicationChannel");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ObjectiveUser", b =>
+                {
+                    b.HasOne("Domain.Objectives.Objective", null)
+                        .WithMany()
+                        .HasForeignKey("ObjectivesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Users.UserDetails.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("RoleUser", b =>
@@ -348,9 +442,19 @@ namespace Infrastructure.Database.Migrations
                     b.Navigation("UserCommunicationChannels");
                 });
 
-            modelBuilder.Entity("Domain.Objectives.ObjectiveTypes.ObjectiveType", b =>
+            modelBuilder.Entity("Domain.Payments.Payment", b =>
                 {
-                    b.Navigation("Tasks");
+                    b.Navigation("Objectives");
+                });
+
+            modelBuilder.Entity("Domain.Statuses.ObjectiveStatus", b =>
+                {
+                    b.Navigation("Objectives");
+                });
+
+            modelBuilder.Entity("Domain.Types.ObjectiveType", b =>
+                {
+                    b.Navigation("Objectives");
                 });
 
             modelBuilder.Entity("Domain.Users.UserDetails.User", b =>
