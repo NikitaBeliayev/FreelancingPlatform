@@ -1,4 +1,4 @@
-﻿using Domain.Category;
+﻿using Domain.Categories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

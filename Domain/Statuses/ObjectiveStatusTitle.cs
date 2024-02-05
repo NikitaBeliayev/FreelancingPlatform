@@ -1,21 +1,22 @@
-﻿using Shared;
+﻿using Domain.Statuses.Errors;
+using Shared;
 
-namespace Domain.Objectives.ObjectiveStatus
+namespace Domain.Statuses
 {
     public class ObjectiveStatusTitle
     {
         public string Value {  get; }
 
-        private ObjectiveStatusTitle(ObjectiveStatusTitleType statusType)
+        private ObjectiveStatusTitle(ObjectiveStatusTitleType objectiveStatusType)
         {
-            Value = statusType.ToString();
+            Value = objectiveStatusType.ToString();
         }
 
         public static Result<ObjectiveStatusTitle> BuildStatusTitle(int objectiveStatus)
         {
             if (objectiveStatus != 1)
             {
-                return Result<ObjectiveStatusTitle>.Failure(null, ObjectiveStatusTitleErrors.InvalidName);
+                return Result<ObjectiveStatusTitle>.Failure(null, StatusTitleErrors.InvalidName);
             }
 
             return Result<ObjectiveStatusTitle>.Success(new ObjectiveStatusTitle((ObjectiveStatusTitleType)objectiveStatus));

@@ -1,5 +1,5 @@
 ﻿
-namespace Domain.Objectives.ObjectiveStatus
+namespace Domain.Statuses
 {
     public enum ObjectiveStatusTitleType
     {

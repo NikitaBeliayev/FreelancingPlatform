@@ -1,9 +1,7 @@
-﻿using Domain.Category.Errors;
-using Domain.Roles;
-using Domain.Roles.Errors;
+﻿using Domain.Categories.Errors;
 using Shared;
 
-namespace Domain.Category;
+namespace Domain.Categories;
 
 public sealed record CategoryName
 {

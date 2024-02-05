@@ -1,4 +1,5 @@
-﻿using Domain.Roles;
+﻿using Domain.Objectives;
+using Domain.Roles;
 using Domain.UserCommunicationChannels;
 using Shared;
 
@@ -11,6 +12,7 @@ namespace Domain.Users.UserDetails
         public Name LastName { get; set; }
         public Password Password { get; set; }
         public ICollection<Role> Roles { get; set; } = new List<Role>();
+        public ICollection<Objective> Objectives { get; } = new List<Objective>();
 
         public ICollection<UserCommunicationChannel> CommunicationChannels { get; set; } =
             new List<UserCommunicationChannel>();

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Domain.Objectives.ObjectiveTypes;
 using Domain.Roles;
 using Domain.Objectives;
+using Domain.Types;
 
 namespace Infrastructure.Database.Configuration
 {

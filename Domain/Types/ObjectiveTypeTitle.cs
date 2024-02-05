@@ -3,7 +3,7 @@ using Domain.Roles;
 using Shared;
 using Domain.Objectives.ObjectiveTypes.Errors;
 
-namespace Domain.Objectives.ObjectiveTypes;
+namespace Domain.Types;
 
 public sealed record class ObjectiveTypeTitle
 {

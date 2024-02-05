@@ -1,4 +1,6 @@
-﻿namespace Domain.Objectives.ObjectiveTypes;
+﻿using Domain.Objectives;
+
+namespace Domain.Types;
 
 public class ObjectiveType
 {
@@ -9,25 +11,25 @@ public class ObjectiveType
 	{
 	}
 
-	public ObjectiveType(int id, ICollection<Objective>? tasks, ObjectiveTypeTitle typeTitle, DateTime eta, int duration)
+	public ObjectiveType(int id, ICollection<Objective> tasks, ObjectiveTypeTitle typeTitle, DateTime eta, int duration)
 	{
 		Id = id;
-		Tasks = tasks;
+		Objectives = tasks;
 		TypeTitle = typeTitle;
-		ETA = eta;
+		Eta = eta;
 		Duration = duration;
 	}
 
 	public int Id { get; set; }
 
-	public ICollection<Objective>? Tasks { get; set; }
+	public ICollection<Objective> Objectives { get; } = new List<Objective>();
 
 	public ObjectiveTypeTitle TypeTitle { get; set; }
 
 	/// <summary>
 	/// The estimated time of arrival
 	/// </summary>
-	public DateTime ETA
+	public DateTime Eta
 	{
 		get => _eta;
 		set => _eta = value < DateTime.Now.AddDays(1) ? throw new ArgumentException("ETA must be at least +1 day from now") : value;

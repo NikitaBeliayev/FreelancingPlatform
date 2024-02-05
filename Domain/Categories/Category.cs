@@ -1,11 +1,11 @@
 ﻿using Domain.Objectives;
 
-namespace Domain.Category;
+namespace Domain.Categories;
 
 public class Category
 {
     public int Id { get; set; }
     public CategoryName Title { get; set; }
 
-    public ICollection<Objective> ObjectiveCollection = new List<Objective>();
+    public ICollection<Objective> Objectives = new List<Objective>();
 }
