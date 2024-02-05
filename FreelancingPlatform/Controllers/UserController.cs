@@ -1,5 +1,6 @@
 ﻿using Application.Users;
 using Application.Users.Create;
+using Application.Users.EmailConfirm;
 using Application.Users.GetById;
 using Application.Users.LoginUser;
 using Application.Users.Register;
@@ -61,22 +62,26 @@ namespace FreelancingPlatform.Controllers
         {
             var command = new LoginUserCommand(user);
             var result = await _sender.Send(command, cancellationToken);
+
             ObjectResult response = ApiResponse<UserLoginResponseDto>.FromResult(result);
             return response;
         }
 
         [AllowAnonymous]
         [HttpGet("{userId:guid}/Confirm/Email/{token:guid}")]
-        public async Task<IActionResult> ConfirmEmail(Guid userId, Guid token)
+        public async Task<IActionResult> ConfirmEmail(Guid userId, Guid token, CancellationToken cancellationToken)
         {
-            return null;
+            var command = new ConfirmUserEmailCommand(userId, token);
+            var result = await _sender.Send(command, cancellationToken);
+            
+            ObjectResult response = ApiResponse<UserEmailConfirmationResponseDto>.FromResult(result);
+            return response;
         }
 
         [Authorize(Roles = nameof(RoleNameType.Admin))]
         [HttpPost("create")]
         public async Task<IActionResult> CreateUser([FromBody] UserDto user, CancellationToken cancellationToken)
         {
-
             var command = new CreateUserCommand(user);
             var result = await _sender.Send(command, cancellationToken);
 
