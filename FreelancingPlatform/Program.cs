@@ -13,6 +13,7 @@ using Infrastructure.Authentication;
 using Infrastructure.Database;
 using Infrastructure.DatabaseConfiguration;
 using Infrastructure.HashProvider;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +61,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var requestTimeout = builder.Configuration.GetSection("RequestTimeout").GetValue<int>("DefaultInSeconds");
+
+builder.Services.AddRequestTimeouts(options =>
+{
+    options.DefaultPolicy = new RequestTimeoutPolicy()
+    {
+        Timeout = TimeSpan.FromSeconds(requestTimeout),
+        TimeoutStatusCode = StatusCodes.Status408RequestTimeout
+    };
+});
 builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(
                     builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -99,7 +110,7 @@ if (builder.Configuration.GetSection("Database").GetValue<bool>("ApplyAutomaticM
 }
 
 app.UseSerilogRequestLogging();
-
+app.UseRequestTimeouts();
 app.UseAuthentication();
 app.UseAuthorization();
 

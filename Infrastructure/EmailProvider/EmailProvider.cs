@@ -21,7 +21,7 @@ namespace Infrastructure.EmailProvider
             this._logger = logger;
         }
 
-        public async Task<Result> SendAsync(EmailMessageComposer? emailModel)
+        public async Task<Result> SendAsync(EmailMessageComposer? emailModel, CancellationToken cancellationToken)
         {
 
             if (emailModel is null)
@@ -51,10 +51,8 @@ namespace Infrastructure.EmailProvider
                    })
 
             {
-                using var message = new MailMessage(_fromAddress, _toAddress)
-                {
-                    Body = emailBody
-                };
+                using var message = new MailMessage(_fromAddress, _toAddress);
+                message.Body = emailBody;
 
                 if (emailModel.CopyTo is not null)
                 {
@@ -63,12 +61,12 @@ namespace Infrastructure.EmailProvider
 
                 try
                 {
-                    await smtpClient.SendMailAsync(message);
+                    await smtpClient.SendMailAsync(message, cancellationToken);
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, $"Error during email sending to {emailModel.Recipient}");
-                    throw new Exception($"Error during email sending to {emailModel.Recipient}", e);
+                    _logger.LogError(e, $"Error during email sending to {emailModel.Recipient.Value}");
+                    throw new Exception($"Error during email sending to {emailModel.Recipient.Value}", e);
                 }
 
                 _logger.LogInformation($"The mail has been sent to {emailModel.Recipient}");
