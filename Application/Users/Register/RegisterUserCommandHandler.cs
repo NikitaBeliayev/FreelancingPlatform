@@ -142,7 +142,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
                 }
             };
 
-            await _emailProvider.SendAsync(messageComposer);
+            await _emailProvider.SendAsync(messageComposer, cancellationToken);
             
             _logger.LogInformation("User logged in successfully: Id = {UserId}", result.Id);
             
