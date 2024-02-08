@@ -20,4 +20,14 @@ public sealed record CategoryName
         }
         return Result<CategoryName>.Success(new CategoryName(categoryName.ToLower()));
     }
+    
+    /// <summary>
+    /// Use this method only for ef core configuration
+    /// </summary>
+    /// <param name="categoryName"></param>
+    /// <returns></returns>
+    public static Result<CategoryName> BuildCategoryNameWithoutValidation(string categoryName)
+    {
+        return Result<CategoryName>.Success(new CategoryName(categoryName.ToLower()));
+    }
 }

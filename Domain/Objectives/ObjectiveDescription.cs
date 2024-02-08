@@ -25,4 +25,14 @@ public class ObjectiveDescription
         
         return Result<ObjectiveDescription>.Success(new ObjectiveDescription(description));
     }
+    
+    /// <summary>
+    /// Use this method only for ef core configuration
+    /// </summary>
+    /// <param name="description"></param>
+    /// <returns></returns>
+    public static Result<ObjectiveDescription> BuildNameWithoutValidation(string description)
+    {
+        return Result<ObjectiveDescription>.Success(new ObjectiveDescription(description));
+    }
 }
