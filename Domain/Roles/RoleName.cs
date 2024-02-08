@@ -25,4 +25,14 @@ public sealed record class RoleName
 
         return Result<RoleName>.Success(new RoleName(((RoleNameType)role)));
     }
+    
+    /// <summary>
+    /// Use this method only for ef core configuration
+    /// </summary>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    public static Result<RoleName> BuildRoleNameWithoutValidation(int role)
+    {
+        return Result<RoleName>.Success(new RoleName(((RoleNameType)role)));
+    }
 }

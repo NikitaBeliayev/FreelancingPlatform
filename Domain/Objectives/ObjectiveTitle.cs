@@ -25,4 +25,14 @@ public class ObjectiveTitle
         
         return Result<ObjectiveTitle>.Success(new ObjectiveTitle(description));
     }
+    
+    /// <summary>
+    /// Use this method only for ef core configuration
+    /// </summary>
+    /// <param name="description"></param>
+    /// <returns></returns>
+    public static Result<ObjectiveTitle> BuildNameWithoutValidation(string description)
+    {
+        return Result<ObjectiveTitle>.Success(new ObjectiveTitle(description));
+    }
 }

@@ -20,4 +20,14 @@ public class PaymentName
         }
         return Result<PaymentName>.Success(new PaymentName(((PaymentType)payment)));
     }
+    
+    /// <summary>
+    /// Use this method only for ef core configuration
+    /// </summary>
+    /// <param name="payment"></param>
+    /// <returns></returns>
+    public static Result<PaymentName> BuildNameWithoutValidation(int payment)
+    {
+        return Result<PaymentName>.Success(new PaymentName(((PaymentType)payment)));
+    }
 }

@@ -23,4 +23,14 @@ public sealed record class ObjectiveTypeTitle
 
 		return Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle((ObjectiveTypeVariations)objectiveType));
 	}
+	
+	/// <summary>
+	/// Use this method only for ef core configuration
+	/// </summary>
+	/// <param name="objectiveType"></param>
+	/// <returns></returns>
+	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitleWithoutValidation(int objectiveType)
+	{
+		return Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle((ObjectiveTypeVariations)objectiveType));
+	}
 }

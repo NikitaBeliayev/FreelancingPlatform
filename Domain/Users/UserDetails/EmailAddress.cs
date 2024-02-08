@@ -38,5 +38,15 @@ namespace Domain.Users.UserDetails
 
             return Result.Success();
         }
+        
+        /// <summary>
+        /// Use this method only for ef core configuration
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Result<EmailAddress> BuildEmailWithoutValidation(string value)
+        {
+            return Result<EmailAddress>.Success(new EmailAddress(value.ToLower(), isEmailValidated: false));
+        }
     }
 }

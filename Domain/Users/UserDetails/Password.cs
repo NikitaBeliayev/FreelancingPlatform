@@ -5,7 +5,7 @@ namespace Domain.Users.UserDetails
 {
     public class Password
     {
-        public string Value { get;}
+        public string Value { get; }
 
         private Password(string value) => Value = value;
 
@@ -18,6 +18,16 @@ namespace Domain.Users.UserDetails
                 : Result<Password>.Failure(null, validationResult.Error);
         }
         public static Result<Password> BuildHashed(string value)
+        {
+            return Result<Password>.Success(new Password(value));
+        }
+        
+        /// <summary>
+        /// Use this method only for ef core configuration
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Result<Password> BuildHashedWithoutValidation(string value)
         {
             return Result<Password>.Success(new Password(value));
         }
@@ -50,6 +60,16 @@ namespace Domain.Users.UserDetails
             }
 
             return Result.Success();
+        }
+        
+        /// <summary>
+        /// Use this method only for ef core configuration
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Result<Password> BuildPasswordWithoutValidation(string value)
+        {
+            return Result<Password>.Success(new Password(value));
         }
     }
 }

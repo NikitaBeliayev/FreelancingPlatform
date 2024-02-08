@@ -15,5 +15,15 @@ namespace Domain.Users.UserDetails
 
             return Result<Name>.Success(new Name(value));
         }
+        
+        /// <summary>
+        /// Use this method only for ef core configuration
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static Result<Name> BuildNameWithoutValidation(string value)
+        {
+            return Result<Name>.Success(new Name(value));
+        }
     }
 }
