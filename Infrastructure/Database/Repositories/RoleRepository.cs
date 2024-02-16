@@ -1,6 +1,5 @@
-﻿using Application.Roles;
+﻿using Domain.Repositories;
 using Domain.Roles;
-using Domain.Roles.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repositories;

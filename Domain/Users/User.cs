@@ -11,7 +11,7 @@ namespace Domain.Users.UserDetails
         public Name FirstName { get; set; }
         public Name LastName { get; set; }
         public Password Password { get; set; }
-        public ICollection<Role> Roles { get; set; } = new List<Role>();
+        public ICollection<Role> Roles { get; } = new List<Role>();
         public ICollection<Objective> Objectives { get; } = new List<Objective>();
 
         public ICollection<UserCommunicationChannel> CommunicationChannels { get; set; } =

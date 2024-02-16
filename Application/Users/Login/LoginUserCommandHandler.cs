@@ -4,11 +4,12 @@ using Application.Abstraction.Messaging;
 using Application.Helpers;
 using Application.Models;
 using Application.Users.ResponseDto;
-using Domain.Users.Repositories;
+using Domain.Repositories;
+using Domain.Users;
 using Domain.Users.UserDetails;
 using Shared;
 
-namespace Application.Users.LoginUser;
+namespace Application.Users.Login;
 
 public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLoginResponseDto>
 {
@@ -31,8 +32,8 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
         }
 
         User? possibleUser =
-            await _userRepository.GetUserByAsync(
-                u => u.Email == emailAddress.Value, cancellationToken);
+            await _userRepository.GetByExpressionWithIncludesAsync(
+                user => user.Email == emailAddress.Value, cancellationToken, user => user.Roles);
 
         if (possibleUser is null)
         {
@@ -45,8 +46,9 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
         {
             return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("Invalid password format", password.Error);
         }
+        password.Value!.Value = _hashProvider.GetHash(password.Value.Value);
 
-        if (possibleUser.Password.Value != _hashProvider.GetHash(password.Value!.Value))
+        if (possibleUser.Password.Value != password.Value.Value)
         {
             return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("Invalid password", new Error("User.LoginUserCommandHandler",
                 "Invalid password", (int)HttpStatusCode.Unauthorized));

@@ -1,5 +1,6 @@
 using Domain.Roles;
 using Domain.UserCommunicationChannels;
+using Domain.Users;
 using Domain.Users.UserDetails;
 
 namespace DomainTests.User;

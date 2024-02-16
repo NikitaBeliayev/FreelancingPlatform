@@ -37,7 +37,7 @@ namespace Infrastructure.EmailProvider
             {
                 emailBody = _emailOptions.ConfirmationEmailBody
                     .Replace("{UserId:Guid}", emailModel.ConfirmationEmail.UserId.ToString())
-                    .Replace("{ConfirmationToken:Guid}", emailModel.ConfirmationEmail.UserId.ToString());
+                    .Replace("{ConfirmationToken:Guid}", emailModel.ConfirmationEmail.ConfirmationToken.ToString());
             }
             using (var smtpClient = new SmtpClient()
                    {

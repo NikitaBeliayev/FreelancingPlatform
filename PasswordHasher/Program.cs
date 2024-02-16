@@ -19,8 +19,7 @@ var users = context.Users.ToList();
 
 foreach (User user in users)
 {
-    var hash = Password.BuildHashed(hashProvider.GetHash(user.Password.Value));
-    user.Password = hash.Value!;
+    user.Password.Value = hashProvider.GetHash(user.Password.Value);
 }
 
 context.SaveChanges();

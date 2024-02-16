@@ -4,14 +4,12 @@ using Application.Helpers;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Shared;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Domain.Roles;
 using Domain.UserCommunicationChannels;
 using Domain.Users.UserDetails;
-using Domain.Users.Repositories;
 using Application.Abstraction;
+using Domain.Repositories;
+using Domain.Users;
 
 namespace Application.Users.Create
 {
@@ -59,7 +57,8 @@ namespace Application.Users.Create
             {
                 return ResponseHelper.LogAndReturnError<UserDto>("Invalid password", password.Error);
             }
-            password = Password.BuildHashed(_hashProvider.GetHash(password.Value!.Value));
+            
+            password.Value!.Value = _hashProvider.GetHash(password.Value!.Value);
 
             User newUser = new(
                 Guid.NewGuid(),

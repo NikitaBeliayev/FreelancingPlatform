@@ -3,12 +3,12 @@ using Domain.Categories;
 using Domain.Payments;
 using Domain.Types;
 using Domain.Users.UserDetails;
+using Shared;
 
 namespace Domain.Objectives;
 
-public class Objective
+public class Objective : Entity
 {
-	public Guid Id { get; set; }
 	public ObjectiveTitle Title { get; set; }
 	public ObjectiveDescription Description { get; set; }
 	public Payment Payment { get; set; }
@@ -24,13 +24,13 @@ public class Objective
 	//public ICollection<string> Contacts { get; } = new List<string>();
 	public byte[]? Attachments { get; set; }
 	
-	public Objective()
+	public Objective(Guid id) : base(id)
 	{
 
 	}
 	public Objective(Guid id, ObjectiveTitle title, ObjectiveDescription description, Payment payment, decimal paymentAmount, 
 		ObjectiveStatus objectiveStatus, ICollection<Category> categories, ObjectiveType type, byte[] attachments, int paymentId,
-		int objectiveStatusId)
+		int objectiveStatusId) : base(id)
 	{
 		Id = id;
 		Title = title;

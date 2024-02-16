@@ -3,11 +3,9 @@ using Application.Abstraction.Messaging;
 using Application.Helpers;
 using Application.Users.ResponseDto;
 using Domain.CommunicationChannels;
+using Domain.Repositories;
 using Domain.UserCommunicationChannels;
-using Domain.UserCommunicationChannels.Repositories;
 using Domain.Users.Errors;
-using Domain.Users.Repositories;
-using Domain.Users.UserDetails;
 using Shared;
 
 namespace Application.Users.EmailConfirm;

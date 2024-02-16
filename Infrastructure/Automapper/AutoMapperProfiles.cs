@@ -13,6 +13,7 @@ using Domain.Roles;
 using Domain.Payments;
 using Domain.Statuses;
 using Domain.Types;
+using Domain.Users;
 using Domain.Users.UserDetails;
 
 namespace Infrastructure.Automapper

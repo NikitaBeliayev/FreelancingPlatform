@@ -1,5 +1,6 @@
-﻿using Application.Objectives.RequestDto;
+﻿using System.Linq.Expressions;
 using Domain.Objectives;
+using Domain.Repositories;
 using Domain.Users.UserDetails;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,39 +8,39 @@ namespace Infrastructure.Database.Repositories;
 
 public class ObjectiveRepository : IObjectiveRepository
 {
-    private readonly AppDbContext _context;
+    private readonly AppDbContext _dbContext;
     
     public ObjectiveRepository(AppDbContext context)
     {
-        _context = context;
+        _dbContext = context;
     }
-    
-    public async Task<Objective?> GetObjectiveByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Objective?> CreateAsync(Objective entity, CancellationToken cancellationToken = default)
     {
-        return await _context.Objectives.FindAsync(new object[] { id }, cancellationToken);
+        await _dbContext.Objectives.AddAsync(entity, cancellationToken);
+        return entity;
     }
-
-    public async Task<IEnumerable<Objective>?> GetObjectiveByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<Objective> GetAll()
     {
-        User? possibleUser = await _context.Users.Include(e => e.Objectives).FirstOrDefaultAsync(e => e.Id == userId, cancellationToken);
-        return possibleUser?.Objectives;
+        return _dbContext.Objectives.AsAsyncEnumerable();
     }
 
-    public async Task<Objective?> DeleteObjectiveAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<Objective?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        Objective? possibleObjective = await GetObjectiveByIdAsync(id, cancellationToken);
-        return possibleObjective is null ? null : _context.Objectives.Remove(possibleObjective).Entity;
+        return await _dbContext.Objectives.FindAsync(new object[] { id }, cancellationToken);
     }
-    
-    public async Task<Objective?> CreateObjectiveAsync(Objective objective, CancellationToken cancellationToken = default)
+
+    public Objective Delete(Objective entity)
     {
-        await _context.Objectives.AddAsync(objective, cancellationToken);
-        return objective;
+        return _dbContext.Objectives.Remove(entity).Entity;
     }
-    
-    public Objective UpdateObjectiveAsync(Objective objective, CancellationToken cancellationToken = default)
+    public Objective Update(Objective entity)
     {
-        _context.Objectives.Update(objective);
-        return objective;
+        return _dbContext.Objectives.Update(entity).Entity;
+    }
+
+    public async Task<Objective?> GetByExpressionWithIncludesAsync(Expression<Func<Objective, bool>> expression, CancellationToken cancellationToken = default,
+        params Expression<Func<Objective, object>>[] includes)
+    {
+        return await includes.Aggregate(_dbContext.Objectives.AsQueryable(), (c, p) => c.Include(p)).FirstOrDefaultAsync(expression, cancellationToken);
     }
 }
