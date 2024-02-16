@@ -1,34 +1,47 @@
 ﻿using Domain.Users.Errors;
 using Shared;
 
-namespace Domain.Users.UserDetails
+namespace Domain.Users
 {
     public class Password
     {
-        public string Value { get; }
+        private string? _value;
+        public string Value
+        {
+            get => _value;
+            set
+            {
+                if (_isValidated && _value is null || IsHashed(value))
+                {
+                    _value = value;
+                    _isValidated = false;
+                }
+            }
+        }
+
+        private static bool _isValidated = false;
 
         private Password(string value) => Value = value;
 
-        public static Result<Password> BuildPassword(string value)
+        public static Result<Password> BuildPassword(string password)
         {
-            var validationResult = ValidatePassword(value);
+            var validationResult = ValidatePassword(password);
 
-            return validationResult.IsSuccess
-                ? Result<Password>.Success(new Password(value))
-                : Result<Password>.Failure(null, validationResult.Error);
+            if (validationResult.IsSuccess)
+            {
+                _isValidated = true;
+                return Result<Password>.Success(new Password(password));
+            }
+            return Result<Password>.Failure(null, validationResult.Error);
         }
-        public static Result<Password> BuildHashed(string value)
-        {
-            return Result<Password>.Success(new Password(value));
-        }
-        
         /// <summary>
         /// Use this method only for ef core configuration
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Result<Password> BuildHashedWithoutValidation(string value)
+        public static Result<Password> BuildPasswordWithoutValidation(string value)
         {
+            _isValidated = true;
             return Result<Password>.Success(new Password(value));
         }
 
@@ -61,15 +74,10 @@ namespace Domain.Users.UserDetails
 
             return Result.Success();
         }
-        
-        /// <summary>
-        /// Use this method only for ef core configuration
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static Result<Password> BuildPasswordWithoutValidation(string value)
+
+        private static bool IsHashed(string hashedPassword)
         {
-            return Result<Password>.Success(new Password(value));
+            return hashedPassword.Length is 64 && hashedPassword.All(c => "0123456789abcdef".Contains(c));
         }
     }
 }

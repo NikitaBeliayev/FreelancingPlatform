@@ -1,7 +1,7 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using AutoMapper;
-using Domain.Users.Repositories;
+using Domain.Repositories;
 using Shared;
 
 namespace Application.Users.GetById

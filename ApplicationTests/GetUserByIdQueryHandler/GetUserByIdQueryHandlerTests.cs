@@ -1,9 +1,10 @@
 using Application.Abstraction.Data;
 using Application.Users.GetById;
 using AutoMapper;
+using Domain.Repositories;
 using Domain.Roles;
 using Domain.UserCommunicationChannels;
-using Domain.Users.Repositories;
+using Domain.Users;
 using Domain.Users.UserDetails;
 using Infrastructure.Automapper;
 using Moq;

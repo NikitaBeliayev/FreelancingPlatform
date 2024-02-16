@@ -1,4 +1,6 @@
-﻿namespace Domain.CommunicationChannels.Repositories;
+﻿using Domain.CommunicationChannels;
+
+namespace Domain.Repositories;
 
 public interface ICommunicationChannelRepository
 {

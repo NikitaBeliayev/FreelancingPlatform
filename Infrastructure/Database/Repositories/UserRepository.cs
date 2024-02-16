@@ -1,8 +1,7 @@
-﻿using Domain.Roles;
-using Domain.Users.Repositories;
-using Domain.Users.UserDetails;
+﻿using Domain.Users.UserDetails;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Domain.Repositories;
 
 namespace Infrastructure.Database.Repositories
 {
@@ -14,29 +13,36 @@ namespace Infrastructure.Database.Repositories
         {
             _dbContext = dbContext;
         }
-
-        public async Task<User?> CreateAsync(User user)
-        {
-            await _dbContext.Set<User>().AddAsync(user);
-
-            return user;
-        }
-
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Set<User>()
-                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken);
+            return await _dbContext.Users.FindAsync(new object[] { id }, cancellationToken);
         }
-        
-        public async Task<User?> GetUserByAsync(Expression<Func<User, bool>> expression, CancellationToken cancellationToken = default)
+        public async Task<User?> CreateAsync(User entity, CancellationToken cancellationToken = default)
         {
-            return await _dbContext.Users.Include(u => u.Roles).FirstOrDefaultAsync(expression, cancellationToken);
+            await _dbContext.Users.AddAsync(entity, cancellationToken);
+
+            return entity;
         }
 
-
-        public async Task<User?> GetByExpressionWithCommunicationChannelsAsync(Expression<Func<User, bool>> expression, CancellationToken cancellationToken = default)
+        public User Delete(User entity)
         {
-            return await _dbContext.Set<User>().Include(u => u.CommunicationChannels).ThenInclude(c => c.CommunicationChannel).FirstOrDefaultAsync(expression, cancellationToken);
+            return _dbContext.Users.Remove(entity).Entity;
+        }
+        public IAsyncEnumerable<User> GetAll()
+        {
+            return _dbContext.Users.AsAsyncEnumerable();
+        }
+
+        public User Update(User entity)
+        {
+            return _dbContext.Users.Update(entity).Entity;
+        }
+
+        public async Task<User?> GetByExpressionWithIncludesAsync(Expression<Func<User, bool>> expression, CancellationToken cancellationToken = default,
+            params Expression<Func<User, object>>[] includes)
+        {
+            return await includes.Aggregate(_dbContext.Users.AsQueryable(), (c, p) => c.Include(p)).
+                FirstOrDefaultAsync(expression, cancellationToken);
         }
     }
 }

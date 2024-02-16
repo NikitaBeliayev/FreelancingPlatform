@@ -8,12 +8,10 @@ using Application.Users.Create;
 using Application.Users.ResponseDto;
 using AutoMapper;
 using Domain.CommunicationChannels;
-using Domain.CommunicationChannels.Repositories;
+using Domain.Repositories;
 using Domain.Roles;
-using Domain.Roles.Repositories;
 using Domain.UserCommunicationChannels;
-using Domain.UserCommunicationChannels.Repositories;
-using Domain.Users.Repositories;
+using Domain.Users;
 using Domain.Users.UserDetails;
 using Microsoft.Extensions.Logging;
 using Shared;
@@ -73,6 +71,8 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
         {
             return ResponseHelper.LogAndReturnError<UserRegistrationResponseDto>("Invalid password", password.Error);
         }
+        
+        password.Value!.Value = _hashProvider.GetHash(password.Value!.Value);
 
         var roles = new List<Role>();
         foreach (var role in request.RegistrationDto.Roles)
@@ -97,7 +97,6 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
         };
         _communicationChannelRepository.ChangeStateToUnchanged(communicationChannel);
         
-        password = Password.BuildHashed(_hashProvider.GetHash(password.Value!.Value));
         User newUser = new(
             Guid.NewGuid(),
             email.Value!,
@@ -107,7 +106,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             new List<UserCommunicationChannel>(),
             roles
         );
-        var possibleUser = await _userRepository.GetUserByAsync(u => u.Email == email.Value, cancellationToken);
+        var possibleUser = await _userRepository.GetByExpressionWithIncludesAsync(u => u.Email == email.Value, cancellationToken);
         if (possibleUser is not null)
         {
             return ResponseHelper.LogAndReturnError<UserRegistrationResponseDto>("User with such email exists",
@@ -115,7 +114,6 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
         }
         
         var result = await _userRepository.CreateAsync(newUser);
-        
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         

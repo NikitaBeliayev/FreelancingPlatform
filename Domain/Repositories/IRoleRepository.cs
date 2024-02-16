@@ -1,4 +1,6 @@
-﻿namespace Domain.Roles.Repositories;
+﻿using Domain.Roles;
+
+namespace Domain.Repositories;
 
 public interface IRoleRepository
 {

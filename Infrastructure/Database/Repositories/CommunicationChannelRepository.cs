@@ -1,5 +1,5 @@
 ﻿using Domain.CommunicationChannels;
-using Domain.CommunicationChannels.Repositories;
+using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repositories;
