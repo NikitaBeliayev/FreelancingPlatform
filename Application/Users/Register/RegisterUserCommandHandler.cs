@@ -113,7 +113,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
                 new Error("Users.CreateUserCommandHandler", "User with such email exists", (int)HttpStatusCode.Conflict));
         }
         
-        var result = await _userRepository.CreateAsync(newUser);
+        var result = await _userRepository.CreateAsync(newUser, cancellationToken);
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         

@@ -10,7 +10,7 @@ using Infrastructure.Automapper;
 using Moq;
 using NUnit.Framework.Legacy;
 
-namespace ApplicationTests.GetUserByIdQueryHandler;
+namespace ApplicationTests.GetUserByIdQueryHandlerTests;
 
 [TestFixture]
 public class CreateUserQueryHandlerTests

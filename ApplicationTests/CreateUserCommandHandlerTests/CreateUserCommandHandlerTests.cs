@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Legacy;
 
-namespace CreateUserCommandHandlerTest;
+namespace ApplicationTests.CreateUserCommandHandlerTests;
 
 [TestFixture]
 public class CreateUserCommandHandlerTests
@@ -47,7 +47,7 @@ public class CreateUserCommandHandlerTests
 
         var command = new CreateUserCommand(new UserDto(userGuid, email, firstName, lastName, password));
         
-        _hashProvider.Setup(provider => provider.GetHash("epasswoR!d1"))
+        _hashProvider.Setup(provider => provider.GetHash(password))
             .Returns("4c0f384da99bb6a3db1b0098c3ef58a9a13dd3b524d9e9b623b90347e55afaf5");
         
         User user = new User(userGuid, EmailAddress.BuildEmail(email).Value!,
@@ -62,7 +62,7 @@ public class CreateUserCommandHandlerTests
 
         
         // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+        var result = await _handler.Handle(command, new CancellationToken());
 
         // Assert
         ClassicAssert.IsTrue(result.IsSuccess);
