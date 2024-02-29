@@ -8,19 +8,21 @@ public class UserCommunicationChannel : Entity
 {
     public User User { get; set; }
     public Guid UserId { get; set; }
-    
+
     public CommunicationChannel CommunicationChannel { get; set; }
     public int CommunicationChannelId { get; set; }
+
     public bool IsConfirmed { get; set; }
     public Guid ConfirmationToken { get; set; }
+    public DateTime? LastEmailSentAt { get; set; }
 
     public UserCommunicationChannel() : base(Guid.NewGuid())
     {
-        
+
     }
 
     public UserCommunicationChannel(Guid id, User user, Guid userId, bool isConfirmed, Guid confirmationToken, CommunicationChannel communicationChannel,
-        int communicationChannelId) : base(id)
+        int communicationChannelId, DateTime? lastEmailSentAt) : base(id)
     {
         User = user;
         UserId = userId;
@@ -28,5 +30,6 @@ public class UserCommunicationChannel : Entity
         ConfirmationToken = confirmationToken;
         CommunicationChannel = communicationChannel;
         CommunicationChannelId = communicationChannelId;
+        LastEmailSentAt = lastEmailSentAt;
     }
 }

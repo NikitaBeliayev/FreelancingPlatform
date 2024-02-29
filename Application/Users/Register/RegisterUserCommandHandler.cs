@@ -124,7 +124,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             await _userCommunicationChannelRepository.CreateAsync(new UserCommunicationChannel(Guid.NewGuid(), newUser,
                 newUser.Id, false,
                 confirmationToken,
-                communicationChannel, (int)CommunicationChannelType.Email), cancellationToken);
+                communicationChannel, (int)CommunicationChannelType.Email, DateTime.UtcNow), cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             

@@ -4,6 +4,7 @@ using Application.Users.Create;
 using Application.Users.EmailConfirm;
 using Application.Users.GetById;
 using Application.Users.Login;
+using Application.Users.ResendEmail;
 using Application.Users.Register;
 using Application.Users.RequestDto;
 using Application.Users.ResponseDto;
@@ -70,6 +71,16 @@ namespace FreelancingPlatform.Controllers
         public async Task<IActionResult> ConfirmEmail(Guid userId, Guid token, CancellationToken cancellationToken)
         {
             var command = new ConfirmUserEmailCommand(userId, token);
+            var result = await _sender.Send(command, cancellationToken);
+
+            return Ok(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("ResendConfirmationEmail")]
+        public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailDto resendConfirmationEmailDto, CancellationToken cancellationToken)
+        {
+            var command = new ResendConfirmationEmailCommand(resendConfirmationEmailDto.userId);
             var result = await _sender.Send(command, cancellationToken);
 
             return Ok(result);

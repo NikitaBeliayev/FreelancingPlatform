@@ -21,6 +21,8 @@ namespace Infrastructure.EmailProvider
             this._logger = logger;
         }
 
+        public int GetResendMinutesDelay => _emailOptions.ResendMinutesDelay;
+
         public async Task<Result> SendAsync(EmailMessageComposer? emailModel, CancellationToken cancellationToken)
         {
 
