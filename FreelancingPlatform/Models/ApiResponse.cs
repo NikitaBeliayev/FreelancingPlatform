@@ -7,7 +7,7 @@ namespace FreelancingPlatform.Models
 	{
 		public T? Data { get; }
 
-        protected ApiResponse(T? data, bool isSuccess, string message, List<string>? errors, int responseCode)
+        public ApiResponse(T? data, bool isSuccess, string message, List<string>? errors, int responseCode)
                 :base(isSuccess, message, errors, responseCode)
         {
             this.Data = data;
@@ -24,8 +24,11 @@ namespace FreelancingPlatform.Models
             result.Error == Error.None ? [] : [$"{result.Error.Code} ({result.Error.StatusCode}): {result.Error.Message}"],
             result.IsSuccess ? statusCode : result.Error.StatusCode);
 
-        public static implicit operator ObjectResult(ApiResponse<T> response) =>
-            new(response) { StatusCode = response.StatusCode };
+        public static ApiResponse<T> FromResponseData(T? data, bool isSuccess, Error error, int statusCode = 200) => new(data,
+            isSuccess,
+            error == Error.None ? "OK" : error.Message,
+            error == Error.None ? [] : [$"{error.Code} ({error.StatusCode}): {error.Message}"],
+            isSuccess ? statusCode : error.StatusCode);
     }
 
     public class ApiResponse

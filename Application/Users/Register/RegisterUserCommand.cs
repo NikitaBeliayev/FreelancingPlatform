@@ -6,4 +6,5 @@ namespace Application.Users.Register;
 
 public record RegisterUserCommand(UserRegistrationDto RegistrationDto) : ICommand<UserRegistrationResponseDto>
 {
+    
 }

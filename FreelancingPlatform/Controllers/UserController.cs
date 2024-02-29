@@ -1,4 +1,4 @@
-using Application.Abstraction;
+﻿using Application.Abstraction;
 using Application.Users;
 using Application.Users.Create;
 using Application.Users.EmailConfirm;
@@ -6,9 +6,9 @@ using Application.Users.GetById;
 using Application.Users.Login;
 using Application.Users.Register;
 using Application.Users.RequestDto;
-using Application.Users.ResendEmail;
 using Application.Users.ResponseDto;
 using Domain.Roles;
+using FreelancingPlatform.Middleware;
 using FreelancingPlatform.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -33,8 +33,7 @@ namespace FreelancingPlatform.Controllers
             var command = new GetUserByIdQuery(id);
             var result = await _sender.Send(command, cancellationToken);
 
-            ObjectResult response = ApiResponse<UserDto>.FromResult(result);
-            return response;
+            return Ok(result);
         }
 
         [HttpPost()]
@@ -43,8 +42,7 @@ namespace FreelancingPlatform.Controllers
             var command = new CreateUserCommand(user);
             var result = await _sender.Send(command, cancellationToken);
 
-            ObjectResult response = ApiResponse<UserDto>.FromResult(result);
-            return response;
+            return Ok(result);
         }
 
         [AllowAnonymous]
@@ -54,8 +52,7 @@ namespace FreelancingPlatform.Controllers
             var command = new RegisterUserCommand(user);
             var result = await _sender.Send(command, cancellationToken);
 
-            ObjectResult response = ApiResponse<UserRegistrationResponseDto>.FromResult(result);
-            return response;
+            return Ok(result);
         }
 
         [AllowAnonymous]
@@ -65,8 +62,7 @@ namespace FreelancingPlatform.Controllers
             var command = new LoginUserCommand(user);
             var result = await _sender.Send(command, cancellationToken);
 
-            ObjectResult response = ApiResponse<UserLoginResponseDto>.FromResult(result);
-            return response;
+            return Ok(result);
         }
 
         [AllowAnonymous]
@@ -76,19 +72,7 @@ namespace FreelancingPlatform.Controllers
             var command = new ConfirmUserEmailCommand(userId, token);
             var result = await _sender.Send(command, cancellationToken);
 
-            ObjectResult response = ApiResponse<UserEmailConfirmationResponseDto>.FromResult(result);
-            return response;
-        }
-
-        [AllowAnonymous]
-        [HttpPost("ResendConfirmationEmail")]
-        public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailDto resendConfirmationEmailDto, CancellationToken cancellationToken)
-        {
-            var command = new ResendConfirmationEmailCommand(resendConfirmationEmailDto.userId);
-            var result = await _sender.Send(command, cancellationToken);
-
-            ObjectResult response = ApiResponse<UserResendEmailConfirmationResponseDto>.FromResult(result);
-            return response;
+            return Ok(result);
         }
 
         [Authorize(Roles = nameof(RoleNameType.Admin))]
@@ -98,8 +82,7 @@ namespace FreelancingPlatform.Controllers
             var command = new CreateUserCommand(user);
             var result = await _sender.Send(command, cancellationToken);
 
-            ObjectResult response = ApiResponse<UserDto>.FromResult(result);
-            return response;
+            return Ok(result);
         }
     }
 }

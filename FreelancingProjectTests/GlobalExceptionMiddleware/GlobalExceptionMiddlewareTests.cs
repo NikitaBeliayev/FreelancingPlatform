@@ -11,8 +11,8 @@ namespace Tests.GlobalExceptionMiddlewareTests
 		public async Task InvokeAsync_Exception_LogsErrorAndReturnsInternalServerError()
 		{
 			// Arrange
-			var logger = new FakeLogger<GlobalExceptionMiddleware>();
-			var middleware = new GlobalExceptionMiddleware(NextMiddleware, logger);
+			var logger = new FakeLogger<GlobalWrapperMiddleware>();
+			var middleware = new GlobalWrapperMiddleware(NextMiddleware, logger);
 
 			var context = new DefaultHttpContext();
 			context.Response.Body = new MemoryStream();
@@ -34,8 +34,8 @@ namespace Tests.GlobalExceptionMiddlewareTests
 		public async Task InvokeAsync_NoException_PassesToNextMiddleware()
 		{
 			// Arrange
-			var logger = new FakeLogger<GlobalExceptionMiddleware>();
-			var middleware = new GlobalExceptionMiddleware(NextMiddleware, logger);
+			var logger = new FakeLogger<GlobalWrapperMiddleware>();
+			var middleware = new GlobalWrapperMiddleware(NextMiddleware, logger);
 
 			var context = new DefaultHttpContext();
 			context.Response.Body = new MemoryStream();

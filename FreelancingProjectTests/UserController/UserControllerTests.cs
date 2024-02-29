@@ -57,7 +57,7 @@ public class UserControllerTests
         };
 
         var result = await _userController.CreateUser(userDto, CancellationToken.None) as ObjectResult;
-        var response = result?.Value as ApiResponse<UserDto>;
+        var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         Assert.That(result, Is.Not.Null);
         Assert.Multiple(() =>
@@ -94,7 +94,7 @@ public class UserControllerTests
         };
 
         var result = await _userController.Get(userId, CancellationToken.None) as ObjectResult;
-        var response = result?.Value as ApiResponse<UserDto>;
+        var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         Assert.That(result, Is.Not.Null);
         Assert.Multiple(() =>
@@ -125,13 +125,13 @@ public class UserControllerTests
         };
 
         var result = await _userController.Get(userId, CancellationToken.None) as ObjectResult;
-        var response = result?.Value as ApiResponse<UserDto>;
+        var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         Assert.That(result, Is.Not.Null);
         Assert.That(response, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(result?.StatusCode, Is.EqualTo(expectedError.StatusCode));
+            Assert.That(response?.StatusCode, Is.EqualTo(expectedError.StatusCode));
             Assert.That(response?.StatusCode, Is.EqualTo(expectedError.StatusCode));
         });
     }
@@ -149,7 +149,7 @@ public class UserControllerTests
 
         // Act
         var result = await _userController.Get(userId, CancellationToken.None) as ObjectResult;
-        var response = result?.Value as ApiResponse<UserDto>;
+        var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         // Assert
         ClassicAssert.NotNull(result);
@@ -172,14 +172,14 @@ public class UserControllerTests
 
         // Act
         var result = await _userController.Get(userId, CancellationToken.None) as ObjectResult;
-        var response = result?.Value as ApiResponse<UserDto>;
+        var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         // Assert
         ClassicAssert.NotNull(result);
         ClassicAssert.NotNull(response);
 		Assert.Multiple(() =>
 		{
-			Assert.That(result?.StatusCode, Is.EqualTo(expectedError.StatusCode));
+			Assert.That(response?.StatusCode, Is.EqualTo(expectedError.StatusCode));
 			Assert.That(response?.StatusCode, Is.EqualTo(expectedError.StatusCode));
 		});
 	}
@@ -195,7 +195,7 @@ public class UserControllerTests
 
         // Act
         var result = await _userController.Post(userDto, CancellationToken.None) as ObjectResult;
-        var response = result?.Value as ApiResponse<UserDto>;
+        var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         // Assert
         ClassicAssert.NotNull(result);
@@ -218,14 +218,14 @@ public class UserControllerTests
 
         // Act
         var result = await _userController.Post(userDto, CancellationToken.None) as ObjectResult;
-        var response = result?.Value as ApiResponse<UserDto>;
+        var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         // Assert
         ClassicAssert.NotNull(result);
         ClassicAssert.NotNull(response);
 		Assert.Multiple(() =>
 		{
-			Assert.That(result?.StatusCode, Is.EqualTo(400));
+			Assert.That(response?.StatusCode, Is.EqualTo(400));
 			Assert.That(response?.Message, Is.EqualTo("User creation failed"));
 		});
 	}
