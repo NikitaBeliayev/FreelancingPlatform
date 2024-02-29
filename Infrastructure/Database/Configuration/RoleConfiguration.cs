@@ -27,7 +27,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         });
         builder.Property(e => e.Name)
             .HasConversion(value => value.Value,
-                value => RoleName.BuildRoleName(
+                value => RoleName.BuildRoleNameWithoutValidation(
                     (int)(RoleNameType)Enum.Parse(typeof(RoleNameType), value)).Value!);
         
         

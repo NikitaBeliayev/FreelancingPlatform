@@ -95,7 +95,7 @@ builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Confi
 
 var app = builder.Build();
 
-app.UseGlobalExceptionMiddleware();
+app.UseGlobalWrapperMiddleware();
 
 app.UseSwagger();
 app.UseSwaggerUI();
