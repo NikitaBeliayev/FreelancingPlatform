@@ -8,5 +8,6 @@ namespace Domain.Users.Errors
         public static Error InvalidConfirmationToken(Guid id) => new("Users.InvalidConfirmationToken", $"The confirmation token for user with id {id} is invalid", 400);
         public static Error EmailChannelMissing(Guid id) => new("Users.EmailChannelMissing", $"Email communication channel for user with id {id} is missing", 400);
         public static Error EmailAlreadyVerified(Guid id) => new("Users.EmailAlreadyVerified", $"Email is already verified for user with id {id}", 400);
+        public static Error ResendEmailDelayNotMet(Guid id) => new("Users.ResendEmailDelayNotMet", $"Cannot resend email to user with id {id} until the required delay has passed", 400);
     }
 }

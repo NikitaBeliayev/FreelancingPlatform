@@ -6,5 +6,4 @@ namespace Application.Users.Login;
 
 public record LoginUserCommand(UserLoginDto LoginUserDto) : ICommand<UserLoginResponseDto>
 {
-    
 }
