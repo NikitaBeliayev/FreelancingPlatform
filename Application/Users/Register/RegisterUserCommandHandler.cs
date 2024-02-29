@@ -151,6 +151,5 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
 
         return ResponseHelper.LogAndReturnError<UserRegistrationResponseDto>("User registration failed, something wrong",
             new Error("Users.CreateUserCommandHandler", "Something wrong"));
-
     }
 }

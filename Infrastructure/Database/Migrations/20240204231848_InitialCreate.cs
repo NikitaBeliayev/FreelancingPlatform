@@ -177,8 +177,9 @@ namespace Infrastructure.Database.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CommunicationChannelId = table.Column<int>(type: "integer", nullable: false),
                     IsConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    ConfirmationToken = table.Column<Guid>(type: "uuid", nullable: false)
-                },
+                    ConfirmationToken = table.Column<Guid>(type: "uuid", nullable: false),
+					LastEmailSentAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValue: DateTime.UtcNow)
+				},
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserCommunicationChannels", x => x.Id);
