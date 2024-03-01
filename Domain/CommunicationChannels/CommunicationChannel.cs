@@ -8,17 +8,17 @@ public class CommunicationChannel
     public int Id { get; set; }
     public ICollection<UserCommunicationChannel> UserCommunicationChannels { get; set; } =
         new List<UserCommunicationChannel>();
-    public CommunicationChannelType Type { get; set; }
+    public CommunicationChannelName Name { get; set; }
 
     public CommunicationChannel()
     {
         
     }
 
-    public CommunicationChannel(int id, CommunicationChannelType type, ICollection<UserCommunicationChannel> userCommunicationChannels)
+    public CommunicationChannel(int id, CommunicationChannelName name, ICollection<UserCommunicationChannel> userCommunicationChannels)
     {
         Id = id;
-        Type = type;
+        Name = name;
         UserCommunicationChannels = userCommunicationChannels;
     }
 }

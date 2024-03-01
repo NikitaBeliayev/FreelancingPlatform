@@ -16,10 +16,10 @@ public class ObjectiveConfiguration : IEntityTypeConfiguration<Objective>
         
         builder.Property(e => e.Title)
             .HasConversion(value => value.Value,
-                value => ObjectiveTitle.BuildName(value).Value!);
+                value => ObjectiveTitle.BuildNameWithoutValidation(value).Value!);
         builder.Property(e => e.Description)
             .HasConversion(value => value.Value,
-                value => ObjectiveDescription.BuildName(value).Value!);
+                value => ObjectiveDescription.BuildNameWithoutValidation(value).Value!);
 
         builder.HasMany(e => e.Categories)
             .WithMany(e => e.Objectives);

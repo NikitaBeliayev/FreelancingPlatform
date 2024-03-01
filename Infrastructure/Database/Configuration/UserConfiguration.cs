@@ -14,21 +14,21 @@ namespace Infrastructure.Database.Configuration
             builder.Property(p => p.FirstName)
                 .HasConversion(
                     firstName => firstName.Value,
-                    value => Name.BuildName(value).Value!
+                    value => Name.BuildNameWithoutValidation(value).Value!
                 )
                 .IsRequired();
 
             builder.Property(p => p.LastName)
                 .HasConversion(
                     lastName => lastName.Value,
-                    value => Name.BuildName(value).Value!
+                    value => Name.BuildNameWithoutValidation(value).Value!
                 )
                 .IsRequired();
 
             builder.Property(p => p.Email)
                 .HasConversion(
                     emailAddress => emailAddress.Value,
-                    value => EmailAddress.BuildEmail(value).Value!
+                    value => EmailAddress.BuildEmailWithoutValidation(value).Value!
                 )
                 .IsRequired();
 

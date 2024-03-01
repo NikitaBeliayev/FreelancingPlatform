@@ -11,7 +11,7 @@ public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Name)
             .HasConversion(value => value.ToString(),
-                value => PaymentName.BuildName((int)(PaymentType)Enum.Parse(typeof(PaymentType), value)).Value!)
+                value => PaymentName.BuildNameWithoutValidation((int)(PaymentType)Enum.Parse(typeof(PaymentType), value)).Value!)
             .IsRequired();
     }
 }
