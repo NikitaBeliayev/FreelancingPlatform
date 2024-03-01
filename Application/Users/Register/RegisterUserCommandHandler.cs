@@ -92,8 +92,8 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
         _roleRepository.ChangeStateToUnchangedForCollection(roles);
         CommunicationChannel communicationChannel = new CommunicationChannel()
         {
-            Id = (int)CommunicationChannelType.Email,
-            Type = CommunicationChannelType.Email
+            Id = (int)CommunicationChannelNameType.Email,
+            Name = CommunicationChannelName.BuildCommunicationChannelName(1).Value!
         };
         _communicationChannelRepository.ChangeStateToUnchanged(communicationChannel);
         
@@ -124,7 +124,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             await _userCommunicationChannelRepository.CreateAsync(new UserCommunicationChannel(Guid.NewGuid(), newUser,
                 newUser.Id, false,
                 confirmationToken,
-                communicationChannel, (int)CommunicationChannelType.Email, DateTime.UtcNow), cancellationToken);
+                communicationChannel, (int)CommunicationChannelNameType.Email, DateTime.UtcNow), cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             

@@ -33,7 +33,7 @@ namespace Application.Users.ResendEmail
             _logger.LogInformation("Confirmation email sending has been requested for user with Id = {UserId}", request.userId);
 
             var userCommunicationChannel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
-                ucc => ucc.UserId == request.userId && ucc.CommunicationChannelId == (int)CommunicationChannelType.Email,
+                ucc => ucc.UserId == request.userId && ucc.CommunicationChannelId == (int)CommunicationChannelNameType.Email,
                 cancellationToken,
                 ucc => ucc.User);
 

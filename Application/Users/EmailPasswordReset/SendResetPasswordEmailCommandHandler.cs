@@ -44,7 +44,7 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("Invalid email format", UserErrors.InvalidEmailFormat(request.userEmail));
 		}
 
-		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.CommunicationChannel.Type == CommunicationChannelType.Email && c.CommunicationChannel.UserCommunicationChannels.Any(ucc => ucc.User.Email.Equals(request.userEmail)), cancellationToken);
+		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value && c.CommunicationChannel.UserCommunicationChannels.Any(ucc => ucc.User.Email.Equals(request.userEmail)), cancellationToken);
 
 		if (channel is null)
 		{

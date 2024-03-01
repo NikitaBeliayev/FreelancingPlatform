@@ -13,6 +13,6 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .IsUnique();
         builder.Property(e => e.Title)
             .HasConversion(value => value.Value,
-                value => CategoryName.BuildCategoryName(value).Value!);
+                value => CategoryName.BuildCategoryNameWithoutValidation(value).Value!);
     }
 }

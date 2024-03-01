@@ -1,4 +1,5 @@
-﻿using Domain.CommunicationChannels;
+﻿using System.Reflection;
+using Domain.CommunicationChannels;
 using Domain.UserCommunicationChannels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,7 +11,14 @@ public class CommunicationChannelConfiguration : IEntityTypeConfiguration<Commun
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasData(new CommunicationChannel(1, CommunicationChannelType.Email,
+        ConstructorInfo? privateConstructor = typeof(CommunicationChannelName).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, [typeof(CommunicationChannelNameType)]);
+        
+        if (privateConstructor is null)
+        {
+            throw new NullReferenceException("Constructor not found");
+        }
+        
+        builder.HasData(new CommunicationChannel(1, (CommunicationChannelName)privateConstructor.Invoke([CommunicationChannelNameType.Email]),
             new List<UserCommunicationChannel>()));
             
         builder.HasMany(e => e.UserCommunicationChannels)
@@ -18,8 +26,9 @@ public class CommunicationChannelConfiguration : IEntityTypeConfiguration<Commun
             .HasForeignKey(e => e.CommunicationChannelId)
             .IsRequired();
         
-        builder.Property(x => x.Type).HasConversion(
-            value => Enum.GetName(value.GetType(), value),
-            value => (CommunicationChannelType)Enum.Parse(typeof(CommunicationChannelType), value));
+        builder.Property(x => x.Name).HasConversion(
+            value => value.Value,
+            value => CommunicationChannelName.BuildCommunicationChannelNameWithoutValidation(
+                (int)(CommunicationChannelNameType)Enum.Parse(typeof(CommunicationChannelNameType), value)).Value!);
     }
 }

@@ -23,7 +23,7 @@ public class ConfirmUserEmailCommandHandler : ICommandHandler<ConfirmUserEmailCo
 
     public async Task<Result<UserEmailConfirmationResponseDto>> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
     {
-        UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.UserId == request.userId && c.CommunicationChannel.Type == CommunicationChannelType.Email, cancellationToken, c => c.CommunicationChannel);
+        UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.UserId == request.userId && c.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value, cancellationToken, c => c.CommunicationChannel);
         if (channel is null)
         {
             return ResponseHelper.LogAndReturnError<UserEmailConfirmationResponseDto>("No match with the user and email communication channel found", UserErrors.EmailChannelMissing(request.userId));

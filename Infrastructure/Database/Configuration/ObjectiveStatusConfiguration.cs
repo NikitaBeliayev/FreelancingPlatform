@@ -28,7 +28,7 @@ namespace Infrastructure.Database.Configuration
             });
             builder.Property(e => e.Title)
                 .HasConversion(value => value.Value,
-                    value => ObjectiveStatusTitle.BuildStatusTitle(
+                    value => ObjectiveStatusTitle.BuildStatusTitleWithoutValidation(
                         (int)(ObjectiveStatusTitleType)Enum.Parse(typeof(ObjectiveStatusTitleType), value)).Value!);
         }
     }

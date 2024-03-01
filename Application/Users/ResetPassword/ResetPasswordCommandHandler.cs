@@ -28,7 +28,7 @@ public class ResetPasswordCommandHandler : ICommandHandler<ResetPasswordCommand,
 
 	public async Task<Result<ResetPasswordResponseDto>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
 	{
-		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.UserId == request.UserId && c.CommunicationChannel.Type == CommunicationChannelType.Email	, cancellationToken);
+		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.UserId == request.UserId && c.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value, cancellationToken);
 
 		if (channel is null)
 		{

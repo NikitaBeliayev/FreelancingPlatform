@@ -29,7 +29,7 @@ namespace Infrastructure.Database.Configuration
 
 			builder.Property(e => e.TypeTitle)
 				.HasConversion(value => value.Title,
-					value => ObjectiveTypeTitle.BuildObjectiveTypeTitle(
+					value => ObjectiveTypeTitle.BuildObjectiveTypeTitleWithoutValidation(
 						(int)(ObjectiveTypeVariations)Enum.Parse(typeof(ObjectiveTypeVariations), value)).Value!);
 		}
 	}
