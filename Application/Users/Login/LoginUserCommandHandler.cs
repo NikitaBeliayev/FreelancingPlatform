@@ -54,7 +54,8 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
                 "Invalid password", (int)HttpStatusCode.Unauthorized));
         }
 
-        JwtCredentials jwtCredentials = _jwtProvider.GenerateCredentials(possibleUser.Id, possibleUser.Email.Value, possibleUser.Roles.Select(r => r.Name.Value));
+        JwtCredentials jwtCredentials = _jwtProvider.GenerateCredentials(possibleUser.Id, possibleUser.Email.Value, 
+            possibleUser.Roles.Select(r => r.Name.Value));
 
         return Result<UserLoginResponseDto>.Success(new UserLoginResponseDto()
         {
