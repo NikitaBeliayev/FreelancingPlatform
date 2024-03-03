@@ -3,7 +3,7 @@ using Application.Abstraction;
 using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using Application.Helpers;
-using Application.Models;
+using Application.Models.Email;
 using Application.Users.Create;
 using Application.Users.ResponseDto;
 using AutoMapper;
@@ -75,7 +75,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
         password.Value!.Value = _hashProvider.GetHash(password.Value!.Value);
 
         var roles = new List<Role>();
-        foreach (var role in request.RegistrationDto.Roles)
+        foreach (var role in  new [] { request.RegistrationDto.Role })
         {
             var roleName = RoleName.BuildRoleName(role);
             if (!roleName.IsSuccess)
@@ -129,18 +129,18 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             
             
-            EmailMessageComposer messageComposer = new EmailMessageComposer()
+            EmailMessageComposerModel messageComposerModel = new EmailMessageComposerModel()
             {
                 CopyTo = null,
                 Recipient = email.Value!,
-                ConfirmationEmail = new ConfirmationEmail()
+                Content = new ConfirmationEmailModel()
                 {
                     ConfirmationToken = confirmationToken,
-                    UserId = newUser.Id
+                    EmailBody = _emailProvider.ConfirmationEmailBody,
                 }
             };
 
-            await _emailProvider.SendAsync(messageComposer, cancellationToken);
+            await _emailProvider.SendAsync(messageComposerModel, cancellationToken);
             
             _logger.LogInformation("User logged in successfully: Id = {UserId}", result.Id);
             

@@ -5,6 +5,7 @@ using Application.Users.ResponseDto;
 using Domain.CommunicationChannels;
 using Domain.Repositories;
 using Domain.UserCommunicationChannels;
+using Domain.UserCommunicationChannels.Errors;
 using Domain.Users.Errors;
 using Shared;
 
@@ -23,20 +24,25 @@ public class ConfirmUserEmailCommandHandler : ICommandHandler<ConfirmUserEmailCo
 
     public async Task<Result<UserEmailConfirmationResponseDto>> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
     {
-        UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.UserId == request.userId && c.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value, cancellationToken, c => c.CommunicationChannel);
+        UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
+            c => c.ConfirmationToken == request.UserConfirmEmailRequestDto.Token && 
+            c.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value, 
+            cancellationToken, 
+            c => c.CommunicationChannel);
         if (channel is null)
         {
-            return ResponseHelper.LogAndReturnError<UserEmailConfirmationResponseDto>("No match with the user and email communication channel found", UserErrors.EmailChannelMissing(request.userId));
+            return ResponseHelper.LogAndReturnError<UserEmailConfirmationResponseDto>("No match with the user and email communication channel found", 
+                UserCommunicationChannelErrors.UserCommunicationChannelNotFound(request.UserConfirmEmailRequestDto.Token));
         }
         
         if (channel.IsConfirmed)
         {
-            return ResponseHelper.LogAndReturnError<UserEmailConfirmationResponseDto>("Email is already confirmed", UserErrors.EmailAlreadyVerified(request.userId));
+            return ResponseHelper.LogAndReturnError<UserEmailConfirmationResponseDto>("Email is already confirmed", UserErrors.EmailAlreadyVerified(channel.UserId));
         }
         
-        if (channel.ConfirmationToken != request.token)
+        if (channel.ConfirmationToken != request.UserConfirmEmailRequestDto.Token)
         {
-            return ResponseHelper.LogAndReturnError<UserEmailConfirmationResponseDto>("Invalid token", UserErrors.InvalidConfirmationToken(request.userId));
+            return ResponseHelper.LogAndReturnError<UserEmailConfirmationResponseDto>("Invalid token", UserErrors.InvalidConfirmationToken(channel.UserId));
         }
 
         channel.IsConfirmed = true;

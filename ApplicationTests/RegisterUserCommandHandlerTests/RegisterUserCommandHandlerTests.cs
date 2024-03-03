@@ -1,6 +1,7 @@
 ﻿using Application.Abstraction;
 using Application.Abstraction.Data;
 using Application.Models;
+using Application.Models.Email;
 using Application.Users.Create;
 using Application.Users.Register;
 using Application.Users.RequestDto;
@@ -71,7 +72,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		_hashProviderMock.Setup(provider => provider.GetHash("epasswoR!d1"))
@@ -99,7 +100,7 @@ public class RegisterUserCommandHandlerTests
 
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Once);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Exactly(2));
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Once);
 	}
 
@@ -118,7 +119,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		//Act
@@ -131,7 +132,7 @@ public class RegisterUserCommandHandlerTests
 		Assert.That(result.Error, Is.EqualTo(NameErrors.NullOrEmpty));
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 
@@ -150,7 +151,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 
@@ -164,7 +165,7 @@ public class RegisterUserCommandHandlerTests
 		Assert.That(result.Error, Is.EqualTo(NameErrors.NullOrEmpty));
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 
@@ -183,7 +184,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		//Act
@@ -197,7 +198,7 @@ public class RegisterUserCommandHandlerTests
 
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 
@@ -216,7 +217,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		//Act
@@ -229,7 +230,7 @@ public class RegisterUserCommandHandlerTests
 		Assert.That(result.Error, Is.EqualTo(EmailAddressErrors.InvalidFormat));
 
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
-		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never); _emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never); _emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 
@@ -248,7 +249,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		//Act
@@ -262,7 +263,7 @@ public class RegisterUserCommandHandlerTests
 
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 
@@ -281,7 +282,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		//Act
@@ -295,7 +296,7 @@ public class RegisterUserCommandHandlerTests
 
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 
@@ -314,7 +315,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		//Act
@@ -328,7 +329,7 @@ public class RegisterUserCommandHandlerTests
 
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 	[Test]
@@ -346,7 +347,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		//Act
@@ -360,7 +361,7 @@ public class RegisterUserCommandHandlerTests
 
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 
@@ -379,7 +380,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Roles = [2, 3]
+			Role = 2
 		});
 
 		//Act
@@ -393,7 +394,7 @@ public class RegisterUserCommandHandlerTests
 
 		_userRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()), Times.Never);
 		_unitOfWorkMock.Verify(uow => uow.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposer>(),
+		_emailProviderMock.Verify(emailProvider => emailProvider.SendAsync(It.IsAny<EmailMessageComposerModel>(),
 			It.IsAny<CancellationToken>()), Times.Never);
 	}
 }

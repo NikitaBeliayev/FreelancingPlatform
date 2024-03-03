@@ -2,7 +2,7 @@
 using Application.Abstraction;
 using Application.Abstraction.Messaging;
 using Application.Helpers;
-using Application.Models;
+using Application.Models.Jwt;
 using Application.Users.ResponseDto;
 using Domain.Repositories;
 using Domain.Users;

@@ -1,4 +1,4 @@
-﻿using Application.Models;
+﻿using Application.Models.Jwt;
 
 namespace Application.Users.ResponseDto;
 

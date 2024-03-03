@@ -1,19 +1,14 @@
-using Application.Abstraction;
 using Application.Users;
 using Application.Users.Create;
 using Application.Users.EmailConfirm;
-using Application.Users.EmailPasswordReset;
 using Application.Users.GetById;
 using Application.Users.ResendEmail;
 using Application.Users.Register;
 using Application.Users.Login;
 using Application.Users.RequestDto;
-using Application.Users.ResetPasswordDto;
-using Application.Users.ResponseDto;
 using Application.Users.ResetPassword;
+using Application.Users.ResetPasswordEmail;
 using Domain.Roles;
-using FreelancingPlatform.Middleware;
-using FreelancingPlatform.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FreelancingPlatform.Controllers
 {
 	[Authorize]
-	[Route("api/[controller]")]
+	[Route("api/users")]
 	[ApiController]
 	public class UserController : ControllerBase
 	{
@@ -40,23 +35,14 @@ namespace FreelancingPlatform.Controllers
             return Ok(result);
         }
 
-		[HttpPost()]
-		public async Task<IActionResult> Post([FromBody] UserDto user, CancellationToken cancellationToken)
-		{
-			var command = new CreateUserCommand(user);
-			var result = await _sender.Send(command, cancellationToken);
-
-            return Ok(result);
-        }
-
 		[AllowAnonymous]
-		[HttpPost("signup")]
+		[HttpPost("signin")]
 		public async Task<IActionResult> Register([FromBody] UserRegistrationDto user, CancellationToken cancellationToken)
 		{
 			var command = new RegisterUserCommand(user);
 			var result = await _sender.Send(command, cancellationToken);
 
-            return Ok(result);
+            return CreatedAtAction(nameof(Register), result);
         }
 
 		[AllowAnonymous]
@@ -70,10 +56,10 @@ namespace FreelancingPlatform.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{userId:guid}/Confirm/Email/{token:guid}")]
-        public async Task<IActionResult> ConfirmEmail(Guid userId, Guid token, CancellationToken cancellationToken)
+        [HttpPost("confirm/email")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] UserConfirmEmailRequestDto userConfirmEmailRequestDto, CancellationToken cancellationToken)
         {
-            var command = new ConfirmUserEmailCommand(userId, token);
+            var command = new ConfirmUserEmailCommand(userConfirmEmailRequestDto);
             var result = await _sender.Send(command, cancellationToken);
 
             return Ok(result);
@@ -81,9 +67,10 @@ namespace FreelancingPlatform.Controllers
 
         [AllowAnonymous]
         [HttpPost("ResendConfirmationEmail")]
-        public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailDto resendConfirmationEmailDto, CancellationToken cancellationToken)
+        public async Task<IActionResult> ResendConfirmationEmail([FromBody] UserResendConfirmationEmailRequestDto userResendConfirmationEmailRequestDto, 
+	        CancellationToken cancellationToken)
         {
-            var command = new ResendConfirmationEmailCommand(resendConfirmationEmailDto.userId);
+            var command = new ResendConfirmationEmailCommand(userResendConfirmationEmailRequestDto.UserId);
             var result = await _sender.Send(command, cancellationToken);
 
             return Ok(result);
@@ -96,12 +83,12 @@ namespace FreelancingPlatform.Controllers
 			var command = new CreateUserCommand(user);
 			var result = await _sender.Send(command, cancellationToken);
 
-			return Ok(result);
+			return CreatedAtAction(nameof(CreateUser), result);
 		}
 
 		[AllowAnonymous]
-		[HttpGet("{userEmail}/reset/email")]
-		public async Task<IActionResult> SendResetPasswordEmail(string userEmail, CancellationToken cancellationToken)
+		[HttpPost("reset/password")]
+		public async Task<IActionResult> SendResetPasswordEmail([FromBody] UserResetPasswordEmailRequestDto userEmail, CancellationToken cancellationToken)
 		{
 			var command = new SendResetPasswordEmailCommand(userEmail);
 			var result = await _sender.Send(command, cancellationToken);
@@ -110,10 +97,10 @@ namespace FreelancingPlatform.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpPut("{userId:guid}/reset/email")]
-		public async Task<IActionResult> ResetPassword(Guid userId, [FromBody] ResetPasswordDto resetPasswordDto, CancellationToken cancellationToken)
+		[HttpPut("reset/password")]
+		public async Task<IActionResult> ResetPassword(Guid userId, [FromBody] UserResetPasswordRequestDto userResetPasswordRequestDto, CancellationToken cancellationToken)
 		{
-			var command = new ResetPasswordCommand(userId, resetPasswordDto.Password, resetPasswordDto.Token);
+			var command = new ResetPasswordCommand(userId, userResetPasswordRequestDto.Password, userResetPasswordRequestDto.Token);
 			var result = await _sender.Send(command, cancellationToken);
 
 			return Ok(result);
