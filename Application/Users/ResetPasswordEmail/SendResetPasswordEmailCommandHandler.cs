@@ -1,57 +1,59 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
-using Application.Models;
 using Domain.Repositories;
 using Domain.UserCommunicationChannels;
 using Domain.Users.UserDetails;
 using Shared;
 using Application.Users.ResponseDto;
-using Microsoft.Extensions.Configuration;
 using Application.Helpers;
 using Domain.CommunicationChannels;
 using Domain.Users.Errors;
 using Application.Abstraction;
-using Application.Users.Create;
+using Application.Models.Email;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Users.EmailPasswordReset;
+namespace Application.Users.ResetPasswordEmail;
 
 public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPasswordEmailCommand, ResetPasswordResponseDto>
 {
 	private readonly IUserCommunicationChannelRepository _userCommunicationChannelRepository;
 	private readonly IUnitOfWork _unitOfWork;
-	private readonly IConfiguration _configuration;
 	private readonly IEmailProvider _emailProvider;
 	private readonly ILogger<SendResetPasswordEmailCommandHandler> _logger;
 
 	public SendResetPasswordEmailCommandHandler(IUserCommunicationChannelRepository userCommunicationChannelRepository, 
-		IUnitOfWork unitOfWork, IConfiguration configuration, IEmailProvider emailProvider, ILogger<SendResetPasswordEmailCommandHandler> logger)
+		IUnitOfWork unitOfWork, IEmailProvider emailProvider, ILogger<SendResetPasswordEmailCommandHandler> logger)
 	{
 		_userCommunicationChannelRepository = userCommunicationChannelRepository;
 		_unitOfWork = unitOfWork;
-		_configuration = configuration;
 		_emailProvider = emailProvider;
 		_logger = logger;
 	}
 
 	public async Task<Result<ResetPasswordResponseDto>> Handle(SendResetPasswordEmailCommand request, CancellationToken cancellationToken)
 	{
-		_logger.LogInformation("Reset password email sending has been requested for user with email = {UserEmail}", request.userEmail);
+		_logger.LogInformation("Reset password email sending has been requested for user with email = {UserEmail}", 
+			request.UserResetPasswordEmailRequestDto.Email);
 
-		var emailResult = EmailAddress.BuildEmail(request.userEmail);
+		var emailResult = EmailAddress.BuildEmail(request.UserResetPasswordEmailRequestDto.Email);
 		if (!emailResult.IsSuccess)
 		{
-			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("Invalid email format", UserErrors.InvalidEmailFormat(request.userEmail));
+			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("Invalid email format",
+				UserErrors.InvalidEmailFormat(request.UserResetPasswordEmailRequestDto.Email));
 		}
-
-		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value && c.CommunicationChannel.UserCommunicationChannels.Any(ucc => ucc.User.Email.Equals(request.userEmail)), cancellationToken);
+		
+		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
+			ucc => ucc.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value && 
+			       ucc.CommunicationChannel.UserCommunicationChannels.Any(uccElement 
+				       => uccElement.User.Email == emailResult.Value!), cancellationToken, 
+			ucc => ucc.User);
 
 		if (channel is null)
 		{
 			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("No match with the user and email communication channel found", UserErrors.EmailChannelMissing());
 		}
 
-		int minMinutesBetweenEmails = _configuration.GetSection("Email").GetValue<int>("ResendMinutesDelay");
+		int minMinutesBetweenEmails = _emailProvider.ResendMinutesDelay;
 
 		if (channel.LastEmailSentAt.HasValue && (DateTime.UtcNow - channel.LastEmailSentAt.Value).TotalMinutes < minMinutesBetweenEmails)
 		{
@@ -64,20 +66,21 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-		EmailMessageComposer messageComposer = new EmailMessageComposer()
+		EmailMessageComposerModel messageComposerModel = new()
 		{
 			Recipient = channel.User.Email,
-			ConfirmationEmail = new ConfirmationEmail()
+			Content = new ResetPasswordEmailModel()
 			{
 				ConfirmationToken = resetToken,
-				UserId = channel.User.Id
+				EmailBody = _emailProvider.ResetPasswordEmailBody
 			}
 		};
 
-		await _emailProvider.SendAsync(messageComposer, cancellationToken);
+		await _emailProvider.SendAsync(messageComposerModel, cancellationToken);
 
 		_logger.LogInformation("Reset password email sent successfully to user: Id = {UserId}", channel.UserId);
 
-		return Result<ResetPasswordResponseDto>.Success(new ResetPasswordResponseDto { Id = channel.UserId, Success = true, Message = "Reset password email sent" });
+		return Result<ResetPasswordResponseDto>.Success(new ResetPasswordResponseDto 
+			{ Id = channel.UserId, Success = true, Message = "Reset password email sent" });
 	}
 }

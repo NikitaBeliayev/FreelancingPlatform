@@ -1,6 +1,5 @@
 ﻿using Domain.Repositories;
 using Application.Helpers;
-using Application.Models;
 using Application.Users.ResponseDto;
 using Application.Abstraction;
 using Shared;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Application.Abstraction.Messaging;
 using Domain.CommunicationChannels;
 using Application.Abstraction.Data;
-using Domain.UserCommunicationChannels;
+using Application.Models.Email;
 using Domain.Users.Errors;
 
 namespace Application.Users.ResendEmail
@@ -49,7 +48,7 @@ namespace Application.Users.ResendEmail
 
             var now = DateTime.UtcNow;
             var lastSent = userCommunicationChannel.LastEmailSentAt ?? DateTime.MinValue;
-            var resendDelay = TimeSpan.FromMinutes(_emailProvider.GetResendMinutesDelay);
+            var resendDelay = TimeSpan.FromMinutes(_emailProvider.ResendMinutesDelay);
 
             if (now - lastSent < resendDelay)
             {
@@ -59,17 +58,17 @@ namespace Application.Users.ResendEmail
             Guid confirmationToken = Guid.NewGuid();
             userCommunicationChannel.ConfirmationToken = confirmationToken;
 
-            EmailMessageComposer messageComposer = new EmailMessageComposer()
+            EmailMessageComposerModel messageComposerModel = new EmailMessageComposerModel()
             {
                 Recipient = userCommunicationChannel.User.Email,
-                ConfirmationEmail = new ConfirmationEmail()
+                Content = new ConfirmationEmailModel()
                 {
                     ConfirmationToken = confirmationToken,
-                    UserId = userCommunicationChannel.User.Id,
+                    EmailBody = _emailProvider.ConfirmationEmailBody
                 }
             };
 
-            await _emailProvider.SendAsync(messageComposer, cancellationToken);
+            await _emailProvider.SendAsync(messageComposerModel, cancellationToken);
 
             userCommunicationChannel.LastEmailSentAt = DateTime.UtcNow;
 

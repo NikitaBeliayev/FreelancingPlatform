@@ -2,6 +2,7 @@
 using Application.Abstraction;
 using Application.Models;
 using System.Net.Mail;
+using Application.Models.Email;
 using Shared;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -21,9 +22,11 @@ namespace Infrastructure.EmailProvider
             this._logger = logger;
         }
 
-        public int GetResendMinutesDelay => _emailOptions.ResendMinutesDelay;
+        public int ResendMinutesDelay => _emailOptions.ResendMinutesDelay;
+        public string ConfirmationEmailBody => _emailOptions.ConfirmationEmailBody;
+        public string ResetPasswordEmailBody => _emailOptions.ResetPasswordEmailBody;
 
-        public async Task<Result> SendAsync(EmailMessageComposer? emailModel, CancellationToken cancellationToken)
+        public async Task<Result> SendAsync(EmailMessageComposerModel emailModel, CancellationToken cancellationToken)
         {
 
             if (emailModel is null)
@@ -34,13 +37,8 @@ namespace Infrastructure.EmailProvider
             _fromAddress = new MailAddress(_emailOptions.SenderEmail);
             _toAddress = new MailAddress(emailModel.Recipient.Value);
 
-            string emailBody = emailModel.Body ?? "";
-            if (emailModel.ConfirmationEmail is not null)
-            {
-                emailBody = _emailOptions.ConfirmationEmailBody
-                    .Replace("{UserId:Guid}", emailModel.ConfirmationEmail.UserId.ToString())
-                    .Replace("{ConfirmationToken:Guid}", emailModel.ConfirmationEmail.ConfirmationToken.ToString());
-            }
+            string emailBody = emailModel.Content.ComposeBody(emailModel.Content.ConfirmationToken);
+            
             using (var smtpClient = new SmtpClient()
                    {
                        Credentials = new NetworkCredential(
@@ -71,7 +69,7 @@ namespace Infrastructure.EmailProvider
                     throw new Exception($"Error during email sending to {emailModel.Recipient.Value}", e);
                 }
 
-                _logger.LogInformation($"The mail has been sent to {emailModel.Recipient}");
+                _logger.LogInformation($"The mail has been sent to {emailModel.Recipient.Value}");
             }
 
             return Result.Success();

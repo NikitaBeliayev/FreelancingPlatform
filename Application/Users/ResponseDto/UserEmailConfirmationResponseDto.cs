@@ -1,7 +1,4 @@
-﻿using Application.Models;
-using Domain.CommunicationChannels;
-
-namespace Application.Users.ResponseDto;
+﻿namespace Application.Users.ResponseDto;
 
 public class UserEmailConfirmationResponseDto
 {

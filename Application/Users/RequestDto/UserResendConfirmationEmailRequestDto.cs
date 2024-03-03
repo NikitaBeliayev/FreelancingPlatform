@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.Users.RequestDto
 {
-    public class ResendConfirmationEmailDto
+    public class UserResendConfirmationEmailRequestDto
     {
-        public Guid userId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

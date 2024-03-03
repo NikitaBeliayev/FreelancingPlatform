@@ -1,22 +1,16 @@
-using Application.Roles;
 using Application.Users;
 using Application.Users.Create;
 using Application.Users.GetById;
 using Domain.Roles;
 using Domain.Users.Errors;
-using Domain.Users.UserDetails;
 using FreelancingPlatform.Models;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework.Legacy;
 using Shared;
 using System.Security.Claims;
-using FreelancingPlatform.Controllers;
-
 namespace Tests.UserController;
 
 [TestFixture]
@@ -62,7 +56,7 @@ public class UserControllerTests
         Assert.That(result, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(result?.StatusCode, Is.EqualTo(200));
+            Assert.That(result?.StatusCode, Is.EqualTo(201));
             Assert.That(response?.Data, Is.EqualTo(userDto));
         });
 
@@ -194,14 +188,14 @@ public class UserControllerTests
             .ReturnsAsync(commandResult);
 
         // Act
-        var result = await _userController.Post(userDto, CancellationToken.None) as ObjectResult;
+        var result = await _userController.CreateUser(userDto, CancellationToken.None) as ObjectResult;
         var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         // Assert
         ClassicAssert.NotNull(result);
         Assert.Multiple(() =>
 		{
-			Assert.That(result?.StatusCode, Is.EqualTo(200));
+			Assert.That(result?.StatusCode, Is.EqualTo(201));
 			Assert.That(response?.Data, Is.EqualTo(userDto));
 		});
 	}
@@ -217,7 +211,7 @@ public class UserControllerTests
             .ReturnsAsync(commandResult);
 
         // Act
-        var result = await _userController.Post(userDto, CancellationToken.None) as ObjectResult;
+        var result = await _userController.CreateUser(userDto, CancellationToken.None) as ObjectResult;
         var response = ApiResponse<UserDto>.FromResult((Result<UserDto>)result.Value, result.StatusCode.Value);
 
         // Assert

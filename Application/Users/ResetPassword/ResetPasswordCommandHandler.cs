@@ -28,7 +28,10 @@ public class ResetPasswordCommandHandler : ICommandHandler<ResetPasswordCommand,
 
 	public async Task<Result<ResetPasswordResponseDto>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
 	{
-		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(c => c.UserId == request.UserId && c.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value, cancellationToken);
+		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
+			ucc => ucc.UserId == request.UserId && 
+				ucc.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1 ).Value, 
+			cancellationToken, ucc => ucc.User);
 
 		if (channel is null)
 		{
@@ -45,7 +48,8 @@ public class ResetPasswordCommandHandler : ICommandHandler<ResetPasswordCommand,
 		{
 			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("Invalid password", password.Error);
 		}
-		password = Password.BuildPassword(_hashProvider.GetHash(password.Value!.Value));
+		
+		password.Value!.Value = _hashProvider.GetHash(password.Value.Value);
 
 		channel.User.Password = password.Value!;
 

@@ -1,5 +1,4 @@
-﻿using Application.Models;
-using Domain.Roles;
+﻿using Application.Models.Jwt;
 
 namespace Application.Abstraction
 {
