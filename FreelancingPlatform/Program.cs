@@ -15,6 +15,7 @@ using Infrastructure.DatabaseConfiguration;
 using Infrastructure.HashProvider;
 using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,7 +60,26 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https:git //aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth" }
+            },
+            new string[] {}
+        }
+    });
+});
 
 var requestTimeout = builder.Configuration.GetSection("RequestTimeout").GetValue<int>("DefaultInSeconds");
 
