@@ -36,7 +36,7 @@ namespace FreelancingPlatform.Controllers
         }
 
 		[AllowAnonymous]
-		[HttpPost("signin")]
+		[HttpPost("signup")]
 		public async Task<IActionResult> Register([FromBody] UserRegistrationDto user, CancellationToken cancellationToken)
 		{
 			var command = new RegisterUserCommand(user);
@@ -46,7 +46,7 @@ namespace FreelancingPlatform.Controllers
         }
 
 		[AllowAnonymous]
-		[HttpPost("login")]
+		[HttpPost("signin")]
 		public async Task<IActionResult> Login([FromBody] UserLoginDto user, CancellationToken cancellationToken)
 		{
 			var command = new LoginUserCommand(user);
