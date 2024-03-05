@@ -66,7 +66,7 @@ namespace FreelancingPlatform.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("ResendConfirmationEmail")]
+        [HttpPost("resend/confirm/email")]
         public async Task<IActionResult> ResendConfirmationEmail([FromBody] UserResendConfirmationEmailRequestDto userResendConfirmationEmailRequestDto, 
 	        CancellationToken cancellationToken)
         {
