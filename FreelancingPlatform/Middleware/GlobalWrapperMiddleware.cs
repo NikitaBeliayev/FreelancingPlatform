@@ -41,12 +41,14 @@ namespace FreelancingPlatform.Middleware
 
                     context.Response.ContentType = "application/json";
 
+                    context.Response.StatusCode = finalResponse.StatusCode;
                     await context.Response.WriteAsJsonAsync(finalResponse);
                 }
                 else
                 {
                     var finalResponse = WrapResponse(context.Response);
 
+                    context.Response.StatusCode = finalResponse.StatusCode;
                     await context.Response.WriteAsJsonAsync(finalResponse);
                 }
             }
@@ -65,7 +67,7 @@ namespace FreelancingPlatform.Middleware
             }
         }
 
-        private object WrapResponse(HttpResponse response, object? body = null)
+        private ApiResponse<object> WrapResponse(HttpResponse response, object? body = null)
         {
             if (body is not null)
             {
