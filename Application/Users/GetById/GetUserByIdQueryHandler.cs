@@ -9,13 +9,11 @@ namespace Application.Users.GetById
     public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserDto>
     {
         private readonly IUserRepository _userRepository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public GetUserByIdQueryHandler(IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public GetUserByIdQueryHandler(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
