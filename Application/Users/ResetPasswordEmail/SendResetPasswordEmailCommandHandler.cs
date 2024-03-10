@@ -43,10 +43,8 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 		}
 		
 		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
-			ucc => ucc.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value && 
-			       ucc.CommunicationChannel.UserCommunicationChannels.Any(uccElement 
-				       => uccElement.User.Email == emailResult.Value!), cancellationToken, 
-			ucc => ucc.User);
+			ucc => ucc.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value &&
+				   ucc.User.Email == emailResult.Value!, cancellationToken, ucc => ucc.User);
 
 		if (channel is null)
 		{
