@@ -3,8 +3,10 @@ using System.Net;
 using Application.Abstraction;
 using Application.Users.Login;
 using Application.Users.RequestDto;
+using Domain.CommunicationChannels;
 using Domain.Repositories;
 using Domain.Roles;
+using Domain.UserCommunicationChannels;
 using Domain.Users;
 using Domain.Users.Errors;
 using Domain.Users.UserDetails;
@@ -50,7 +52,14 @@ public class LoginUserCommandHandlerTests
             FirstName = Name.BuildName("John").Value!,
             LastName = Name.BuildName("Doe").Value!,
             Objectives = {  },
-            CommunicationChannels = {  }
+            CommunicationChannels = new List<UserCommunicationChannel>
+            {
+                new UserCommunicationChannel
+                {
+                    CommunicationChannelId = (int)CommunicationChannelNameType.Email,
+                    IsConfirmed = true
+                }
+            }
         };
         user.Password.Value = _hashProviderMock.Object.GetHash(password.Value!.Value);
         user.Roles.Add(new Role(2, RoleName.BuildRoleName(2).Value!, new List<User>()));
@@ -166,7 +175,14 @@ public class LoginUserCommandHandlerTests
             FirstName = Name.BuildName("John").Value!,
             LastName = Name.BuildName("Doe").Value!,
             Objectives = {  },
-            CommunicationChannels = {  }
+            CommunicationChannels = new List<UserCommunicationChannel>
+            {
+                new UserCommunicationChannel
+                {
+                    CommunicationChannelId = (int)CommunicationChannelNameType.Email,
+                    IsConfirmed = true
+                }
+            }
         };
         user.Roles.Add(new Role(2, RoleName.BuildRoleName(2).Value!, new List<User>()));
         
@@ -216,7 +232,14 @@ public class LoginUserCommandHandlerTests
             FirstName = Name.BuildName("John").Value!,
             LastName = Name.BuildName("Doe").Value!,
             Objectives = {  },
-            CommunicationChannels = {  }
+            CommunicationChannels = new List<UserCommunicationChannel>
+            {
+                new UserCommunicationChannel
+                {
+                    CommunicationChannelId = (int)CommunicationChannelNameType.Email,
+                    IsConfirmed = true
+                }
+            }
         };
         user.Roles.Add(new Role(2, RoleName.BuildRoleName(2).Value!, new List<User>()));
         

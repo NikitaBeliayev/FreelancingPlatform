@@ -8,6 +8,7 @@ using Domain.Repositories;
 using Domain.Users;
 using Domain.Users.UserDetails;
 using Shared;
+using Domain.CommunicationChannels;
 
 namespace Application.Users.Login;
 
@@ -33,12 +34,18 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
 
         User? possibleUser =
             await _userRepository.GetByExpressionWithIncludesAsync(
-                user => user.Email == emailAddress.Value, cancellationToken, user => user.Roles);
+                user => user.Email == emailAddress.Value, cancellationToken, user => user.Roles, user => user.CommunicationChannels);
 
         if (possibleUser is null)
         {
-            return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("There is no user with this email address", new Error("User.LoginUserCommandHandler"
-                , "There is no user with this email address", (int)HttpStatusCode.Unauthorized));
+            return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("There is no user with this email address", new Error("User.LoginUserCommandHandler", 
+                "There is no user with this email address", (int)HttpStatusCode.Unauthorized));
+        }
+        var emailConfirmed = possibleUser.CommunicationChannels.Any(ucc => ucc.CommunicationChannelId == (int)CommunicationChannelNameType.Email && ucc.IsConfirmed);
+        if (!emailConfirmed)
+        {
+            return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("Email has not been confirmed", new Error("User.LoginUserCommandHandler", 
+                "Email has not been confirmed", (int)HttpStatusCode.Unauthorized));
         }
 
         Result<Password> password = Password.BuildPassword(request.LoginUserDto.Password);
