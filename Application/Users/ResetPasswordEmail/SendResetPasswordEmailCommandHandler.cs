@@ -51,7 +51,12 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("No match with the user and email communication channel found", UserErrors.EmailChannelMissing());
 		}
 
-		int minMinutesBetweenEmails = _emailProvider.ResendMinutesDelay;
+        if (!channel.IsConfirmed)
+        {
+            return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("Please verify your email before changing your password", UserErrors.EmailNotVerified(channel.UserId));
+        }
+
+        int minMinutesBetweenEmails = _emailProvider.ResendMinutesDelay;
 
 		if (channel.LastEmailSentAt.HasValue && (DateTime.UtcNow - channel.LastEmailSentAt.Value).TotalMinutes < minMinutesBetweenEmails)
 		{
