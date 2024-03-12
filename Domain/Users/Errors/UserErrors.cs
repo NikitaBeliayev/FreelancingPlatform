@@ -9,6 +9,7 @@ namespace Domain.Users.Errors
         public static Error EmailChannelMissing() => new("Users.EmailChannelMissing", "Email communication channel not found", 400);
         public static Error EmailChannelMissing(Guid id) => new("Users.EmailChannelMissing", $"Email communication channel for user with id {id} is missing", 400);
         public static Error EmailAlreadyVerified(Guid id) => new("Users.EmailAlreadyVerified", $"Email is already verified for user with id {id}", 400);
+        public static Error EmailNotVerified(Guid id) => new("Users.EmailNotVerified", $"Email is not verified for user with id {id}", 403);
         public static Error ResendEmailDelayNotMet(Guid id) => new("Users.ResendEmailDelayNotMet", $"Cannot resend email to user with id {id} until the required delay has passed", 400);
         public static Error TooManyRequests(Guid id) => new("Users.TooManyRequests", $"Too many requests for user with id {id}", 429);
         public static Error InvalidEmailFormat(string email) => new("Users.InvalidEmailFormat", $"The email {email} is invalid", 400);
