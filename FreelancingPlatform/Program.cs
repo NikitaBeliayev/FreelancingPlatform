@@ -56,7 +56,13 @@ builder.Services.AddSingleton<IValidateOptions
 
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin();
+    });
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https:git //aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -129,6 +135,7 @@ if (builder.Configuration.GetSection("Database").GetValue<bool>("ApplyAutomaticM
     }
 }
 
+app.UseCors();
 app.UseSerilogRequestLogging();
 app.UseRequestTimeouts();
 app.UseAuthentication();
