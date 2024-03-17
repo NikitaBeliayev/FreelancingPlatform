@@ -1,4 +1,4 @@
-﻿using Application.Objectives.Category;
+using Application.Objectives.Category;
 using Application.Objectives.ObjectiveStatus;
 using Application.Objectives.ObjectiveTypes;
 using Application.Payments;
@@ -17,5 +17,6 @@ public class ObjectiveDto
     public ICollection<CategoryDto> Categories { get; } = new List<CategoryDto>();
     public ObjectiveTypeDto Type { get; set; }
     public byte[]? Attachments { get; set; }
+    public string CreatorPublicContacts { get; set; }
     public UserDto Creator { get; set; }
 }
