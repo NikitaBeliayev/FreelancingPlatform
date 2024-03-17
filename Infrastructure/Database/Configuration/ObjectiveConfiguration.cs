@@ -38,8 +38,13 @@ public class ObjectiveConfiguration : IEntityTypeConfiguration<Objective>
             .WithMany(e => e.Objectives)
             .HasForeignKey(e => e.TypeId)
             .IsRequired();
-        
-        builder.HasMany(e => e.Users)
+
+        builder.HasOne(e => e.Creator)
+                .WithMany()
+                .HasForeignKey(e => e.CreatorId)
+                .IsRequired();
+
+        builder.HasMany(e => e.Implementors)
             .WithMany(e => e.Objectives);
 
     }

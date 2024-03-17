@@ -19,9 +19,9 @@ public class Objective : Entity
 	public ICollection<Category> Categories { get; } = new List<Category>();
 	public ObjectiveType Type { get; set; }
 	public int TypeId { get; set; }
-
-	public ICollection<User> Users { get; } = new List<User>();
-	//public ICollection<string> Contacts { get; } = new List<string>();
+    public User Creator { get; set; }
+    public Guid CreatorId { get; set; }
+    public ICollection<User> Implementors { get; } = new List<User>();
 	public byte[]? Attachments { get; set; }
 	
 	public Objective(Guid id) : base(id)
@@ -30,7 +30,7 @@ public class Objective : Entity
 	}
 	public Objective(Guid id, ObjectiveTitle title, ObjectiveDescription description, Payment payment, decimal paymentAmount, 
 		ObjectiveStatus objectiveStatus, ICollection<Category> categories, ObjectiveType type, byte[] attachments, int paymentId,
-		int objectiveStatusId) : base(id)
+		int objectiveStatusId, Guid creatorId, User creator) : base(id)
 	{
 		Id = id;
 		Title = title;
@@ -43,5 +43,7 @@ public class Objective : Entity
 		Attachments = attachments;
 		PaymentId = paymentId;
 		ObjectiveStatusId = objectiveStatusId;
+		CreatorId = creatorId;
+		Creator = creator;
 	}
 }
