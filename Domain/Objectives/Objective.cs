@@ -1,4 +1,4 @@
-﻿using Domain.Statuses;
+using Domain.Statuses;
 using Domain.Categories;
 using Domain.Payments;
 using Domain.Types;
@@ -19,6 +19,7 @@ public class Objective : Entity
 	public ICollection<Category> Categories { get; } = new List<Category>();
 	public ObjectiveType Type { get; set; }
 	public int TypeId { get; set; }
+	public string CreatorPublicContacts { get; set; }
     public User Creator { get; set; }
     public Guid CreatorId { get; set; }
     public ICollection<User> Implementors { get; } = new List<User>();
