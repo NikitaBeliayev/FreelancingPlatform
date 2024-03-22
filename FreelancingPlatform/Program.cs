@@ -61,8 +61,8 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
     {
         policy.AllowAnyOrigin()
-            .AllowAnyHeaders()
-            .AllowAnyMethods();
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 builder.Services.AddControllers();
