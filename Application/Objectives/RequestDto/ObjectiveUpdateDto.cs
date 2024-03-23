@@ -1,4 +1,4 @@
-﻿using Application.Objectives.Category;
+﻿using Application.Objectives.Categories;
 using Application.Payments;
 
 namespace Application.Objectives.RequestDto;
