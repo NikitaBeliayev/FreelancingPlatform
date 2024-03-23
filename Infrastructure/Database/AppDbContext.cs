@@ -6,6 +6,7 @@ using Domain.Roles;
 using Domain.Statuses;
 using Domain.Types;
 using Domain.Users.UserDetails;
+using Domain.Categories;
 
 namespace Infrastructure.Database
 {
@@ -27,6 +28,7 @@ namespace Infrastructure.Database
         public DbSet<UserCommunicationChannel> UserCommunicationChannels => Set<UserCommunicationChannel>();
         public DbSet<Role> Role => Set<Role>();
         public DbSet<Objective> Objectives => Set<Objective>();
+        public DbSet<Category> Category => Set<Category>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

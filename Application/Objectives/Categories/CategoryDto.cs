@@ -1,4 +1,4 @@
-﻿namespace Application.Objectives.Category;
+﻿namespace Application.Objectives.Categories;
 
 public class CategoryDto
 {

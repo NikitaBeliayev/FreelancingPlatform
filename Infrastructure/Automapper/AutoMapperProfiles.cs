@@ -1,5 +1,5 @@
 using Application.Objectives;
-using Application.Objectives.Category;
+using Application.Objectives.Categories;
 using Application.Objectives.ObjectiveStatus;
 using Application.Objectives.ObjectiveTypes;
 using Application.Roles;
@@ -106,7 +106,7 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Title,
-                        opt => opt.MapFrom(src => src.Title));
+                        opt => opt.MapFrom(src => src.Title.Value));
 
                 CreateMap<CategoryDto, Category>()
                     .ForMember(dest => dest.Id,
