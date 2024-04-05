@@ -5,7 +5,7 @@ namespace Application.Users
     public class UserDto
     {
         public Guid? Id { get; set; }
-        public string EmailAddress { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
 
@@ -19,7 +19,7 @@ namespace Application.Users
         public UserDto(Guid? id, string email, string firstName, string lastName, string password)
         {
             Id = id;
-            EmailAddress = email;
+            Email = email;
             FirstName = firstName;
             LastName = lastName;
             Password = password;

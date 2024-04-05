@@ -13,7 +13,7 @@ public class UserTests
     {
         // Arrange
         Guid userId = Guid.NewGuid();
-        EmailAddress email = EmailAddress.BuildEmail("john.doe@example.com").Value!;
+        Email email = Email.BuildEmail("john.doe@example.com").Value!;
         Domain.Users.UserDetails.Name firstName = Domain.Users.UserDetails.Name.BuildName("John").Value!;
         Domain.Users.UserDetails.Name lastName = Domain.Users.UserDetails.Name.BuildName("Doe").Value!;
         Password password = Password.BuildPassword("Password123").Value!;

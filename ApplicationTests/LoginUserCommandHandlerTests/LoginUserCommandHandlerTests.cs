@@ -36,10 +36,10 @@ public class LoginUserCommandHandlerTests
         //Arrange
         var userLoginDto = new UserLoginDto()
         {
-            EmailAddress = "john.doe@example.com",
+            Email = "john.doe@example.com",
             Password = "epasswoR!d1"
         };
-        var emailAddress = EmailAddress.BuildEmail(userLoginDto.EmailAddress);
+        var emailAddress = Email.BuildEmail(userLoginDto.Email);
         var password = Password.BuildPassword(userLoginDto.Password);
         var command = new LoginUserCommand(userLoginDto);
         _hashProviderMock.Setup(hp => hp.GetHash(password.Value!.Value))
@@ -96,7 +96,7 @@ public class LoginUserCommandHandlerTests
         //Arrange
         var userLoginDto = new UserLoginDto()
         {
-            EmailAddress = "john.doeexample.com",
+            Email = "john.doeexample.com",
             Password = "epasswoR!d1"
         };
         var command = new LoginUserCommand(userLoginDto);
@@ -125,7 +125,7 @@ public class LoginUserCommandHandlerTests
     {
         var userLoginDto = new UserLoginDto()
         {
-            EmailAddress = "john.doe@example.com",
+            Email = "john.doe@example.com",
             Password = "epasswoR!d1"
         };
         var command = new LoginUserCommand(userLoginDto);
@@ -160,11 +160,11 @@ public class LoginUserCommandHandlerTests
     {
         var userLoginDto = new UserLoginDto()
         {
-            EmailAddress = "john.doe@example.com",
+            Email = "john.doe@example.com",
             Password = "epasswo!d1"
         };
         
-        var emailAddress = EmailAddress.BuildEmail(userLoginDto.EmailAddress);
+        var emailAddress = Email.BuildEmail(userLoginDto.Email);
         var password = Password.BuildPassword(userLoginDto.Password);
         var command = new LoginUserCommand(userLoginDto);
         User user = new User()
@@ -215,12 +215,12 @@ public class LoginUserCommandHandlerTests
     {
         var userLoginDto = new UserLoginDto()
         {
-            EmailAddress = "john.doe@example.com",
+            Email = "john.doe@example.com",
             Password = "epasswoR!d1"
         };
         var command = new LoginUserCommand(userLoginDto);
         
-        var emailAddress = EmailAddress.BuildEmail(userLoginDto.EmailAddress);
+        var emailAddress = Email.BuildEmail(userLoginDto.Email);
         var password = Password.BuildPassword(userLoginDto.Password);
         _hashProviderMock.Setup(hp => hp.GetHash(It.IsAny<string>()))
             .Returns("4c0f384da99bb6a3db1b0098c3ef58a9a13dd3b524d9e9b623b90347e55afaf5");

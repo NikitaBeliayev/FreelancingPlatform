@@ -35,7 +35,7 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 		_logger.LogInformation("Reset password email sending has been requested for user with email = {UserEmail}", 
 			request.UserResetPasswordEmailRequestDto.Email);
 
-		var emailResult = EmailAddress.BuildEmail(request.UserResetPasswordEmailRequestDto.Email);
+		var emailResult = Email.BuildEmail(request.UserResetPasswordEmailRequestDto.Email);
 		if (!emailResult.IsSuccess)
 		{
 			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("Invalid email format",
