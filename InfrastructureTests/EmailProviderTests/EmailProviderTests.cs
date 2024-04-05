@@ -57,7 +57,7 @@ public class EmailProviderTests
                 EmailBody = "testBody"
             },
             CopyTo = null,
-            Recipient = EmailAddress.BuildEmail("john.doe@example.com").Value!
+            Recipient = Email.BuildEmail("john.doe@example.com").Value!
         };
         
         var emailOptions = new EmailOptions
@@ -95,7 +95,7 @@ public class EmailProviderTests
                 EmailBody = "testBody"
             },
             CopyTo = null,
-            Recipient = EmailAddress.BuildEmail("john.doe@example.com").Value!
+            Recipient = Email.BuildEmail("john.doe@example.com").Value!
         };
         
         var emailOptions = new EmailOptions
@@ -133,7 +133,7 @@ public class EmailProviderTests
                 EmailBody = "testBody"
             },
             CopyTo = null,
-            Recipient = EmailAddress.BuildEmail("john.doe@example.com").Value!
+            Recipient = Email.BuildEmail("john.doe@example.com").Value!
         };
         
         var emailOptions = new EmailOptions

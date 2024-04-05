@@ -3,24 +3,24 @@ using Shared;
 
 namespace Domain.Users.UserDetails
 {
-    public class EmailAddress
+    public class Email
     {
         public string Value { get; }
         public bool IsEmailValidated { get; }
 
-        private EmailAddress(string value, bool isEmailValidated)
+        private Email(string value, bool isEmailValidated)
         {
             Value = value;
             IsEmailValidated = isEmailValidated;
         }
 
-        public static Result<EmailAddress> BuildEmail(string value)
+        public static Result<Email> BuildEmail(string value)
         {
             var validationResult = ValidateEmail(value);
 
             return validationResult.IsSuccess
-                ? Result<EmailAddress>.Success(new EmailAddress(value.ToLower(), isEmailValidated: true))
-                : Result<EmailAddress>.Failure(null, validationResult.Error);
+                ? Result<Email>.Success(new Email(value.ToLower(), isEmailValidated: true))
+                : Result<Email>.Failure(null, validationResult.Error);
         }
 
         private static Result ValidateEmail(string value)
@@ -44,9 +44,9 @@ namespace Domain.Users.UserDetails
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Result<EmailAddress> BuildEmailWithoutValidation(string value)
+        public static Result<Email> BuildEmailWithoutValidation(string value)
         {
-            return Result<EmailAddress>.Success(new EmailAddress(value.ToLower(), isEmailValidated: false));
+            return Result<Email>.Success(new Email(value.ToLower(), isEmailValidated: false));
         }
     }
 }

@@ -68,7 +68,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -78,7 +78,7 @@ public class RegisterUserCommandHandlerTests
 		_hashProviderMock.Setup(provider => provider.GetHash("epasswoR!d1"))
 			.Returns("4c0f384da99bb6a3db1b0098c3ef58a9a13dd3b524d9e9b623b90347e55afaf5");
 
-		User user = new User(guid, EmailAddress.BuildEmail(email).Value!,
+		User user = new User(guid, Email.BuildEmail(email).Value!,
 			Name.BuildName(firstName).Value!, Name.BuildName(lastName).Value!,
 			Password.BuildPassword(password).Value!,
 			new List<UserCommunicationChannel>(),
@@ -115,7 +115,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -147,7 +147,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -180,7 +180,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -213,7 +213,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -245,7 +245,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -278,7 +278,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -311,7 +311,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -343,7 +343,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
@@ -376,7 +376,7 @@ public class RegisterUserCommandHandlerTests
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
 		{
-			EmailAddress = email,
+			Email = email,
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,

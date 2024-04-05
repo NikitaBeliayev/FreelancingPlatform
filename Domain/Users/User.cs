@@ -7,7 +7,7 @@ namespace Domain.Users.UserDetails
 {
     public class User : Entity
     {
-        public EmailAddress Email { get; set; }
+        public Email Email { get; set; }
         public Name FirstName { get; set; }
         public Name LastName { get; set; }
         public Password Password { get; set; }
@@ -21,7 +21,7 @@ namespace Domain.Users.UserDetails
         {
         }
 
-        public User(Guid id, EmailAddress email, Name firstName, Name lastName, Password password,
+        public User(Guid id, Email email, Name firstName, Name lastName, Password password,
             ICollection<UserCommunicationChannel> userCommunicationChannels,  ICollection<Role> rolesCollection) : base(id)
         {
             Email = email;

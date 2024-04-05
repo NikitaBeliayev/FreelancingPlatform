@@ -50,7 +50,7 @@ public class CreateUserCommandHandlerTests
 		_hashProvider.Setup(provider => provider.GetHash(password))
 			.Returns("4c0f384da99bb6a3db1b0098c3ef58a9a13dd3b524d9e9b623b90347e55afaf5");
 
-		User user = new User(userGuid, EmailAddress.BuildEmail(email).Value!,
+		User user = new User(userGuid, Email.BuildEmail(email).Value!,
 			Name.BuildName(firstName).Value!, Name.BuildName(lastName).Value!,
 			Password.BuildPassword(password).Value!,
 			new List<UserCommunicationChannel>(),
@@ -71,7 +71,7 @@ public class CreateUserCommandHandlerTests
 		{
 			Assert.That(result.Value!.FirstName, Is.EqualTo(firstName));
 			Assert.That(result.Value!.LastName, Is.EqualTo(lastName));
-			Assert.That(result.Value!.EmailAddress, Is.EqualTo(email));
+			Assert.That(result.Value!.Email, Is.EqualTo(email));
 			Assert.That(result.Value!.Password, Is.EqualTo(_hashProvider.Object.GetHash(password)));
 		});
 

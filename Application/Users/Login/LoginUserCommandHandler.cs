@@ -26,7 +26,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
     }
     public async Task<Result<UserLoginResponseDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        Result<EmailAddress> emailAddress = EmailAddress.BuildEmail(request.LoginUserDto.EmailAddress.ToLower());
+        Result<Email> emailAddress = Email.BuildEmail(request.LoginUserDto.Email.ToLower());
         if (!emailAddress.IsSuccess)
         {
             return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("Invalid email format", emailAddress.Error);

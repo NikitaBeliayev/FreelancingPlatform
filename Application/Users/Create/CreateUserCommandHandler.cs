@@ -34,7 +34,7 @@ namespace Application.Users.Create
         {
             _logger.LogInformation("User creation has been requested");
 
-            var email = EmailAddress.BuildEmail(command.User.EmailAddress);
+            var email = Email.BuildEmail(command.User.Email);
             if (!email.IsSuccess)
             {
                 return ResponseHelper.LogAndReturnError<UserDto>("Invalid email", email.Error);

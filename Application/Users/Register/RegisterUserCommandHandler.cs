@@ -48,7 +48,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
     public async Task<Result<UserRegistrationResponseDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("User registration has been requested");
-        var email = EmailAddress.BuildEmail(request.RegistrationDto.EmailAddress);
+        var email = Email.BuildEmail(request.RegistrationDto.Email);
         if (!email.IsSuccess)
         {
             return ResponseHelper.LogAndReturnError<UserRegistrationResponseDto>("Invalid email", email.Error);
