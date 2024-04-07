@@ -4,19 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repositories;
 
-public class RoleRepository : IRoleRepository
+public class RoleRepository : Repository<Role>, IRoleRepository
 {
-    private readonly AppDbContext _dbContext;
-
-    public RoleRepository(AppDbContext dbContext)
+    public RoleRepository(AppDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
     public void ChangeStateToUnchangedForCollection(IEnumerable<Role> roles)
     {
         foreach (var role in roles)
         {
-            _dbContext.Role.Entry(role).State = EntityState.Unchanged;
+            _dbSet.Entry(role).State = EntityState.Unchanged;
         }
     }
 }

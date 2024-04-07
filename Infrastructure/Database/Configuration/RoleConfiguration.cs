@@ -11,24 +11,18 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {
-        builder.HasKey(e => e.Id);
-        ConstructorInfo? privateConstructor = typeof(RoleName).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, [typeof(RoleNameType)]);
-        
-        if (privateConstructor is null)
-        {
-            throw new NullReferenceException("Constructor not found");
-        }
-        
         builder.HasData(new List<Role>()
         {
-            new Role(1, (RoleName)privateConstructor.Invoke([RoleNameType.Admin]), new List<User>()),
-            new Role(2, (RoleName)privateConstructor.Invoke([RoleNameType.Customer]), new List<User>()),
-            new Role(3, (RoleName)privateConstructor.Invoke([RoleNameType.Implementer]), new List<User>())
+            new Role(new Guid("00edafe3-b047-5980-d0fa-da10f400c1e5"), 
+                RoleName.BuildRoleNameWithoutValidation(RoleNameVariations.GetValue(RoleNameVariations.Admin).Value!).Value!, new List<User>()),
+            new Role(new Guid("1d6026ce-0dac-13ea-8b72-95f02b7620a7"), 
+                RoleName.BuildRoleNameWithoutValidation(RoleNameVariations.GetValue(RoleNameVariations.Customer).Value!).Value!, new List<User>()),
+            new Role(new Guid("e438dde5-34d8-f76d-aecb-26a8d882d530"), 
+                RoleName.BuildRoleNameWithoutValidation(RoleNameVariations.GetValue(RoleNameVariations.Implementer).Value!).Value!, new List<User>())
         });
         builder.Property(e => e.Name)
             .HasConversion(value => value.Value,
-                value => RoleName.BuildRoleNameWithoutValidation(
-                    (int)(RoleNameType)Enum.Parse(typeof(RoleNameType), value)).Value!);
+                value => RoleName.BuildRoleNameWithoutValidation(value).Value!);
         
         
     }

@@ -8,6 +8,7 @@ using Domain.Roles;
 using Domain.UserCommunicationChannels;
 using Domain.Users.UserDetails;
 using Application.Abstraction;
+using Domain.Objectives;
 using Domain.Repositories;
 using Domain.Users;
 
@@ -67,10 +68,12 @@ namespace Application.Users.Create
                 lastName.Value!,
                 password.Value!,
                 new List<UserCommunicationChannel>(), 
-                new List<Role>()
+                new List<Role>(),
+                new List<Objective>(),
+                new List<Objective>()
             );
 
-            var result = await _userRepository.CreateAsync(newUser);
+            var result = await _userRepository.CreateAsync(newUser, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             if (result != null)

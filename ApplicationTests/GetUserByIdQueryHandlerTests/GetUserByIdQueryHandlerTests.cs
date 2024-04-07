@@ -1,6 +1,7 @@
 using Application.Abstraction.Data;
 using Application.Users.GetById;
 using AutoMapper;
+using Domain.Objectives;
 using Domain.Repositories;
 using Domain.Roles;
 using Domain.UserCommunicationChannels;
@@ -38,7 +39,7 @@ public class CreateUserQueryHandlerTests
 		var user = new User(userId, Email.BuildEmail("john.doe@example.com").Value!, Name.BuildName(firstName).Value!,
 			Name.BuildName(lastName).Value!, Password.BuildPassword("epasswoR!d1").Value!,
 			new List<UserCommunicationChannel>(),
-			new List<Role>());
+			new List<Role>(), new List<Objective>(), new List<Objective>());
 		userRepositoryMock.Setup(repo => repo.GetByIdAsync(userId, CancellationToken.None))
 			.ReturnsAsync(user);
 

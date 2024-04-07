@@ -2,6 +2,7 @@ using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using Application.Helpers;
 using Application.Users.ResponseDto;
+using AutoMapper;
 using Domain.CommunicationChannels;
 using Domain.Repositories;
 using Domain.UserCommunicationChannels;
@@ -15,18 +16,22 @@ public class ConfirmUserEmailCommandHandler : ICommandHandler<ConfirmUserEmailCo
 {
     private readonly IUserCommunicationChannelRepository _userCommunicationChannelRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public ConfirmUserEmailCommandHandler(IUserCommunicationChannelRepository userCommunicationChannelRepository, IUnitOfWork unitOfWork)
+    public ConfirmUserEmailCommandHandler(IUserCommunicationChannelRepository userCommunicationChannelRepository,
+        IUnitOfWork unitOfWork, IMapper mapper)
     {
         _userCommunicationChannelRepository = userCommunicationChannelRepository;
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
     public async Task<Result<UserEmailConfirmationResponseDto>> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
     {
         UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
             c => c.ConfirmationToken == request.UserConfirmEmailRequestDto.Token && 
-            c.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value, 
+            c.CommunicationChannel.Name == 
+            CommunicationChannelName.BuildCommunicationChannelName(CommunicationChannelNameVariations.GetValue(CommunicationChannelNameVariations.Email).Value!).Value, 
             cancellationToken, 
             c => c.CommunicationChannel);
         if (channel is null)
@@ -49,6 +54,6 @@ public class ConfirmUserEmailCommandHandler : ICommandHandler<ConfirmUserEmailCo
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result<UserEmailConfirmationResponseDto>.Success(new UserEmailConfirmationResponseDto());
+        return Result<UserEmailConfirmationResponseDto>.Success(_mapper.Map<UserEmailConfirmationResponseDto>(channel.User));
     }
 }

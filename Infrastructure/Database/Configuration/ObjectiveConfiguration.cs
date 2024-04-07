@@ -40,12 +40,12 @@ public class ObjectiveConfiguration : IEntityTypeConfiguration<Objective>
             .IsRequired();
 
         builder.HasOne(e => e.Creator)
-                .WithMany()
-                .HasForeignKey(e => e.CreatorId)
-                .IsRequired();
+            .WithMany(e => e.CreatedObjectives)
+            .HasForeignKey(e => e.CreatorId)
+            .IsRequired();
 
         builder.HasMany(e => e.Implementors)
-            .WithMany(e => e.Objectives);
-
+            .WithMany(e => e.ObjectivesToImplement)
+            .UsingEntity(j => j.ToTable("ObjectiveImplementors"));
     }
 }

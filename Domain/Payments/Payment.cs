@@ -1,22 +1,18 @@
 ﻿using Domain.Objectives;
+using Shared;
 
 namespace Domain.Payments;
 
-public class Payment
+public class Payment : Entity
 {
-    public int Id { get; set; }
-    
     public PaymentName Name { get; set; }
     public ICollection<Objective> Objectives { get; set; } = new List<Objective>();
 
-    public Payment()
-    {
-        
-    }
+    public Payment(Guid id) : base(id)
+    { }
 
-    public Payment(int id, PaymentName paymentType, ICollection<Objective> objectives)
+    public Payment(Guid id, PaymentName paymentType, ICollection<Objective> objectives) : base(id)
     {
-        Id = id; 
         Name = paymentType;
         Objectives = objectives;
     }

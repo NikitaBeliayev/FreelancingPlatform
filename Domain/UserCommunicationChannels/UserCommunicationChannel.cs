@@ -1,4 +1,5 @@
 ﻿using Domain.CommunicationChannels;
+using Domain.Users;
 using Domain.Users.UserDetails;
 using Shared;
 
@@ -10,7 +11,7 @@ public class UserCommunicationChannel : Entity
     public Guid UserId { get; set; }
 
     public CommunicationChannel CommunicationChannel { get; set; }
-    public int CommunicationChannelId { get; set; }
+    public Guid CommunicationChannelId { get; set; }
 
     public bool IsConfirmed { get; set; }
     public Guid ConfirmationToken { get; set; }
@@ -22,7 +23,7 @@ public class UserCommunicationChannel : Entity
     }
 
     public UserCommunicationChannel(Guid id, User user, Guid userId, bool isConfirmed, Guid confirmationToken, CommunicationChannel communicationChannel,
-        int communicationChannelId, DateTime? lastEmailSentAt) : base(id)
+        Guid communicationChannelId, DateTime? lastEmailSentAt) : base(id)
     {
         User = user;
         UserId = userId;

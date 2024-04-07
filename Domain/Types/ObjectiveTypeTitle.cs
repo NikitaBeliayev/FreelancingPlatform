@@ -1,27 +1,20 @@
-﻿using Domain.Roles.Errors;
-using Domain.Roles;
-using Shared;
-using Domain.Objectives.ObjectiveTypes.Errors;
+﻿using Shared;
 
 namespace Domain.Types;
 
-public sealed record class ObjectiveTypeTitle
+public sealed class ObjectiveTypeTitle
 {
-	private ObjectiveTypeTitle(ObjectiveTypeVariations objectiveTypeVariations)
+	private ObjectiveTypeTitle(string objectiveType)
 	{
-		Title = objectiveTypeVariations.ToString();
+		Title = objectiveType;
 	}
 
 	public string Title { get; }
 
-	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitle(int objectiveType)
+	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitle(string value)
 	{
-		if (objectiveType < 1 || objectiveType > 3)
-		{
-			return Result<ObjectiveTypeTitle>.Failure(null, ObjectiveTypeErrors.InvalidTitle);
-		}
-
-		return Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle((ObjectiveTypeVariations)objectiveType));
+		return string.IsNullOrWhiteSpace(value) ? Result<ObjectiveTypeTitle>.Failure(null, new Error("", "", 500)) 
+			: Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle(value));
 	}
 	
 	/// <summary>
@@ -29,8 +22,8 @@ public sealed record class ObjectiveTypeTitle
 	/// </summary>
 	/// <param name="objectiveType"></param>
 	/// <returns></returns>
-	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitleWithoutValidation(int objectiveType)
+	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitleWithoutValidation(string objectiveType)
 	{
-		return Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle((ObjectiveTypeVariations)objectiveType));
+		return Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle(objectiveType));
 	}
 }

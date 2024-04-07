@@ -9,6 +9,7 @@ using Domain.Users;
 using Domain.CommunicationChannels;
 using Shared;
 using Application.Abstraction;
+using AutoMapper;
 using Domain.Users.UserDetails;
 
 namespace Application.Users.ResetPassword;
@@ -18,19 +19,23 @@ public class ResetPasswordCommandHandler : ICommandHandler<ResetPasswordCommand,
 	private readonly IUserCommunicationChannelRepository _userCommunicationChannelRepository;
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IHashProvider _hashProvider;
+	private readonly IMapper _mapper;
 
-	public ResetPasswordCommandHandler(IUserCommunicationChannelRepository userCommunicationChannelRepository, IUnitOfWork unitOfWork, IHashProvider hashProvider)
+	public ResetPasswordCommandHandler(IUserCommunicationChannelRepository userCommunicationChannelRepository, IUnitOfWork unitOfWork, IHashProvider hashProvider,
+		IMapper mapper)
 	{
 		_userCommunicationChannelRepository = userCommunicationChannelRepository;
 		_unitOfWork = unitOfWork;
 		_hashProvider = hashProvider;
+		_mapper = mapper;
 	}
 
 	public async Task<Result<ResetPasswordResponseDto>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
 	{
 		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
 			ucc => ucc.UserId == request.UserId && 
-				ucc.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1 ).Value, 
+				ucc.CommunicationChannel.Name == 
+				CommunicationChannelName.BuildCommunicationChannelName(CommunicationChannelNameVariations.GetValue(CommunicationChannelNameVariations.Email).Value!).Value, 
 			cancellationToken, ucc => ucc.User);
 
 		if (channel is null)
@@ -55,6 +60,6 @@ public class ResetPasswordCommandHandler : ICommandHandler<ResetPasswordCommand,
 
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-		return Result<ResetPasswordResponseDto>.Success(new ResetPasswordResponseDto { Id = channel.UserId, Success = true, Message = "Password reset successful" });
+		return Result<ResetPasswordResponseDto>.Success(_mapper.Map<ResetPasswordResponseDto>(channel.User));
 	}
 }

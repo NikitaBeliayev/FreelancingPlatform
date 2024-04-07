@@ -1,19 +1,19 @@
-﻿using Domain.Users.UserDetails;
+﻿using Domain.Users;
+using Domain.Users.UserDetails;
+using Shared;
 
 namespace Domain.Roles;
 
-public class Role
+public class Role : Entity
 {
-    public int Id { get; set; }
     public RoleName Name { get; set; }
     public ICollection<User> Users = new List<User>();
-    public Role()
+    public Role(Guid id) : base(id)
     {
         
     }
-    public Role(int id, RoleName name, ICollection<User> usersCollection)
+    public Role(Guid id, RoleName name, ICollection<User> usersCollection) : base(id)
     {
-        Id = id;
         Name = name;
         Users = usersCollection;
     }

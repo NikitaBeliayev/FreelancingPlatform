@@ -1,7 +1,8 @@
+using Application.Models.Jwt;
 using Application.Objectives;
 using Application.Objectives.Categories;
 using Application.Objectives.ObjectiveStatus;
-using Application.Objectives.ObjectiveTypes;
+using Application.Objectives.Types;
 using Application.Roles;
 using Application.Payments;
 using Application.Users;
@@ -30,7 +31,8 @@ namespace Infrastructure.Automapper
                 CreateMap<string, Name>().ConstructUsing(value => Name.BuildName(value).Value!);
                 CreateMap<Password, string>().ConvertUsing(password => password.Value);
                 CreateMap<string, Password>().ConstructUsing(value => Password.BuildPassword(value).Value!);
-
+                
+                //mapping between user and all response dto
                 CreateMap<User, UserDto>()
                     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                     .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
@@ -48,142 +50,68 @@ namespace Infrastructure.Automapper
                 CreateMap<User, UserRegistrationResponseDto>()
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id));
-
-                CreateMap<RoleDto, Role>()
-                    .ForMember(dest => dest.Name,
-                        opt => opt.MapFrom(src => (RoleNameType)Enum.Parse(typeof(RoleNameType), src.Name)))
+                
+                CreateMap<User, UserEmailConfirmationResponseDto>();
+                
+                CreateMap<User, ResetPasswordResponseDto>()
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id));
-
+                
+                CreateMap<Tuple<User, JwtCredentials>, UserLoginResponseDto>()
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Item1.Id))
+                    .ForMember(dest => dest.Id,
+                        opt => opt.MapFrom(src => src.Item2));
+                
+                CreateMap<User, UserResendEmailConfirmationResponseDto>();
+                
+                //mapping between role and all response dto
                 CreateMap<Role, RoleDto>()
-                    .ForMember(dest => dest.Name,
-                        opt => opt.MapFrom(src => nameof(src.Name)))
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id));
-
-                CreateMap<ObjectiveTypeDto, ObjectiveType>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.TypeTitle,
-                        opt => opt.MapFrom(src =>
-                            (ObjectiveTypeVariations)Enum.Parse(typeof(ObjectiveTypeVariations), src.TypeTitle)))
-                    .ForMember(dest => dest.Eta, opt => opt.MapFrom(src => src.ETA))
-                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
-
-                CreateMap<ObjectiveType, ObjectiveTypeDto>()
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.Value));
+                
+                CreateMap<RoleDto, Role>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.TypeTitle,
-                        opt => opt.MapFrom(src => nameof(src.TypeTitle)))
-                    .ForMember(dest => dest.ETA, opt => opt.MapFrom(src => src.Eta))
-                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration));
-
-                CreateMap<ObjectiveStatusDto, ObjectiveStatus>()
-                    .ForMember(dest => dest.Title,
-                        opt => opt.MapFrom(src =>
-                            (ObjectiveStatusTitleType)Enum.Parse(typeof(ObjectiveStatusTitleType), src.Title)))
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id));
-
-                CreateMap<ObjectiveStatus, ObjectiveStatusDto>()
-                    .ForMember(dest => dest.Title,
-                        opt => opt.MapFrom(src => nameof(src.Title)))
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id));
-
-                CreateMap<PaymentDto, Payment>()
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.Name,
-                        opt => opt.MapFrom(src
-                            => (PaymentType)Enum.Parse(typeof(PaymentType), src.Name)));
-
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => RoleName.BuildRoleName(src.Id).Value!))
+                    .ForMember(dest => dest.Users, opt => opt.Ignore());
+                
+                
+                //mapping between payment and all response dto
                 CreateMap<Payment, PaymentDto>()
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.Name,
-                        opt => opt.MapFrom(src => nameof(src.Name)));
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.Value));
+                
+                CreateMap<PaymentDto, Payment>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => 
+                        PaymentName.BuildName(PaymentVariations.GetValue(src.Id).Value!).Value!))
+                    .ForMember(dest => dest.Objectives, opt => opt.Ignore());
+                
+                //mapping between objective type and all response dto
 
+                CreateMap<ObjectiveType, TypeDto>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))
+                    .ForMember(dest => dest.TypeTitle, opt => opt.MapFrom(src => src.TypeTitle.Title));
+                
+                CreateMap<TypeDto, ObjectiveType>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))
+                    .ForMember(dest => dest.TypeTitle, opt =>
+                        opt.MapFrom(src =>
+                            ObjectiveTypeTitle.BuildObjectiveTypeTitle(src.TypeTitle).Value!));
+                
+                
+                
+                //mapping between objective type and all response dto
                 CreateMap<Category, CategoryDto>()
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.Title,
-                        opt => opt.MapFrom(src => src.Title.Value));
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Value));
 
                 CreateMap<CategoryDto, Category>()
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Title,
-                        opt => opt.MapFrom(src => CategoryName.BuildCategoryName(src.Title)));
-
-                CreateMap<Objective, ObjectiveDto>()
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.ObjectiveStatus,
-                        opt => opt.MapFrom(src => new ObjectiveStatusDto()
-                        {
-                            Id = src.ObjectiveStatusId,
-                            Title = src.ObjectiveStatus.Title.Value
-                        }))
-                    .ForMember(dest => dest.Title,
-                        opt => opt.MapFrom(src => src.Title.Value))
-                    .ForMember(dest => dest.Categories,
-                        opt => opt.MapFrom(src => src.Categories))
-                    .ForMember(dest => dest.Description,
-                        opt => opt.MapFrom(src => src.Description.Value))
-                    .ForMember(dest => dest.Payment,
-                        opt => opt.MapFrom(src => new PaymentDto()
-                        {
-                            Id = src.ObjectiveStatus.Id,
-                            Name = src.Payment.Name.Value
-                        }))
-                    .ForMember(dest => dest.Attachments,
-                        opt => opt.MapFrom(src => src.Attachments))
-                    .ForMember(dest => dest.PaymentAmount,
-                        opt => opt.MapFrom(src => src.PaymentAmount))
-                    .ForMember(dest => dest.Type,
-                        opt => opt.MapFrom(src => new ObjectiveTypeDto()
-                        {
-                            Duration = src.Type.Duration,
-                            ETA = src.Type.Eta,
-                            Id = src.Type.Id,
-                            TypeTitle = src.Type.TypeTitle.Title
-                        }));
-
-                CreateMap<ObjectiveDto, Objective>()
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.Categories,
-                        opt => opt.MapFrom(src
-                            => src.Categories.Select(c => new Category()
-                            {
-                                Id = c.Id,
-                                Objectives = new List<Objective>(),
-                                Title = CategoryName.BuildCategoryName(c.Title).Value!
-                            })))
-                    .ForMember(dest => dest.Title,
-                        opt => opt.MapFrom(src => ObjectiveTitle.BuildName(src.Title).Value!))
-                    .ForMember(dest => dest.Attachments,
-                        opt => opt.MapFrom(src => src.Attachments))
-                    .ForMember(dest => dest.Description,
-                        opt => opt.MapFrom(src => ObjectiveDescription.BuildName(src.Description).Value!))
-                    .ForMember(dest => dest.Payment,
-                        opt => opt.MapFrom(src => new Payment()
-                        {
-                            Id = src.Payment.Id,
-                            Name = PaymentName.BuildName(src.Payment.Id).Value!,
-                            Objectives = new List<Objective>()
-                        }))
-                    .ForMember(dest => dest.ObjectiveStatus,
-                        opt => opt.MapFrom(src => new ObjectiveStatus(
-                            src.ObjectiveStatus.Id,
-                            ObjectiveStatusTitle.BuildStatusTitle(src.ObjectiveStatus.Id).Value!,
-                            new List<Objective>())))
-                    .ForMember(dest => dest.Type,
-                        opt => opt.MapFrom(src => new ObjectiveType(
-                            src.Type.Id, new List<Objective>(),
-                            ObjectiveTypeTitle.BuildObjectiveTypeTitle(src.Type.Id).Value!, src.Type.ETA,
-                            src.Type.Duration)))
-                    .ForMember(dest => dest.PaymentAmount,
-                        opt => opt.MapFrom(src => src.PaymentAmount));
+                        opt => opt.MapFrom(src => CategoryName.BuildCategoryNameWithoutValidation(src.Title!)));
             }
         }
     }

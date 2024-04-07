@@ -10,6 +10,7 @@ using Domain.CommunicationChannels;
 using Domain.Users.Errors;
 using Application.Abstraction;
 using Application.Models.Email;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Users.ResetPasswordEmail;
@@ -20,14 +21,16 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IEmailProvider _emailProvider;
 	private readonly ILogger<SendResetPasswordEmailCommandHandler> _logger;
+	private readonly IMapper _mapper;
 
 	public SendResetPasswordEmailCommandHandler(IUserCommunicationChannelRepository userCommunicationChannelRepository, 
-		IUnitOfWork unitOfWork, IEmailProvider emailProvider, ILogger<SendResetPasswordEmailCommandHandler> logger)
+		IUnitOfWork unitOfWork, IEmailProvider emailProvider, ILogger<SendResetPasswordEmailCommandHandler> logger, IMapper mapper)
 	{
 		_userCommunicationChannelRepository = userCommunicationChannelRepository;
 		_unitOfWork = unitOfWork;
 		_emailProvider = emailProvider;
 		_logger = logger;
+		_mapper = mapper;
 	}
 
 	public async Task<Result<ResetPasswordResponseDto>> Handle(SendResetPasswordEmailCommand request, CancellationToken cancellationToken)
@@ -43,7 +46,7 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 		}
 		
 		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
-			ucc => ucc.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(1).Value &&
+			ucc => ucc.CommunicationChannel.Name == CommunicationChannelName.BuildCommunicationChannelName(CommunicationChannelNameVariations.GetValue(CommunicationChannelNameVariations.Email).Value!).Value &&
 				   ucc.User.Email == emailResult.Value!, cancellationToken, ucc => ucc.User);
 
 		if (channel is null)
@@ -60,7 +63,8 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 
 		if (channel.LastEmailSentAt.HasValue && (DateTime.UtcNow - channel.LastEmailSentAt.Value).TotalMinutes < minMinutesBetweenEmails)
 		{
-			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>($"Please wait at least {minMinutesBetweenEmails} minutes before requesting a new password reset email.", UserErrors.TooManyRequests(channel.UserId));
+			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>($"Please wait at least {minMinutesBetweenEmails} minutes before requesting a new password reset email.", 
+				UserErrors.TooManyRequests(channel.UserId));
 		}
 
 		Guid resetToken = Guid.NewGuid();
@@ -83,7 +87,6 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 
 		_logger.LogInformation("Reset password email sent successfully to user: Id = {UserId}", channel.UserId);
 
-		return Result<ResetPasswordResponseDto>.Success(new ResetPasswordResponseDto 
-			{ Id = channel.UserId, Success = true, Message = "Reset password email sent" });
+		return Result<ResetPasswordResponseDto>.Success(_mapper.Map<ResetPasswordResponseDto>(channel.User));
 	}
 }

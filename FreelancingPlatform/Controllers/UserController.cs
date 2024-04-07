@@ -25,7 +25,7 @@ namespace FreelancingPlatform.Controllers
 		{
 			_sender = sender;
 		}
-
+		
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
 		{
@@ -76,7 +76,8 @@ namespace FreelancingPlatform.Controllers
             return Ok(result);
         }
 
-		[Authorize(Roles = nameof(RoleNameType.Admin))]
+		[Authorize(Roles = "Admin")] // change this to variable in the future
+		[AllowAnonymous]
 		[HttpPost("create")]
 		public async Task<IActionResult> CreateUser([FromBody] UserDto user, CancellationToken cancellationToken)
 		{
@@ -87,7 +88,7 @@ namespace FreelancingPlatform.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpPost("reset/password")]
+		[HttpPost("reset/password")] // change url
 		public async Task<IActionResult> SendResetPasswordEmail([FromBody] UserResetPasswordEmailRequestDto userEmail, CancellationToken cancellationToken)
 		{
 			var command = new SendResetPasswordEmailCommand(userEmail);

@@ -1,4 +1,5 @@
 ﻿using Application.Abstraction;
+using Domain.Users;
 using Domain.Users.UserDetails;
 using Infrastructure.Database;
 using Infrastructure.HashProvider;

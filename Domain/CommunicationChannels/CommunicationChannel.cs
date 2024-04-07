@@ -3,19 +3,16 @@ using Shared;
 
 namespace Domain.CommunicationChannels;
 
-public class CommunicationChannel
+public class CommunicationChannel : Entity
 {
-    public int Id { get; set; }
     public ICollection<UserCommunicationChannel> UserCommunicationChannels { get; set; } =
         new List<UserCommunicationChannel>();
     public CommunicationChannelName Name { get; set; }
 
-    public CommunicationChannel()
-    {
-        
-    }
+    public CommunicationChannel(Guid id) : base(id)
+    { }
 
-    public CommunicationChannel(int id, CommunicationChannelName name, ICollection<UserCommunicationChannel> userCommunicationChannels)
+    public CommunicationChannel(Guid id, CommunicationChannelName name, ICollection<UserCommunicationChannel> userCommunicationChannels) : base(id)
     {
         Id = id;
         Name = name;

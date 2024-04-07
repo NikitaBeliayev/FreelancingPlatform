@@ -39,7 +39,7 @@ public class UserControllerTests
         var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
         {
         new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-        new Claim(ClaimTypes.Role, nameof(RoleNameType.Customer))
+        new Claim(ClaimTypes.Role, nameof(RoleNameVariations.Customer))
         }));
 
         _senderMock.Setup(x => x.Send(It.IsAny<CreateUserCommand>(), It.IsAny<CancellationToken>()))
@@ -74,7 +74,7 @@ public class UserControllerTests
         var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
         {
         new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-        new Claim(ClaimTypes.Role, nameof(RoleNameType.Admin))
+        new Claim(ClaimTypes.Role, nameof(RoleNameVariations.Admin))
         }));
 
         var queryResult = Result<UserDto>.Success(userDto);
@@ -110,7 +110,7 @@ public class UserControllerTests
         var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
         {
         new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-        new Claim(ClaimTypes.Role, nameof(RoleNameType.Customer))
+        new Claim(ClaimTypes.Role, nameof(RoleNameVariations.Customer))
         }));
 
         _userController.ControllerContext = new ControllerContext
