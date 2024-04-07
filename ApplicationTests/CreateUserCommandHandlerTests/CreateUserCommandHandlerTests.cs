@@ -3,6 +3,7 @@ using Application.Abstraction.Data;
 using Application.Users;
 using Application.Users.Create;
 using AutoMapper;
+using Domain.Objectives;
 using Domain.Repositories;
 using Domain.Roles;
 using Domain.UserCommunicationChannels;
@@ -54,7 +55,7 @@ public class CreateUserCommandHandlerTests
 			Name.BuildName(firstName).Value!, Name.BuildName(lastName).Value!,
 			Password.BuildPassword(password).Value!,
 			new List<UserCommunicationChannel>(),
-			new List<Role>());
+			new List<Role>(), new List<Objective>(), new List<Objective>());
 		user.Password.Value = _hashProvider.Object.GetHash(password);
 
 		_userRepositoryMock.Setup(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()))

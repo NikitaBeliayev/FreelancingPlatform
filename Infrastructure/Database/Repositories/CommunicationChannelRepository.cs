@@ -4,16 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repositories;
 
-public class CommunicationChannelRepository : ICommunicationChannelRepository
+public class CommunicationChannelRepository : Repository<CommunicationChannel>, ICommunicationChannelRepository
 {
-    private readonly AppDbContext _dbContext;
-    
-    public CommunicationChannelRepository(AppDbContext dbContext)
+    public CommunicationChannelRepository(AppDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
     public void ChangeStateToUnchanged(CommunicationChannel communicationChannel)
     {
-        _dbContext.Entry(communicationChannel).State = EntityState.Unchanged;
+        _dbSet.Entry(communicationChannel).State = EntityState.Unchanged;
     }
 }

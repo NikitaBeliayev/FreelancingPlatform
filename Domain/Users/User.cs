@@ -1,9 +1,10 @@
 ﻿using Domain.Objectives;
 using Domain.Roles;
 using Domain.UserCommunicationChannels;
+using Domain.Users.UserDetails;
 using Shared;
 
-namespace Domain.Users.UserDetails
+namespace Domain.Users
 {
     public class User : Entity
     {
@@ -12,17 +13,20 @@ namespace Domain.Users.UserDetails
         public Name LastName { get; set; }
         public Password Password { get; set; }
         public ICollection<Role> Roles { get; } = new List<Role>();
-        public ICollection<Objective> Objectives { get; } = new List<Objective>();
+        public ICollection<Objective> ObjectivesToImplement { get; } = new List<Objective>();
+        
+        public ICollection<Objective> CreatedObjectives { get; } = new List<Objective>();
 
         public ICollection<UserCommunicationChannel> CommunicationChannels { get; set; } =
             new List<UserCommunicationChannel>();
 
-        public User() : base(Guid.NewGuid())
+        public User(Guid id) : base(id)
         {
         }
 
         public User(Guid id, Email email, Name firstName, Name lastName, Password password,
-            ICollection<UserCommunicationChannel> userCommunicationChannels,  ICollection<Role> rolesCollection) : base(id)
+            ICollection<UserCommunicationChannel> userCommunicationChannels,  ICollection<Role> rolesCollection, ICollection<Objective> objectiveToImplement, 
+            ICollection<Objective> createdObjectives) : base(id)
         {
             Email = email;
             FirstName = firstName;
@@ -30,6 +34,8 @@ namespace Domain.Users.UserDetails
             Password = password;
             CommunicationChannels = userCommunicationChannels;
             Roles = rolesCollection;
+            ObjectivesToImplement = objectiveToImplement;
+            CreatedObjectives = createdObjectives;
         }
     }
 }

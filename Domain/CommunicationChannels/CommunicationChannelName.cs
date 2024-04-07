@@ -9,19 +9,16 @@ public class CommunicationChannelName
 {
     public string Value { get; }
 
-    private CommunicationChannelName(CommunicationChannelNameType communicationChannelNameType)
+    private CommunicationChannelName(string communicationChannelNameVariations)
     {
-        Value = communicationChannelNameType.ToString();
+        Value = communicationChannelNameVariations;
     }
     
-    public static Result<CommunicationChannelName> BuildCommunicationChannelName(int communicationChannelNameType)
+    public static Result<CommunicationChannelName> BuildCommunicationChannelName(string value)
     {
-        if (communicationChannelNameType is not 1)
-        {
-            return Result<CommunicationChannelName>.Failure(null, CommunicationChannelNameErrors.InvalidName);
-        }
-
-        return Result<CommunicationChannelName>.Success(new CommunicationChannelName(((CommunicationChannelNameType)communicationChannelNameType)));
+        
+        return string.IsNullOrWhiteSpace(value) ? Result<CommunicationChannelName>.Failure(null, new Error("", "", 500)) 
+            : Result<CommunicationChannelName>.Success(new CommunicationChannelName(value));
     }
     
     /// <summary>
@@ -29,8 +26,8 @@ public class CommunicationChannelName
     /// </summary>
     /// <param name="communicationChannelName"></param>
     /// <returns></returns>
-    public static Result<CommunicationChannelName> BuildCommunicationChannelNameWithoutValidation(int communicationChannelName)
+    public static Result<CommunicationChannelName> BuildCommunicationChannelNameWithoutValidation(string communicationChannelName)
     {
-        return Result<CommunicationChannelName>.Success(new CommunicationChannelName(((CommunicationChannelNameType)communicationChannelName)));
+        return Result<CommunicationChannelName>.Success(new CommunicationChannelName(communicationChannelName));
     }
 }

@@ -10,26 +10,27 @@ namespace Infrastructure.Database.Configuration
     {
         public void Configure(EntityTypeBuilder<ObjectiveStatus> builder)
         {
-            builder.HasKey(e => e.Id);
-            ConstructorInfo? privateConstructor = typeof(ObjectiveStatusTitle).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, [typeof(ObjectiveStatusTitleType)]);
-
-            if (privateConstructor is null)
-            {
-                throw new NullReferenceException("Constructor not found");
-            }
-
             builder.HasData(new List<ObjectiveStatus>()
             {
-            new ObjectiveStatus(1, (ObjectiveStatusTitle)privateConstructor.Invoke([ObjectiveStatusTitleType.Draft]), new List<Objective>()),
-            new ObjectiveStatus(2, (ObjectiveStatusTitle)privateConstructor.Invoke([ObjectiveStatusTitleType.InProgress]), new List<Objective>()),
-            new ObjectiveStatus(3, (ObjectiveStatusTitle)privateConstructor.Invoke([ObjectiveStatusTitleType.WaitingForAssignment]), new List<Objective>()),
-            new ObjectiveStatus(4, (ObjectiveStatusTitle)privateConstructor.Invoke([ObjectiveStatusTitleType.WaitingForApproval]), new List<Objective>()),
-            new ObjectiveStatus(5, (ObjectiveStatusTitle)privateConstructor.Invoke([ObjectiveStatusTitleType.Done]), new List<Objective>())
+                new (new Guid("6cb13af0-83d5-c772-7ba4-5a3d9a5a1cb9"), 
+                    ObjectiveStatusTitle.BuildStatusTitleWithoutValidation(ObjectiveStatusTitleVariations.GetValue(ObjectiveStatusTitleVariations.Draft).Value!).Value!,
+                    new List<Objective>()),
+                new (new Guid("c9b0e0b6-fb0c-fedd-767f-137f8066d1df"),
+                    ObjectiveStatusTitle.BuildStatusTitleWithoutValidation(ObjectiveStatusTitleVariations.GetValue(ObjectiveStatusTitleVariations.InProgress).Value!).Value!, 
+                    new List<Objective>()),
+                new (new Guid("327db9d4-0282-c319-b047-dcf22483e225"), 
+                    ObjectiveStatusTitle.BuildStatusTitleWithoutValidation(ObjectiveStatusTitleVariations.GetValue(ObjectiveStatusTitleVariations.WaitingForAssignment).Value!).Value!, 
+                    new List<Objective>()),
+                new (new Guid("2f2f54aa-46dd-29d0-6459-2afdb5e950ee"), 
+                    ObjectiveStatusTitle.BuildStatusTitleWithoutValidation(ObjectiveStatusTitleVariations.GetValue(ObjectiveStatusTitleVariations.WaitingForApproval).Value!).Value!, 
+                    new List<Objective>()),
+                new (new Guid("e26529f9-a7c8-b3af-c1b9-a5c09a263636"), 
+                ObjectiveStatusTitle.BuildStatusTitleWithoutValidation(ObjectiveStatusTitleVariations.GetValue(ObjectiveStatusTitleVariations.Done).Value!).Value!, 
+                new List<Objective>())
             });
             builder.Property(e => e.Title)
                 .HasConversion(value => value.Value,
-                    value => ObjectiveStatusTitle.BuildStatusTitleWithoutValidation(
-                        (int)(ObjectiveStatusTitleType)Enum.Parse(typeof(ObjectiveStatusTitleType), value)).Value!);
+                    value => ObjectiveStatusTitle.BuildStatusTitleWithoutValidation(value).Value!);
         }
     }
 }

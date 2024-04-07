@@ -9,5 +9,6 @@ namespace Application.Abstraction.Messaging
 
     public interface ICommand<TResult>: IRequest<Result<TResult>>
     {
+        
     }
 }

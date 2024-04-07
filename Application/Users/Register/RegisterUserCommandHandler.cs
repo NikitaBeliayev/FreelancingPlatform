@@ -8,6 +8,7 @@ using Application.Users.Create;
 using Application.Users.ResponseDto;
 using AutoMapper;
 using Domain.CommunicationChannels;
+using Domain.Objectives;
 using Domain.Repositories;
 using Domain.Roles;
 using Domain.UserCommunicationChannels;
@@ -82,18 +83,17 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             {
                 return ResponseHelper.LogAndReturnError<UserRegistrationResponseDto>("Invalid role id", roleName.Error);
             }
-            roles.Add(new Role()
+            roles.Add(new Role(role)
             {
-                Id = role,
                 Name = RoleName.BuildRoleName(role).Value!
             });
         }
 
         _roleRepository.ChangeStateToUnchangedForCollection(roles);
-        CommunicationChannel communicationChannel = new CommunicationChannel()
+        CommunicationChannel communicationChannel = new CommunicationChannel(CommunicationChannelNameVariations.Email)
         {
-            Id = (int)CommunicationChannelNameType.Email,
-            Name = CommunicationChannelName.BuildCommunicationChannelName(1).Value!
+            Name = CommunicationChannelName.
+                BuildCommunicationChannelName(CommunicationChannelNameVariations.GetValue(CommunicationChannelNameVariations.Email).Value!).Value! // change this to the more flexible solution
         };
         _communicationChannelRepository.ChangeStateToUnchanged(communicationChannel);
         
@@ -104,7 +104,9 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             lastName.Value!,
             password.Value!,
             new List<UserCommunicationChannel>(),
-            roles
+            roles,
+            new List<Objective>(),
+            new List<Objective>()
         );
         var possibleUser = await _userRepository.GetByExpressionWithIncludesAsync(u => u.Email == email.Value, cancellationToken);
         if (possibleUser is not null)
@@ -124,7 +126,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
             await _userCommunicationChannelRepository.CreateAsync(new UserCommunicationChannel(Guid.NewGuid(), newUser,
                 newUser.Id, false,
                 confirmationToken,
-                communicationChannel, (int)CommunicationChannelNameType.Email, DateTime.UtcNow), cancellationToken);
+                communicationChannel, Guid.Empty, DateTime.UtcNow), cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             

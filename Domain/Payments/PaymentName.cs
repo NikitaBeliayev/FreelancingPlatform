@@ -7,18 +7,15 @@ public class PaymentName
 {
     public string Value { get; }
 
-    private PaymentName(PaymentType paymentType)
+    private PaymentName(string paymentName)
     {
-        Value = paymentType.ToString();
+        Value = paymentName;
     }
 
-    public static Result<PaymentName> BuildName(int payment)
+    public static Result<PaymentName> BuildName(string value)
     {
-        if (payment is not 1)
-        {
-            return  Result<PaymentName>.Failure(null, PaymentNameErrors.InvalidName);
-        }
-        return Result<PaymentName>.Success(new PaymentName(((PaymentType)payment)));
+        return string.IsNullOrWhiteSpace(value) ? Result<PaymentName>.Failure(null, new Error("", "", 500)) 
+            : Result<PaymentName>.Success(new PaymentName(value));
     }
     
     /// <summary>
@@ -26,8 +23,8 @@ public class PaymentName
     /// </summary>
     /// <param name="payment"></param>
     /// <returns></returns>
-    public static Result<PaymentName> BuildNameWithoutValidation(int payment)
+    public static Result<PaymentName> BuildNameWithoutValidation(string payment)
     {
-        return Result<PaymentName>.Success(new PaymentName(((PaymentType)payment)));
+        return Result<PaymentName>.Success(new PaymentName(payment));
     }
 }

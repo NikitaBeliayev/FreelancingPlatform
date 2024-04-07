@@ -4,23 +4,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Categories;
 
-public class Category
+public class Category : Entity
 {
-    [Key]
-    public int? Id { get; set; }
     public CategoryName Title { get; set; }
 
     public ICollection<Objective> Objectives = new List<Objective>();
 
-    public Category() { }
-    public Category(CategoryName title, List<Objective> objectives)
+    public Category(Guid id) : base(id)
     {
-        Title = title;
-        Objectives = objectives;
     }
-    public Category(int id, CategoryName title, List<Objective> objectives)
+
+    public Category(Guid id, CategoryName title, List<Objective> objectives) : base(id)
     {
-        Id = id;
         Title = title;
         Objectives = objectives;
     }

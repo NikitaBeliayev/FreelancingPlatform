@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Microsoft.Extensions.Logging;
+using Shared;
 
 namespace Application.Helpers
 {

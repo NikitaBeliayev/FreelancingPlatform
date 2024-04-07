@@ -7,6 +7,7 @@ using Domain.Statuses;
 using Domain.Types;
 using Domain.Users.UserDetails;
 using Domain.Categories;
+using Domain.Users;
 
 namespace Infrastructure.Database
 {

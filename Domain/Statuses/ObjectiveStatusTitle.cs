@@ -7,19 +7,15 @@ namespace Domain.Statuses
     {
         public string Value {  get; }
 
-        private ObjectiveStatusTitle(ObjectiveStatusTitleType objectiveStatusType)
+        private ObjectiveStatusTitle(string objectiveStatus)
         {
-            Value = objectiveStatusType.ToString();
+            Value = objectiveStatus;
         }
 
-        public static Result<ObjectiveStatusTitle> BuildStatusTitle(int objectiveStatus)
+        public static Result<ObjectiveStatusTitle> BuildStatusTitle(string value)
         {
-            if (objectiveStatus != 1)
-            {
-                return Result<ObjectiveStatusTitle>.Failure(null, StatusTitleErrors.InvalidName);
-            }
-
-            return Result<ObjectiveStatusTitle>.Success(new ObjectiveStatusTitle((ObjectiveStatusTitleType)objectiveStatus));
+            return string.IsNullOrWhiteSpace(value) ? Result<ObjectiveStatusTitle>.Failure(null, new Error("", "", 500)) 
+                : Result<ObjectiveStatusTitle>.Success(new ObjectiveStatusTitle(value));
         }
         
         /// <summary>
@@ -27,9 +23,9 @@ namespace Domain.Statuses
         /// </summary>
         /// <param name="objectiveStatus"></param>
         /// <returns></returns>
-        public static Result<ObjectiveStatusTitle> BuildStatusTitleWithoutValidation(int objectiveStatus)
+        public static Result<ObjectiveStatusTitle> BuildStatusTitleWithoutValidation(string objectiveStatus)
         {
-            return Result<ObjectiveStatusTitle>.Success(new ObjectiveStatusTitle((ObjectiveStatusTitleType)objectiveStatus));
+            return Result<ObjectiveStatusTitle>.Success(new ObjectiveStatusTitle(objectiveStatus));
         }
     }
 }

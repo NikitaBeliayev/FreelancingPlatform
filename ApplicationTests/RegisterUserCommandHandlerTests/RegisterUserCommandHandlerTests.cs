@@ -6,6 +6,7 @@ using Application.Users.Create;
 using Application.Users.Register;
 using Application.Users.RequestDto;
 using AutoMapper;
+using Domain.Objectives;
 using Domain.Repositories;
 using Domain.Roles;
 using Domain.UserCommunicationChannels;
@@ -54,16 +55,14 @@ public class RegisterUserCommandHandlerTests
 		string lastName = "Doe";
 		string password = "epasswoR!d1";
 
-		Role customerRole = new Role()
+		Role customerRole = new Role(RoleNameVariations.Customer)
 		{
-			Id = 2,
-			Name = RoleName.BuildRoleName(2).Value!
+			Name = RoleName.BuildRoleName(RoleNameVariations.Customer).Value!
 		};
 
-		Role implementerRole = new Role()
+		Role implementerRole = new Role(RoleNameVariations.Implementer)
 		{
-			Id = 3,
-			Name = RoleName.BuildRoleName(3).Value!
+			Name = RoleName.BuildRoleName(RoleNameVariations.Customer).Value!
 		};
 
 		var command = new RegisterUserCommand(new UserRegistrationDto()
@@ -72,7 +71,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		_hashProviderMock.Setup(provider => provider.GetHash("epasswoR!d1"))
@@ -85,7 +84,7 @@ public class RegisterUserCommandHandlerTests
 			new List<Role>()
 			{
 				customerRole, implementerRole
-			});
+			}, new List<Objective>(), new List<Objective>());
 
 		_userRepositoryMock.Setup(repo => repo.CreateAsync(It.IsAny<User>(), new CancellationToken()))
 			.ReturnsAsync(user);
@@ -119,7 +118,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		//Act
@@ -151,7 +150,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 
@@ -184,7 +183,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		//Act
@@ -217,7 +216,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		//Act
@@ -249,7 +248,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		//Act
@@ -282,7 +281,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		//Act
@@ -315,7 +314,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		//Act
@@ -347,7 +346,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		//Act
@@ -380,7 +379,7 @@ public class RegisterUserCommandHandlerTests
 			FirstName = firstName,
 			LastName = lastName,
 			Password = password,
-			Role = 2
+			Role = RoleNameVariations.Customer
 		});
 
 		//Act

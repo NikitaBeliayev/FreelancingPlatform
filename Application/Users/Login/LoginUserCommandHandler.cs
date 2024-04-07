@@ -4,6 +4,7 @@ using Application.Abstraction.Messaging;
 using Application.Helpers;
 using Application.Models.Jwt;
 using Application.Users.ResponseDto;
+using AutoMapper;
 using Domain.Repositories;
 using Domain.Users;
 using Domain.Users.UserDetails;
@@ -17,12 +18,14 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
     private readonly IUserRepository _userRepository;
     private readonly IJwtProvider _jwtProvider;
     private readonly IHashProvider _hashProvider;
+    private readonly IMapper _mappper;
 
-    public LoginUserCommandHandler(IUserRepository userRepository, IJwtProvider jwtProvider, IHashProvider hashProvider)
+    public LoginUserCommandHandler(IUserRepository userRepository, IJwtProvider jwtProvider, IHashProvider hashProvider, IMapper mappper)
     {
         _userRepository = userRepository;
         _jwtProvider = jwtProvider;
         _hashProvider = hashProvider;
+        _mappper = mappper;
     }
     public async Task<Result<UserLoginResponseDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
@@ -41,7 +44,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
             return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("There is no user with this email address", new Error("User.LoginUserCommandHandler", 
                 "There is no user with this email address", (int)HttpStatusCode.Unauthorized));
         }
-        var emailConfirmed = possibleUser.CommunicationChannels.Any(ucc => ucc.CommunicationChannelId == (int)CommunicationChannelNameType.Email && ucc.IsConfirmed);
+        var emailConfirmed = possibleUser.CommunicationChannels.Any(ucc => ucc.CommunicationChannelId == CommunicationChannelNameVariations.Email && ucc.IsConfirmed);
         if (!emailConfirmed)
         {
             return ResponseHelper.LogAndReturnError<UserLoginResponseDto>("Email has not been confirmed", new Error("User.LoginUserCommandHandler", 
@@ -63,12 +66,10 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
 
         JwtCredentials jwtCredentials = _jwtProvider.GenerateCredentials(possibleUser.Id, possibleUser.Email.Value, 
             possibleUser.Roles.Select(r => r.Name.Value));
+        
 
-        return Result<UserLoginResponseDto>.Success(new UserLoginResponseDto()
-        {
-            Id = possibleUser.Id,
-            Credentials =  jwtCredentials
-        });
+        return Result<UserLoginResponseDto>.Success(_mappper.Map<UserLoginResponseDto>(
+            new Tuple<User, JwtCredentials>(possibleUser, jwtCredentials)));
 
     }
 }

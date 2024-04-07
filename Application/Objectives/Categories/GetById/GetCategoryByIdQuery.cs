@@ -2,7 +2,7 @@
 
 namespace Application.Objectives.Categories.GetById
 {
-    public record GetCategoryByIdQuery(int CategoryId): IQuery<CategoryDto>
+    public record GetCategoryByIdQuery(Guid CategoryId): IQuery<CategoryDto>
     {
     }
 }

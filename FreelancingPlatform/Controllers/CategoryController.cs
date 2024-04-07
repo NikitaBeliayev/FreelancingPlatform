@@ -17,9 +17,10 @@ namespace FreelancingPlatform.Controllers
         {
             _sender = sender;
         }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id, CancellationToken cancellationToken)
+        
+        [AllowAnonymous]
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
         {
             var command = new GetCategoryByIdQuery(id);
             var result = await _sender.Send(command, cancellationToken);
@@ -27,10 +28,11 @@ namespace FreelancingPlatform.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpPost("search")]
         public async Task<IActionResult> Search([FromBody] CategorySearchDto searchParams, CancellationToken cancellationToken)
         {
-            var command = new GetCategoryByTitleWithPaginationQuery(searchParams);
+            var command = new GetByTitleWithPaginationQuery(searchParams);
             var result = await _sender.Send(command, cancellationToken);
 
             return Ok(result);
