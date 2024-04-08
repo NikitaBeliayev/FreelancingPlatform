@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   web:
-    image: registry.eimaen.pw/students-lab/freelancing-project
+    image: registry.eimaen.pw/students-lab/backend-csharp/freelancing-project:latest
     networks:
       - caddy
     labels:
