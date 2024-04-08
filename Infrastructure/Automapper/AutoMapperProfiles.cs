@@ -60,7 +60,7 @@ namespace Infrastructure.Automapper
                 CreateMap<Tuple<User, JwtCredentials>, UserLoginResponseDto>()
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Item1.Id))
-                    .ForMember(dest => dest.Id,
+                    .ForMember(dest => dest.Credentials,
                         opt => opt.MapFrom(src => src.Item2));
                 
                 CreateMap<User, UserResendEmailConfirmationResponseDto>();
