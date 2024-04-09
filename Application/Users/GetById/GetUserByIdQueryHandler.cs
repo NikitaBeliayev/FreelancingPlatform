@@ -21,9 +21,7 @@ namespace Application.Users.GetById
         {
             var result = await _userRepository.GetByIdAsync(query.UserId, cancellationToken);
 
-            return result != null
-                ? Result<UserDto>.Success(_mapper.Map<UserDto>(result))
-                : Result<UserDto>.Success(null);
+            return Result<UserDto>.Success(_mapper.Map<UserDto>(result));
         }
     }
 }

@@ -20,9 +20,7 @@ namespace Application.Objectives.Categories.GetById
         {
             var result = await _categoryRepository.GetByIdAsync(query.CategoryId, cancellationToken);
 
-            return result != null
-                ? Result<CategoryDto>.Success(_mapper.Map<CategoryDto>(result))
-                : Result<CategoryDto>.Success(null);
+            return Result<CategoryDto>.Success(_mapper.Map<CategoryDto>(result));
         }
     }
 }

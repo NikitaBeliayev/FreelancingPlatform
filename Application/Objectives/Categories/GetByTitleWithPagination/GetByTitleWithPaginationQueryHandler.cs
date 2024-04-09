@@ -21,9 +21,7 @@ namespace Application.Objectives.Categories.GetCategoryByTitleWithPagination
         {
             var result = _categoryRepository.GetByTitleWithPagination(query.SearchParams.search, query.SearchParams.pageSize, query.SearchParams.skip, cancellationToken);
 
-            return result != null
-                ? Result<List<CategoryDto>>.Success(_mapper.Map<List<CategoryDto>>(result))
-                : Result<List<CategoryDto>>.Success(null);
+            return Result<List<CategoryDto>>.Success(_mapper.Map<List<CategoryDto>>(result));
         }
     }
 }
