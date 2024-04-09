@@ -70,6 +70,5 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
 
         return Result<UserLoginResponseDto>.Success(_mappper.Map<UserLoginResponseDto>(
             new Tuple<User, JwtCredentials>(possibleUser, jwtCredentials)));
-
     }
 }
