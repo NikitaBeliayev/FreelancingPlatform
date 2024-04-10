@@ -88,5 +88,6 @@ public class SendResetPasswordEmailCommandHandler : ICommandHandler<SendResetPas
 		_logger.LogInformation("Reset password email sent successfully to user: Id = {UserId}", channel.UserId);
 
 		return Result<ResetPasswordResponseDto>.Success(_mapper.Map<ResetPasswordResponseDto>(channel.User));
+
 	}
 }
