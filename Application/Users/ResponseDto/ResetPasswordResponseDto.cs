@@ -2,5 +2,5 @@
 
 public class ResetPasswordResponseDto
 {
-	public Guid Id { get; init; }
+	// TODO: Add the properties of the reset
 }

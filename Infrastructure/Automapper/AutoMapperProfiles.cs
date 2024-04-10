@@ -53,9 +53,7 @@ namespace Infrastructure.Automapper
                 
                 CreateMap<User, UserEmailConfirmationResponseDto>();
                 
-                CreateMap<User, ResetPasswordResponseDto>()
-                    .ForMember(dest => dest.Id,
-                        opt => opt.MapFrom(src => src.Id));
+                CreateMap<User, ResetPasswordResponseDto>();
                 
                 CreateMap<Tuple<User, JwtCredentials>, UserLoginResponseDto>()
                     .ForMember(dest => dest.Id,
