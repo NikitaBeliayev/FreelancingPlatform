@@ -1,5 +1,6 @@
 ﻿using Domain.Categories;
 using Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repositories
 {
@@ -10,14 +11,10 @@ namespace Infrastructure.Database.Repositories
            
         }
 
-        public IEnumerable<Category> GetByTitleWithPagination(string search, int pageSize, int skip, CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<Category> GetByTitleWithPagination(Func<Category, bool> expression, int pageSize, int skip, CancellationToken cancellationToken = default)
         {
-            var categories = _dbSet.ToList();
-
-            return categories
-                .Where(x => x.Title.Value.ToLower() == search.ToLower())
-                .Skip(skip)
-                .Take(pageSize);
+            return _dbSet.OrderBy(x => x.Objectives.Count).Skip(skip)
+                .Take(pageSize).AsAsyncEnumerable();
         }
     }
 }
