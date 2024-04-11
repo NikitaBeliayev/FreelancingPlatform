@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FreelancingPlatform.Controllers
 {
+    [Authorize]
     [Route("api/categories")]
     [ApiController]
     public class CategoryController : ControllerBase
@@ -18,7 +19,6 @@ namespace FreelancingPlatform.Controllers
             _sender = sender;
         }
         
-        [AllowAnonymous]
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
         {
@@ -28,7 +28,6 @@ namespace FreelancingPlatform.Controllers
             return Ok(result);
         }
 
-        [AllowAnonymous]
         [HttpPost("search")]
         public async Task<IActionResult> Search([FromBody] CategorySearchDto searchParams, CancellationToken cancellationToken)
         {
