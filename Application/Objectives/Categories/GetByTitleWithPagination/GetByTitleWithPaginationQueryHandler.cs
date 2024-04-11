@@ -19,7 +19,9 @@ namespace Application.Objectives.Categories.GetCategoryByTitleWithPagination
 
         public async Task<Result<List<CategoryDto>>> Handle(GetByTitleWithPaginationQuery query, CancellationToken cancellationToken)
         {
-            var result = _categoryRepository.GetByTitleWithPagination(query.SearchParams.search, query.SearchParams.pageSize, query.SearchParams.skip, cancellationToken);
+            string search = string.IsNullOrWhiteSpace(query.SearchParams.search) ? "" : query.SearchParams.search;
+            var result = _categoryRepository.GetByTitleWithPagination(category => category.Title.Value.Contains(search), 
+                query.SearchParams.pageSize, query.SearchParams.skip, cancellationToken);
 
             return Result<List<CategoryDto>>.Success(_mapper.Map<List<CategoryDto>>(result));
         }

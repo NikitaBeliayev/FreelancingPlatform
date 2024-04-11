@@ -1,10 +1,13 @@
 ﻿using Domain.Categories;
+using Shared;
+using System.Linq.Expressions;
 
 namespace Domain.Repositories
 
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        IEnumerable<Category> GetByTitleWithPagination(string search, int take, int pageSize, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<Category> GetByTitleWithPagination(Func<Category, bool> expression, int take, int pageSize, 
+            CancellationToken cancellationToken = default);
     }
 }
