@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FreelancingPlatform.Controllers
 {
+    [Authorize]
     [Route("api/types")]
     [ApiController]
     public class ObjectiveTypeController : ControllerBase
@@ -25,7 +26,6 @@ namespace FreelancingPlatform.Controllers
             _sender = sender;
         }
         
-        [AllowAnonymous]
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
         {
@@ -35,7 +35,6 @@ namespace FreelancingPlatform.Controllers
             return Ok(result);
         }
 
-        [AllowAnonymous]
         [HttpGet("{take:int}/{skip:int}")]
         public async Task<IActionResult> Get(int take, int skip, CancellationToken cancellationToken)
         {
