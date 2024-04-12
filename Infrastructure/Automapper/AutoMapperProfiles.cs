@@ -16,6 +16,7 @@ using Domain.Statuses;
 using Domain.Types;
 using Domain.Users;
 using Domain.Users.UserDetails;
+using Application.Objectives.Types.ResponseDto;
 
 namespace Infrastructure.Automapper
 {
@@ -87,11 +88,15 @@ namespace Infrastructure.Automapper
                 
                 //mapping between objective type and all response dto
 
-                CreateMap<ObjectiveType, TypeDto>()
+                //CreateMap<ObjectiveType, TypeDto>()
+                //    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                //    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))
+                //    .ForMember(dest => dest.TypeTitle, opt => opt.MapFrom(src => src.TypeTitle.Title));
+
+                CreateMap<ObjectiveType, ResponseTypeDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))
-                    .ForMember(dest => dest.TypeTitle, opt => opt.MapFrom(src => src.TypeTitle.Title));
-                
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.TypeTitle.Title));
+
                 CreateMap<TypeDto, ObjectiveType>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))

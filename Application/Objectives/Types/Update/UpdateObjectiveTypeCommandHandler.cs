@@ -1,6 +1,7 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using Application.Helpers;
+using Application.Objectives.Types.ResponseDto;
 using AutoMapper;
 using Domain;
 using Domain.Repositories;
@@ -10,7 +11,7 @@ using Shared;
 
 namespace Application.Objectives.Types.Update;
 
-public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjectiveTypeCommand, TypeDto>
+public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjectiveTypeCommand, ResponseTypeDto>
 {
     private readonly IObjectiveTypeRepository _typeRepository;
     private readonly IMapper _mapper;
@@ -24,7 +25,7 @@ public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjective
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
-    public async Task<Result<TypeDto>> Handle(UpdateObjectiveTypeCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ResponseTypeDto>> Handle(UpdateObjectiveTypeCommand request, CancellationToken cancellationToken)
     {
         var requestDto = request.RequestDto;
         
@@ -34,14 +35,14 @@ public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjective
         if (!typeTitleResult.IsSuccess)
         {
             _logger.LogInformation("Invalid title {title} for updating type with id: {id}", requestDto.Title, requestDto.Id);
-            return ResponseHelper.LogAndReturnError<TypeDto>("Invalid title", typeTitleResult.Error);
+            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Invalid title", typeTitleResult.Error);
         }
         
         var possibleType = await _typeRepository.GetByIdAsync(requestDto.Id, cancellationToken);
         if (possibleType is null)
         {
             _logger.LogError("Type with id {id} not found", requestDto.Id);
-            return ResponseHelper.LogAndReturnError<TypeDto>("Type not found", new Error("", "", 404));
+            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type not found", new Error("", "", 404));
         }
 
 
@@ -52,6 +53,6 @@ public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjective
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         _logger.LogInformation("Type with id: {id} updated successfully", request.RequestDto.Id);
         
-        return Result<TypeDto>.Success(_mapper.Map<TypeDto>(possibleType));
+        return Result<ResponseTypeDto>.Success(_mapper.Map<ResponseTypeDto>(possibleType));
     }
 }

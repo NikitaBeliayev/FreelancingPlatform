@@ -1,6 +1,7 @@
 ﻿using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using Application.Helpers;
+using Application.Objectives.Types.ResponseDto;
 using AutoMapper;
 using Domain;
 using Domain.Objectives;
@@ -11,7 +12,7 @@ using Shared;
 
 namespace Application.Objectives.Types.Create;
 
-public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjectiveTypeCommand, TypeDto>
+public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjectiveTypeCommand, ResponseTypeDto>
 {
     private readonly IObjectiveTypeRepository _typeRepository;
     private readonly ILogger<CreateObjectiveTypeCommandHandler> _logger;
@@ -25,27 +26,27 @@ public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjective
         _unitOfWork = unitOfWork;
     }
    
-    public async Task<Result<TypeDto>> Handle(CreateObjectiveTypeCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ResponseTypeDto>> Handle(CreateObjectiveTypeCommand request, CancellationToken cancellationToken)
     {
         var typeDto = request.TypeDto;
         var titleBuildResult = ObjectiveTypeTitle.BuildObjectiveTypeTitle(typeDto.TypeTitle);
         if (!titleBuildResult.IsSuccess)
         {
             _logger.LogError("Error while building title for type {typeDto}", typeDto);
-            return ResponseHelper.LogAndReturnError<TypeDto>("", new Error("", "", 500));
+            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("", new Error("", "", 500));
         }
         
         var possibleObjectiveType = await _typeRepository.GetByExpressionWithIncludesAsync(type => type.TypeTitle == titleBuildResult.Value!, cancellationToken);
         if (possibleObjectiveType is not null)
         {
             _logger.LogError("Type with title {title} already exists", titleBuildResult.Value);
-            return ResponseHelper.LogAndReturnError<TypeDto>("Type with this title already exists", new Error("", "", 400));
+            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type with this title already exists", new Error("", "", 400));
         }
 
         var createdObjectiveType = await _typeRepository.CreateAsync(new ObjectiveType(typeDto.Id, new List<Objective>(), 
             titleBuildResult.Value!, typeDto.Duration), cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         
-        return Result<TypeDto>.Success(_mapper.Map<TypeDto>(createdObjectiveType));
+        return Result<ResponseTypeDto>.Success(_mapper.Map<ResponseTypeDto>(createdObjectiveType));
     }
 }

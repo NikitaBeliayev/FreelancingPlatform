@@ -1,5 +1,6 @@
 ﻿using Application.Abstraction.Messaging;
 using Application.Helpers;
+using Application.Objectives.Types.ResponseDto;
 using AutoMapper;
 using Domain.Repositories;
 using Domain.Types;
@@ -8,7 +9,7 @@ using Shared;
 
 namespace Application.Objectives.Types.GetById;
 
-public class GetByIdQueryHandler : IQueryHandler<GetByIdQuery, TypeDto>
+public class GetByIdQueryHandler : IQueryHandler<GetByIdQuery, ResponseTypeDto>
 {
     
     private readonly IObjectiveTypeRepository _typeRepository;
@@ -22,17 +23,17 @@ public class GetByIdQueryHandler : IQueryHandler<GetByIdQuery, TypeDto>
         _logger = logger;
     }
     
-    public async Task<Result<TypeDto>> Handle(GetByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<ResponseTypeDto>> Handle(GetByIdQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Get type request has been received for type with id {id}", request.Id);
         var result = await _typeRepository.GetByIdAsync(request.Id, cancellationToken);
 
-        if (result is not null) return Result<TypeDto>.Success(_mapper.Map<TypeDto>(result));
+        if (result is not null) return Result<ResponseTypeDto>.Success(_mapper.Map<ResponseTypeDto>(result));
         
         
         _logger.LogError("There are no type with id {id}", request.Id);
-        ResponseHelper.LogAndReturnError<TypeDto>("Type not found", new Error("", "", 404));
+        ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type not found", new Error("", "", 404));
 
-        return Result<TypeDto>.Success(_mapper.Map<TypeDto>(result));
+        return Result<ResponseTypeDto>.Success(_mapper.Map<ResponseTypeDto>(result));
     }
 }
