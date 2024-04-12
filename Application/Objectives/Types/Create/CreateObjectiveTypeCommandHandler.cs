@@ -29,7 +29,7 @@ public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjective
     public async Task<Result<ResponseTypeDto>> Handle(CreateObjectiveTypeCommand request, CancellationToken cancellationToken)
     {
         var typeDto = request.TypeDto;
-        var titleBuildResult = ObjectiveTypeTitle.BuildObjectiveTypeTitle(typeDto.TypeTitle);
+        var titleBuildResult = ObjectiveTypeTitle.BuildObjectiveTypeTitle(typeDto.Id);
         if (!titleBuildResult.IsSuccess)
         {
             _logger.LogError("Error while building title for type {typeDto}", typeDto);

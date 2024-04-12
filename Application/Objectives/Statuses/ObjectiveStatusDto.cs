@@ -1,6 +1,4 @@
-﻿using Domain.Objectives;
-
-namespace Application.Objectives.ObjectiveStatus
+﻿namespace Application.Objectives.Statuses
 {
     public class ObjectiveStatusDto
     {

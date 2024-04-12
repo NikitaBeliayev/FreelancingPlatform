@@ -30,7 +30,7 @@ public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjective
         var requestDto = request.RequestDto;
         
         _logger.LogInformation("Update type request has been received for type with id {id}", requestDto.Id);
-        var typeTitleResult = ObjectiveTypeTitle.BuildObjectiveTypeTitle(requestDto.Title);
+        var typeTitleResult = ObjectiveTypeTitle.BuildObjectiveTypeTitle(requestDto.Id);
 
         if (!typeTitleResult.IsSuccess)
         {
