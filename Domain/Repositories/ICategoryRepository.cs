@@ -9,5 +9,7 @@ namespace Domain.Repositories
     {
         IAsyncEnumerable<Category> GetByTitleWithPagination(Func<Category, bool> expression, int take, int pageSize, 
             CancellationToken cancellationToken = default);
+
+        public Category? GetByTitle(string title, CancellationToken cancellationToken = default);
     }
 }

@@ -11,10 +11,11 @@ public sealed class ObjectiveTypeTitle
 
 	public string Title { get; }
 
-	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitle(string value)
+	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitle(Guid value)
 	{
-		return string.IsNullOrWhiteSpace(value) ? Result<ObjectiveTypeTitle>.Failure(null, new Error("", "", 500)) 
-			: Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle(value));
+		return value != ObjectiveTypeVariations.Group && value != ObjectiveTypeVariations.Team  && value != ObjectiveTypeVariations.Individual ? 
+			Result<ObjectiveTypeTitle>.Failure(null, new Error("", "", 500)) 
+			: Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle(ObjectiveTypeVariations.GetValue(value).Value!));
 	}
 	
 	/// <summary>

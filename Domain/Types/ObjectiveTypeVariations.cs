@@ -6,9 +6,9 @@ namespace Domain.Types;
 public static class ObjectiveTypeVariations
 {
     private static readonly ImmutableList<KeyValuePair<Guid, string>> _typeCollection = ImmutableList.Create<KeyValuePair<Guid, string>>(
-            new KeyValuePair<Guid, string>(new Guid("00edafe3-b047-5980-d0fa-da10f400c1e5"), "Individual"),
-            new KeyValuePair<Guid, string>(new Guid("1d6026ce-0dac-13ea-8b72-95f02b7620a7"), "Group"),
-            new KeyValuePair<Guid, string>(new Guid("e438dde5-34d8-f76d-aecb-26a8d882d530"), "Team")
+            new KeyValuePair<Guid, string>(new Guid("2247d42d-a645-bc96-0b4b-944db2a8b519"), "Individual"),
+            new KeyValuePair<Guid, string>(new Guid("34719303-dace-07b9-8be3-9a77ee3a48a0"), "Group"),
+            new KeyValuePair<Guid, string>(new Guid("a28f84ac-f428-a29b-b8a5-fbd76596817d"), "Team")
         );
     
     public static Guid Individual => _typeCollection.FirstOrDefault(pair => pair.Value == "Individual")!.Key;

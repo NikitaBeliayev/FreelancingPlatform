@@ -1,7 +1,6 @@
 using Application.Models.Jwt;
 using Application.Objectives;
 using Application.Objectives.Categories;
-using Application.Objectives.ObjectiveStatus;
 using Application.Objectives.Types;
 using Application.Roles;
 using Application.Payments;
@@ -83,7 +82,7 @@ namespace Infrastructure.Automapper
                 CreateMap<PaymentDto, Payment>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => 
-                        PaymentName.BuildName(PaymentVariations.GetValue(src.Id).Value!).Value!))
+                        PaymentName.BuildName(src.Id).Value!))
                     .ForMember(dest => dest.Objectives, opt => opt.Ignore());
                 
                 //mapping between objective type and all response dto
@@ -102,7 +101,7 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))
                     .ForMember(dest => dest.TypeTitle, opt =>
                         opt.MapFrom(src =>
-                            ObjectiveTypeTitle.BuildObjectiveTypeTitle(src.TypeTitle).Value!));
+                            ObjectiveTypeTitle.BuildObjectiveTypeTitle(src.Id).Value!));
                 
                 
                 

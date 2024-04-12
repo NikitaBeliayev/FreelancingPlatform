@@ -12,10 +12,11 @@ public class PaymentName
         Value = paymentName;
     }
 
-    public static Result<PaymentName> BuildName(string value)
+    public static Result<PaymentName> BuildName(Guid value)
     {
-        return string.IsNullOrWhiteSpace(value) ? Result<PaymentName>.Failure(null, new Error("", "", 500)) 
-            : Result<PaymentName>.Success(new PaymentName(value));
+        return value != PaymentVariations.Coin  ? 
+            Result<PaymentName>.Failure(null, new Error("", "", 500)) 
+            : Result<PaymentName>.Success(new PaymentName(PaymentVariations.GetValue(value).Value!));
     }
     
     /// <summary>
