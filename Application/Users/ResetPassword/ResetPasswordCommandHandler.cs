@@ -33,19 +33,18 @@ public class ResetPasswordCommandHandler : ICommandHandler<ResetPasswordCommand,
 	public async Task<Result<ResetPasswordResponseDto>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
 	{
 		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
-			ucc => ucc.UserId == request.UserId && 
-				ucc.CommunicationChannel.Name == 
+			ucc => ucc.ConfirmationToken == request.Token && ucc.CommunicationChannel.Name == 
 				CommunicationChannelName.BuildCommunicationChannelName(CommunicationChannelNameVariations.GetValue(CommunicationChannelNameVariations.Email).Value!).Value, 
 			cancellationToken, ucc => ucc.User);
 
 		if (channel is null)
 		{
-			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("No match with the user and email communication channel found", UserErrors.EmailChannelMissing(request.UserId));
+			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("No match with the user and email communication channel found", UserErrors.EmailChannelMissing());
 		}
 
 		if (channel.ConfirmationToken != request.Token)
 		{
-			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("Invalid token", UserErrors.InvalidConfirmationToken(request.UserId));
+			return ResponseHelper.LogAndReturnError<ResetPasswordResponseDto>("Invalid token", UserErrors.InvalidConfirmationToken());
 		}
 
 		var password = Password.BuildPassword(request.Password);

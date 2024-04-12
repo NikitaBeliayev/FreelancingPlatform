@@ -99,9 +99,9 @@ namespace FreelancingPlatform.Controllers
 
 		[AllowAnonymous]
 		[HttpPut("reset/password")]
-		public async Task<IActionResult> ResetPassword(Guid userId, [FromBody] UserResetPasswordRequestDto userResetPasswordRequestDto, CancellationToken cancellationToken)
+		public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordRequestDto userResetPasswordRequestDto, CancellationToken cancellationToken)
 		{
-			var command = new ResetPasswordCommand(userId, userResetPasswordRequestDto.Password, userResetPasswordRequestDto.Token);
+			var command = new ResetPasswordCommand(userResetPasswordRequestDto.Password, userResetPasswordRequestDto.Token);
 			var result = await _sender.Send(command, cancellationToken);
 
 			return Ok(result);
