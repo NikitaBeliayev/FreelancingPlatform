@@ -38,7 +38,7 @@ namespace FreelancingPlatform.Controllers
         [HttpGet("{take:int}/{skip:int}")]
         public async Task<IActionResult> Get(int take, int skip, CancellationToken cancellationToken)
         {
-            var command = new GetAllWithPaginationQuery(take, skip);
+            var command = new GetAllObjectiveTypesWithPaginationQuery(take, skip);
             var result = await _sender.Send(command, cancellationToken);
 
             return Ok(result);

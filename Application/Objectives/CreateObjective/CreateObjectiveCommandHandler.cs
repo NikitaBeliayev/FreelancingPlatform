@@ -120,6 +120,5 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         
         return Result<ObjectiveDto>.Success(request.RequestDto);
-
     }
 }
