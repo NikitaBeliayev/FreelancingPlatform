@@ -31,7 +31,7 @@ namespace Infrastructure.Automapper
                 CreateMap<string, Name>().ConstructUsing(value => Name.BuildName(value).Value!);
                 CreateMap<Password, string>().ConvertUsing(password => password.Value);
                 CreateMap<string, Password>().ConstructUsing(value => Password.BuildPassword(value).Value!);
-                
+
                 //mapping between user and all response dto
                 CreateMap<User, UserDto>()
                     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
@@ -50,48 +50,42 @@ namespace Infrastructure.Automapper
                 CreateMap<User, UserRegistrationResponseDto>()
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Id));
-                
+
                 CreateMap<User, UserEmailConfirmationResponseDto>();
-                
+
                 CreateMap<User, ResetPasswordResponseDto>();
-                
+
                 CreateMap<Tuple<User, JwtCredentials>, UserLoginResponseDto>()
                     .ForMember(dest => dest.Id,
                         opt => opt.MapFrom(src => src.Item1.Id))
                     .ForMember(dest => dest.Credentials,
                         opt => opt.MapFrom(src => src.Item2));
-                
+
                 CreateMap<User, UserResendEmailConfirmationResponseDto>();
-                
+
                 //mapping between role and all response dto
                 CreateMap<Role, RoleDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.Value));
-                
+
                 CreateMap<RoleDto, Role>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => RoleName.BuildRoleName(src.Id).Value!))
                     .ForMember(dest => dest.Users, opt => opt.Ignore());
-                
-                
+
+
                 //mapping between payment and all response dto
                 CreateMap<Payment, PaymentDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.Value));
-                
+
                 CreateMap<PaymentDto, Payment>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => 
+                    .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
                         PaymentName.BuildName(src.Id).Value!))
                     .ForMember(dest => dest.Objectives, opt => opt.Ignore());
-                
+
                 //mapping between objective type and all response dto
-
-                //CreateMap<ObjectiveType, TypeDto>()
-                //    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                //    .ForMember(dest => dest.Duration, opt => opt.MapFrom(src => src.Duration))
-                //    .ForMember(dest => dest.TypeTitle, opt => opt.MapFrom(src => src.TypeTitle.Title));
-
                 CreateMap<ObjectiveType, ResponseTypeDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.TypeTitle.Title));
@@ -102,9 +96,9 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.TypeTitle, opt =>
                         opt.MapFrom(src =>
                             ObjectiveTypeTitle.BuildObjectiveTypeTitle(src.Id).Value!));
-                
-                
-                
+
+
+
                 //mapping between objective type and all response dto
                 CreateMap<Category, CategoryDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -114,6 +108,19 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Title,
                         opt => opt.MapFrom(src => CategoryName.BuildCategoryNameWithoutValidation(src.Title!)));
+
+                //mapping between objective and response ojective dto
+                CreateMap<Objective, ResponseObjectiveDto>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Value))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description.Value))
+                    .ForMember(dest => dest.PaymentId, opt => opt.MapFrom(src => src.PaymentId))
+                    .ForMember(dest => dest.PaymentAmount, opt => opt.MapFrom(src => src.PaymentAmount))
+                    .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Categories.Select(t => new CategoryDto { Id = t.Id, Title = t.Title.Value })))
+                    .ForMember(dest => dest.CreatorPublicContacts, opt => opt.MapFrom(src => src.CreatorPublicContacts))
+                    .ForMember(dest => dest.Creator, opt => opt.MapFrom(src => new UserDto { Id = src.Creator.Id, FirstName = src.Creator.FirstName.Value, LastName = src.Creator.LastName.Value, Email = src.Creator.Email.Value }))
+                    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new TypeDto { Id = src.Type.Id, TypeTitle = src.Type.TypeTitle.Title, Duration = src.Type.Duration }))
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
             }
         }
     }
