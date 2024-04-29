@@ -13,15 +13,15 @@ public class ObjectiveRepository : Repository<Objective>, IObjectiveRepository
     { 
     }
 
-	public IAsyncEnumerable<Objective> GetAllForImplementorWithPagination(int take, int skip, CancellationToken cancellationToken = default)
+	public async Task<IEnumerable<Objective>> GetAllForImplementorWithPagination(int take, int skip, CancellationToken cancellationToken = default)
 	{
-		return _dbSet
-			.Include(o => o.Categories)
+		return await _dbSet
+            .Include(o => o.Categories)
 			.Include(o => o.Creator)
 			.Include(o => o.Type)
 			.Where(x => x.ObjectiveStatusId.ToString() == "2f2f54aa-46dd-29d0-6459-2afdb5e950ee" || x.ObjectiveStatusId.ToString() == "327db9d4-0282-c319-b047-dcf22483e225")
-			.Skip(skip).Take(take).AsAsyncEnumerable();
-	}
+			.Skip(skip).Take(take).ToListAsync(cancellationToken);
+    }
 
     public async Task<IEnumerable<Objective>> GetByCreatorId(Guid creatorId, CancellationToken cancellationToken = default)
     {

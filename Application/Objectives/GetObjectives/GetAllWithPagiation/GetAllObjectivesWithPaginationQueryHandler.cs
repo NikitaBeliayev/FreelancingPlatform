@@ -21,17 +21,17 @@ namespace Application.Objectives.GetObjectives.GetAllWithPagiation
             _repository = repository;
         }
 
-        public Task<Result<IEnumerable<ResponseObjectiveDto>>> Handle(GetAllObjectivesWithPaginationQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<ResponseObjectiveDto>>> Handle(GetAllObjectivesWithPaginationQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get all objective types with pagination has been requested");
-            var objectives = _repository.GetAllForImplementorWithPagination(request.Take, request.Skip, cancellationToken);
+            var objectives = await _repository.GetAllForImplementorWithPagination(request.Take, request.Skip, cancellationToken);
             var objectiveDtos = _mapper.Map<IEnumerable<ResponseObjectiveDto>>(objectives);
             if (!objectiveDtos.Any())
             {
-                return Task.FromResult(ResponseHelper.LogAndReturnError<IEnumerable<ResponseObjectiveDto>>("No objectives found", new Error("Objective GetObjectives.GetAllWithPagiation.GetAllObjectivesWithPaginationQueryHandler", "No objectives found", 500)));
+                return ResponseHelper.LogAndReturnError<IEnumerable<ResponseObjectiveDto>>("No objectives found", new Error("Objective GetObjectives.GetAllWithPagiation.GetAllObjectivesWithPaginationQueryHandler", "No objectives found", 500));
             }
 
-            return Task.FromResult(Result<IEnumerable<ResponseObjectiveDto>>.Success(objectiveDtos));
+            return Result<IEnumerable<ResponseObjectiveDto>>.Success(objectiveDtos);
         }
     }
 }
