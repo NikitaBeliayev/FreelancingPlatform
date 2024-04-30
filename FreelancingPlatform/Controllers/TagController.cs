@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace FreelancingPlatform.Controllers
 {
     [Authorize]
-    [Route("api/categories")]
+    [Route("api/tags")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class TagController : ControllerBase
     {
         private readonly ISender _sender;
-        public CategoryController(ISender sender)
+        public TagController(ISender sender)
         {
             _sender = sender;
         }
