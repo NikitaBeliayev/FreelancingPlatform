@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Net;
 using Application.Abstraction;
+using Application.Users.GetById;
 using Application.Users.Login;
 using Application.Users.RequestDto;
 using AutoMapper;
@@ -12,6 +13,7 @@ using Domain.Users;
 using Domain.Users.Errors;
 using Domain.Users.UserDetails;
 using Infrastructure.Automapper;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Shared;
 
@@ -24,6 +26,7 @@ public class LoginUserCommandHandlerTests
     private readonly Mock<IJwtProvider> _jwtProviderMock = new();
     private readonly Mock<IHashProvider> _hashProviderMock = new();
     private Mapper _mapper;
+    private readonly Mock<ILogger<LoginUserCommandHandler>> _logger = new();
 
     [TearDown]
     public void TearDown()
@@ -77,7 +80,7 @@ public class LoginUserCommandHandlerTests
                 It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()))
             .ReturnsAsync(user);
         
-        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper);
+        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper, _logger.Object);
         //Act
         var result = await handler.Handle(command, new CancellationToken());
         
@@ -108,7 +111,7 @@ public class LoginUserCommandHandlerTests
             Password = "epasswoR!d1"
         };
         var command = new LoginUserCommand(userLoginDto);
-        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper);
+        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper, _logger.Object);
         //Act
         var result = await handler.Handle(command, new CancellationToken());
         
@@ -142,7 +145,7 @@ public class LoginUserCommandHandlerTests
                 It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()))
             .ReturnsAsync(null as User);
         
-        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper);
+        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper, _logger.Object);
         //Act
         var result = await handler.Handle(command, new CancellationToken());
         
@@ -198,7 +201,7 @@ public class LoginUserCommandHandlerTests
                 It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()))
             .ReturnsAsync(user);
         
-        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper);
+        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper, _logger.Object);
         //Act
         var result = await handler.Handle(command, new CancellationToken());
         
@@ -254,7 +257,7 @@ public class LoginUserCommandHandlerTests
                 It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()))
             .ReturnsAsync(user);
         
-        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper);
+        var handler = new LoginUserCommandHandler(_userRepositoryMock.Object, _jwtProviderMock.Object, _hashProviderMock.Object, _mapper, _logger.Object);
         //Act
         var result = await handler.Handle(command, new CancellationToken());
         

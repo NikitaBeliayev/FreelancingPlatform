@@ -78,7 +78,7 @@ namespace Application.Users.Create
 
             if (result != null)
             {
-                _logger.LogInformation("User created successfully: Id = {UserId}", result.Id);
+                _logger.LogInformation("Created user with Id = {UserId}", result.Id);
                 return Result<UserDto>.Success(_mapper.Map<UserDto>(result));
             }
 

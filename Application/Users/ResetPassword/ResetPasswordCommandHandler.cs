@@ -11,6 +11,7 @@ using Shared;
 using Application.Abstraction;
 using AutoMapper;
 using Domain.Users.UserDetails;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Users.ResetPassword;
 
@@ -20,18 +21,22 @@ public class ResetPasswordCommandHandler : ICommandHandler<ResetPasswordCommand,
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IHashProvider _hashProvider;
 	private readonly IMapper _mapper;
+	private readonly ILogger<ResetPasswordCommandHandler> _logger;
 
 	public ResetPasswordCommandHandler(IUserCommunicationChannelRepository userCommunicationChannelRepository, IUnitOfWork unitOfWork, IHashProvider hashProvider,
-		IMapper mapper)
+		IMapper mapper, ILogger<ResetPasswordCommandHandler> logger)
 	{
 		_userCommunicationChannelRepository = userCommunicationChannelRepository;
 		_unitOfWork = unitOfWork;
 		_hashProvider = hashProvider;
 		_mapper = mapper;
+		_logger = logger;
 	}
 
 	public async Task<Result<ResetPasswordResponseDto>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
 	{
+		_logger.LogInformation("Password reset requested for user");
+
 		UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
 			ucc => ucc.ConfirmationToken == request.Token && ucc.CommunicationChannel.Name == 
 				CommunicationChannelName.BuildCommunicationChannelName(CommunicationChannelNameVariations.GetValue(CommunicationChannelNameVariations.Email).Value!).Value, 
@@ -59,6 +64,7 @@ public class ResetPasswordCommandHandler : ICommandHandler<ResetPasswordCommand,
 
 		await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+		_logger.LogInformation("Pasword reset successfull for user");
 		return Result<ResetPasswordResponseDto>.Success(_mapper.Map<ResetPasswordResponseDto>(channel.User));
 	}
 }

@@ -28,6 +28,8 @@ public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjective
    
     public async Task<Result<ResponseTypeDto>> Handle(CreateObjectiveTypeCommand request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Objective type creation has been requested");
+
         var typeDto = request.TypeDto;
         var titleBuildResult = ObjectiveTypeTitle.BuildObjectiveTypeTitle(typeDto.Id);
         if (!titleBuildResult.IsSuccess)
@@ -46,7 +48,8 @@ public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjective
         var createdObjectiveType = await _typeRepository.CreateAsync(new ObjectiveType(typeDto.Id, new List<Objective>(), 
             titleBuildResult.Value!, typeDto.Duration), cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
+        _logger.LogInformation("Created user with Id = {Id}", createdObjectiveType.Id);
         return Result<ResponseTypeDto>.Success(_mapper.Map<ResponseTypeDto>(createdObjectiveType));
     }
 }

@@ -78,7 +78,7 @@ namespace Application.Users.ResendEmail
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            _logger.LogInformation("Confirmation email sent successfully to user: Id = {UserId}", request.userId);
+            _logger.LogInformation("Confirmation email sent to user with Id = {UserId}", request.userId);
 
             return Result<UserResendEmailConfirmationResponseDto>.Success(_mapper.Map<UserResendEmailConfirmationResponseDto>(userCommunicationChannel.User));
         }

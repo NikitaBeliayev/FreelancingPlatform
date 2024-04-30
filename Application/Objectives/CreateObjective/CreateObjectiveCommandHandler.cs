@@ -35,9 +35,12 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
     
     public async Task<Result<ObjectiveDto>> Handle(CreateObjectiveCommand request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Objective creation requested");
+
         var titleResult = ObjectiveTitle.BuildName(request.RequestDto.Title);
         if (!titleResult.IsSuccess)
         {
+            _logger.LogError("Error: Invalid title, {Code}: {Mesage}", titleResult.Error.Code, titleResult.Error.Message);
             return Result<ObjectiveDto>.Failure(null, titleResult.Error);
         }
         
@@ -45,6 +48,7 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
         
         if (!descriptionResult.IsSuccess)
         {
+            _logger.LogError("Error: Invalid description, {Code}: {Mesage}", descriptionResult.Error.Code, descriptionResult.Error.Message);
             return Result<ObjectiveDto>.Failure(null, descriptionResult.Error);
         }
         
@@ -52,6 +56,7 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
         
         if (!paymentResult.IsSuccess)
         {
+            _logger.LogError("Error: Invalid payment, {Code}: {Mesage}", paymentResult.Error.Code, paymentResult.Error.Message);
             return Result<ObjectiveDto>.Failure(null, paymentResult.Error);
         }
         
@@ -59,13 +64,16 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
         
         if (!typeResult.IsSuccess)
         {
+            _logger.LogError("Error: Invalid type, {Code}: {Mesage}", typeResult.Error.Code, typeResult.Error.Message);
             return Result<ObjectiveDto>.Failure(null, typeResult.Error);
         }
         
         var creator = await _userRepository.GetByIdAsync(request.RequestDto.Creator.Id, cancellationToken);
         if (creator is null)
         {
-            return Result<ObjectiveDto>.Failure(null, UserErrors.NotFound(request.RequestDto.Creator.Id));
+            var error = UserErrors.NotFound(request.RequestDto.Creator.Id);
+            _logger.LogError("Error: Invalid creator, {Code}: {Mesage}", error.Code, error.Message);
+            return Result<ObjectiveDto>.Failure(null, error);
         }
         
         foreach (var category in request.RequestDto.Categories)
@@ -73,11 +81,10 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
             var categoryResult = CategoryName.BuildCategoryName(category.Title);
             if (!categoryResult.IsSuccess)
             {
+                _logger.LogError("Error: Invalid category, {Code}: {Mesage}", categoryResult.Error.Code, categoryResult.Error.Message);
                 return Result<ObjectiveDto>.Failure(null, categoryResult.Error);
             }
         }
-        
-        
         
         var categoriesCollection = request.RequestDto.Categories.Select(async c =>
         {
@@ -118,7 +125,8 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
         
         await _objectiveRepository.CreateAsync(objective, cancellationToken); 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
-        
+
+        _logger.LogInformation("Objective with Id = {id} created successfully", objective.Id);
         return Result<ObjectiveDto>.Success(request.RequestDto);
     }
 }

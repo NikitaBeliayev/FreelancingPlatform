@@ -8,6 +8,7 @@ using Domain.Repositories;
 using Domain.UserCommunicationChannels;
 using Domain.UserCommunicationChannels.Errors;
 using Domain.Users.Errors;
+using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Application.Users.EmailConfirm;
@@ -17,17 +18,21 @@ public class ConfirmUserEmailCommandHandler : ICommandHandler<ConfirmUserEmailCo
     private readonly IUserCommunicationChannelRepository _userCommunicationChannelRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ILogger<ConfirmUserEmailCommandHandler> _logger;
 
     public ConfirmUserEmailCommandHandler(IUserCommunicationChannelRepository userCommunicationChannelRepository,
-        IUnitOfWork unitOfWork, IMapper mapper)
+        IUnitOfWork unitOfWork, IMapper mapper, ILogger<ConfirmUserEmailCommandHandler> logger)
     {
         _userCommunicationChannelRepository = userCommunicationChannelRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<Result<UserEmailConfirmationResponseDto>> Handle(ConfirmUserEmailCommand request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("User email confirmation has been requested");
+
         UserCommunicationChannel? channel = await _userCommunicationChannelRepository.GetByExpressionWithIncludesAsync(
             c => c.ConfirmationToken == request.UserConfirmEmailRequestDto.Token && 
             c.CommunicationChannel.Name == 
@@ -53,6 +58,8 @@ public class ConfirmUserEmailCommandHandler : ICommandHandler<ConfirmUserEmailCo
         channel.IsConfirmed = true;
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Email successfully confirmed for user with Id = {id}", channel.UserId);
 
         return Result<UserEmailConfirmationResponseDto>.Success(_mapper.Map<UserEmailConfirmationResponseDto>(channel.User));
     }
