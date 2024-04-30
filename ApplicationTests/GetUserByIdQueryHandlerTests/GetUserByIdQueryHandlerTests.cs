@@ -1,4 +1,5 @@
 using Application.Abstraction.Data;
+using Application.Users.Create;
 using Application.Users.GetById;
 using AutoMapper;
 using Domain.Objectives;
@@ -8,6 +9,7 @@ using Domain.UserCommunicationChannels;
 using Domain.Users;
 using Domain.Users.UserDetails;
 using Infrastructure.Automapper;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Legacy;
 
@@ -16,7 +18,9 @@ namespace ApplicationTests.GetUserByIdQueryHandlerTests;
 [TestFixture]
 public class CreateUserQueryHandlerTests
 {
-	[Test]
+    private readonly Mock<ILogger<GetUserByIdQueryHandler>> _logger = new();
+
+    [Test]
 	public async Task Handle_WithValidUserId_ShouldReturnUserDTO()
 	{
 		// Arrange
@@ -28,7 +32,7 @@ public class CreateUserQueryHandlerTests
 		var _mapper = new Mapper(configuration);
 
 
-		var handler = new Application.Users.GetById.GetUserByIdQueryHandler(userRepositoryMock.Object, _mapper);
+    var handler = new Application.Users.GetById.GetUserByIdQueryHandler(userRepositoryMock.Object, _mapper, _logger.Object);
 
 		var userId = Guid.NewGuid();
 		var query = new GetUserByIdQuery(userId);
@@ -70,7 +74,7 @@ public class CreateUserQueryHandlerTests
 		var configuration = new MapperConfiguration(cfg => cfg.AddProfile(myProfile));
 		var _mapper = new Mapper(configuration);
 
-		var handler = new Application.Users.GetById.GetUserByIdQueryHandler(userRepositoryMock.Object, _mapper);
+		var handler = new Application.Users.GetById.GetUserByIdQueryHandler(userRepositoryMock.Object, _mapper, _logger.Object);
 
 		var invalidUserId = Guid.NewGuid();
 		var query = new GetUserByIdQuery(invalidUserId);

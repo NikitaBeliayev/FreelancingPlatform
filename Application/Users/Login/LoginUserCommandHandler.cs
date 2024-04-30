@@ -10,6 +10,7 @@ using Domain.Users;
 using Domain.Users.UserDetails;
 using Shared;
 using Domain.CommunicationChannels;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Users.Login;
 
@@ -19,16 +20,20 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
     private readonly IJwtProvider _jwtProvider;
     private readonly IHashProvider _hashProvider;
     private readonly IMapper _mappper;
+    private readonly ILogger<LoginUserCommandHandler> _logger;
 
-    public LoginUserCommandHandler(IUserRepository userRepository, IJwtProvider jwtProvider, IHashProvider hashProvider, IMapper mappper)
+    public LoginUserCommandHandler(IUserRepository userRepository, IJwtProvider jwtProvider, IHashProvider hashProvider, IMapper mappper, ILogger<LoginUserCommandHandler> logger)
     {
         _userRepository = userRepository;
         _jwtProvider = jwtProvider;
         _hashProvider = hashProvider;
         _mappper = mappper;
+        _logger = logger;
     }
     public async Task<Result<UserLoginResponseDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("User login requested");
+
         Result<Email> emailAddress = Email.BuildEmail(request.LoginUserDto.Email.ToLower());
         if (!emailAddress.IsSuccess)
         {
@@ -66,8 +71,8 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
 
         JwtCredentials jwtCredentials = _jwtProvider.GenerateCredentials(possibleUser.Id, possibleUser.Email.Value, 
             possibleUser.Roles.Select(r => r.Name.Value));
-        
 
+        _logger.LogInformation("User with Id = {id} successfully logged in", possibleUser.Id);
         return Result<UserLoginResponseDto>.Success(_mappper.Map<UserLoginResponseDto>(
             new Tuple<User, JwtCredentials>(possibleUser, jwtCredentials)));
     }

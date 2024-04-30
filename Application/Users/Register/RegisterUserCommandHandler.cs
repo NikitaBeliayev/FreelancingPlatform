@@ -144,7 +144,7 @@ public class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, U
 
             await _emailProvider.SendAsync(messageComposerModel, cancellationToken);
             
-            _logger.LogInformation("User logged in successfully: Id = {UserId}", result.Id);
+            _logger.LogInformation("User successfully registered with Id = {UserId}", result.Id);
             
             UserRegistrationResponseDto userRegistration = _mapper.Map<UserRegistrationResponseDto>(result);
             
