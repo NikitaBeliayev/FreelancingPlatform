@@ -41,7 +41,7 @@ public class ObjectiveController : ControllerBase
 		return Ok(result);
 	}
 
-    [HttpGet]
+    [HttpGet("/get/forCustomer")]
     [Authorize(Roles = "Customer")]
     public async Task<IActionResult> Get(CancellationToken cancellationToken)
     {
