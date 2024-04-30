@@ -35,7 +35,7 @@ public class ObjectiveController : ControllerBase
     [Authorize(Roles = "Implementer")]
 	public async Task<IActionResult> Get(int pageNum, int pageSize, CancellationToken cancellationToken)
 	{
-		var command = new GetAllObjectivesWithPaginationQuery(pageSize, (pageNum - 1) * pageSize);
+		var command = new GetAllObjectivesWithPaginationQuery(pageNum, pageSize);
 		var result = await _sender.Send(command, cancellationToken);
 
 		return Ok(result);
