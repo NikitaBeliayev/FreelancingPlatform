@@ -32,4 +32,11 @@ public class ObjectiveRepository : Repository<Objective>, IObjectiveRepository
             .Where(o => o.CreatorId == creatorId)
             .ToListAsync(cancellationToken);
     }
+
+	public async Task<int> GetTotalCountForImplementor(CancellationToken cancellationToken = default)
+	{
+		return await _dbSet
+			.Where(x => x.ObjectiveStatusId.ToString() == "2f2f54aa-46dd-29d0-6459-2afdb5e950ee" || x.ObjectiveStatusId.ToString() == "327db9d4-0282-c319-b047-dcf22483e225")
+			.CountAsync(cancellationToken);
+	}
 }

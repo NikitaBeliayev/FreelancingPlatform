@@ -1,5 +1,5 @@
 ﻿using Application.Abstraction.Messaging;
-using Application.Objectives.Types.ResponseDto;
+using Application.Objectives.ResponseDto;
 
 namespace Application.Objectives.GetObjectives.GetAllForCustomer
 {

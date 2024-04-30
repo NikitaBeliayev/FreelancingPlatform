@@ -1,6 +1,6 @@
 ﻿using Application.Abstraction.Messaging;
 using Application.Helpers;
-using Application.Objectives.Types.ResponseDto;
+using Application.Objectives.ResponseDto;
 using AutoMapper;
 using Domain.Repositories;
 using Microsoft.Extensions.Logging;
