@@ -20,6 +20,6 @@ namespace Application.Objectives.ResponseDto
 		public ICollection<CategoryDto> Tags { get; set; }
 		public UserDto Creator { get; set; }
 		public TypeDto Type { get; set; }
-		public DateTime Eta { get; set; }
+		public DateTime Deadline { get; set; }
 	}
 }
