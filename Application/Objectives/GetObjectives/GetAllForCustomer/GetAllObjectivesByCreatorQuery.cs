@@ -1,15 +1,10 @@
 ﻿using Application.Abstraction.Messaging;
+using Application.Objectives.PaginatedResult;
 using Application.Objectives.ResponseDto;
 
 namespace Application.Objectives.GetObjectives.GetAllForCustomer
 {
-    public class GetAllObjectivesByCreatorQuery : IQuery<IEnumerable<ResponseObjectiveDto>>
+    public record GetAllObjectivesByCreatorQuery(Guid CreatorId, int PageNum, int PageSize) : IQuery<PaginatedResultDto<ResponseObjectiveDto>>
     {
-        public Guid CreatorId { get; set; }
-
-        public GetAllObjectivesByCreatorQuery(Guid creatorId)
-        {
-            CreatorId = creatorId;
-        }
     }
 }

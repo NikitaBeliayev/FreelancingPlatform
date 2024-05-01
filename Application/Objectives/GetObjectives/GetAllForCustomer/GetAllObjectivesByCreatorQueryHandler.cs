@@ -1,5 +1,6 @@
 ﻿using Application.Abstraction.Messaging;
 using Application.Helpers;
+using Application.Objectives.PaginatedResult;
 using Application.Objectives.ResponseDto;
 using AutoMapper;
 using Domain.Repositories;
@@ -8,7 +9,7 @@ using Shared;
 
 namespace Application.Objectives.GetObjectives.GetAllForCustomer
 {
-    public class GetAllObjectivesByCreatorCommandHandler : IQueryHandler<GetAllObjectivesByCreatorQuery, IEnumerable<ResponseObjectiveDto>>
+    public class GetAllObjectivesByCreatorCommandHandler : IQueryHandler<GetAllObjectivesByCreatorQuery, PaginatedResultDto<ResponseObjectiveDto>>
     {
         private readonly IObjectiveRepository _repository;
         private readonly ILogger<GetAllObjectivesByCreatorCommandHandler> _logger;
@@ -21,17 +22,32 @@ namespace Application.Objectives.GetObjectives.GetAllForCustomer
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<ResponseObjectiveDto>>> Handle(GetAllObjectivesByCreatorQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PaginatedResultDto<ResponseObjectiveDto>>> Handle(GetAllObjectivesByCreatorQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get all objectives by creator has been requested");
-            var objectives = await _repository.GetByCreatorId(request.CreatorId, cancellationToken);
-            var objectiveDtos = _mapper.Map<IEnumerable<ResponseObjectiveDto>>(objectives);
-            if (!objectiveDtos.Any())
+            var objectives = await _repository.GetByCreatorIdWithPagination(request.CreatorId, request.PageSize, (request.PageNum - 1) * request.PageSize, cancellationToken);
+            if (!objectives.Any())
             {
-                return ResponseHelper.LogAndReturnError<IEnumerable<ResponseObjectiveDto>>("No objectives found for the provided creator ID", new Error("Objective GetObjectives.GetAllForCustomer.GetAllObjectivesByCreatorQueryHandler", "No objectives found for the provided creator ID", 500));
+                return ResponseHelper.LogAndReturnError<PaginatedResultDto<ResponseObjectiveDto>>("No objectives found", new Error("Objective GetObjectives.GetAllForCustomer.GetAllObjectivesByCreatorQueryHandler", "No objectives found", 500));
             }
 
-            return Result<IEnumerable<ResponseObjectiveDto>>.Success(objectiveDtos);
+            var objectiveDtos = objectives.Select(_mapper.Map<ResponseObjectiveDto>);
+
+            var totalObjectives = await _repository.GetTotalCountForCreator(request.CreatorId, cancellationToken);
+            var totalPages = (int)Math.Ceiling((double)totalObjectives / request.PageSize);
+
+            var next = request.PageNum < totalPages ? $"https://<server>/api/creators/tasks/?pageNum={request.PageNum + 1}&pageSize={request.PageSize}" : null;
+            var previous = request.PageNum > 1 ? $"https://<server>/api/creators/tasks/?pageNum={request.PageNum - 1}&pageSize={request.PageSize}" : null;
+
+            var result = new PaginatedResultDto<ResponseObjectiveDto>
+            {
+                Count = totalObjectives,
+                Next = next,
+                Previous = previous,
+                Results = objectiveDtos
+            };
+
+            return Result<PaginatedResultDto<ResponseObjectiveDto>>.Success(result);
         }
     }
 }

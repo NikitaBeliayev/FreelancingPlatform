@@ -33,7 +33,7 @@ public class ObjectiveController : ControllerBase
 
 	[HttpGet("{pageNum:int}/{pageSize:int}")]
     [Authorize(Roles = "Implementer")]
-	public async Task<IActionResult> Get(int pageNum, int pageSize, CancellationToken cancellationToken)
+	public async Task<IActionResult> GetAll(int pageNum, int pageSize, CancellationToken cancellationToken)
 	{
 		var command = new GetAllObjectivesWithPaginationQuery(pageNum, pageSize);
 		var result = await _sender.Send(command, cancellationToken);
@@ -41,14 +41,14 @@ public class ObjectiveController : ControllerBase
 		return Ok(result);
 	}
 
-    [HttpGet("/get/forCustomer")]
+    [HttpGet("/api/creators/tasks")]
     [Authorize(Roles = "Customer")]
-    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromQuery]int pageNum, [FromQuery]int pageSize, CancellationToken cancellationToken)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var id = Guid.Parse(userId);
 
-        var command = new GetAllObjectivesByCreatorQuery(id);
+        var command = new GetAllObjectivesByCreatorQuery(id, pageNum, pageSize);
         var result = await _sender.Send(command, cancellationToken);
 
         return Ok(result);
