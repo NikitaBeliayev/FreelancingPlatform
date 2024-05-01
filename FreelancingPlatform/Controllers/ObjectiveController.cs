@@ -1,4 +1,4 @@
-﻿using Application.Objectives;
+using Application.Objectives;
 using Application.Objectives.CreateObjective;
 using Application.Objectives.GetObjectives.GetAllForCustomer;
 using Application.Objectives.GetObjectives.GetAllWithPagiation;
@@ -31,9 +31,9 @@ public class ObjectiveController : ControllerBase
         return new ObjectResult(result);
     }
 
-	[HttpGet("{pageNum:int}/{pageSize:int}")]
+	[HttpGet]
     [Authorize(Roles = "Implementer")]
-	public async Task<IActionResult> GetAll(int pageNum, int pageSize, CancellationToken cancellationToken)
+	public async Task<IActionResult> GetAll([FromQuery] int pageNum, [FromQuery] int pageSize, CancellationToken cancellationToken)
 	{
 		var command = new GetAllObjectivesWithPaginationQuery(pageNum, pageSize);
 		var result = await _sender.Send(command, cancellationToken);

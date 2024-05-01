@@ -121,7 +121,7 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.CreatorPublicContacts, opt => opt.MapFrom(src => src.CreatorPublicContacts))
                     .ForMember(dest => dest.Creator, opt => opt.MapFrom(src => new UserDto { Id = src.Creator.Id, FirstName = src.Creator.FirstName.Value, LastName = src.Creator.LastName.Value, Email = src.Creator.Email.Value }))
                     .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new TypeDto { Id = src.Type.Id, TypeTitle = src.Type.TypeTitle.Title, Duration = src.Type.Duration }))
-                    .ForMember(dest => dest.Eta, opt => opt.MapFrom(src => src.Eta));
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
 			}
         }
     }
