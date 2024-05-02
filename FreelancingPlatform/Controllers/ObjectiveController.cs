@@ -2,6 +2,8 @@ using Application.Objectives;
 using Application.Objectives.CreateObjective;
 using Application.Objectives.GetObjectives.GetAllForCustomer;
 using Application.Objectives.GetObjectives.GetAllWithPagiation;
+using Application.Objectives.RequestDto;
+using Application.Objectives.ResponseDto;
 using Application.Objectives.Types.GetByIdWithPagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +26,7 @@ public class ObjectiveController : ControllerBase
 
     [HttpPost]
     //[Authorize(Roles = "Admin,Customer")]
-    public async Task<IActionResult> Create([FromBody] ObjectiveDto requestDto, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Create([FromBody] ObjectiveCreateDto requestDto, CancellationToken cancellationToken = default)
     {
         var command = new CreateObjectiveCommand(requestDto);
         var result = await _sender.Send(command, cancellationToken);
