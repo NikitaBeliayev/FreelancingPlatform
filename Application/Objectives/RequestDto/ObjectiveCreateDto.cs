@@ -2,6 +2,7 @@
 using Application.Objectives.Categories.ResponseDto;
 using Application.Objectives.Types;
 using Application.Objectives.Types.ResponseDto;
+using Application.Payments;
 using Application.Users;
 using Application.Users.ResponseDto;
 using System;
@@ -10,17 +11,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Objectives.ResponseDto
+namespace Application.Objectives.RequestDto
 {
-	public class ResponseObjectiveDto
+	public class ObjectiveCreateDto
 	{
-		public Guid Id { get; set; }
 		public string Title { get; set; }
 		public string Description { get; set; }
 		// public PaymentDto Payment { get; set; }
 		public decimal PaymentAmount { get; set; }
-		public string CreatorPublicContacts { get; set; }
 		public ICollection<SimpleCategoryResponseDto> Tags { get; set; }
+		public string CreatorPublicContacts { get; set; }
 		public SimpleUserResponseDto Creator { get; set; }
 		public SimpleResponseTypeDto Type { get; set; }
 		public DateTime Deadline { get; set; }
