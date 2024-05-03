@@ -8,7 +8,7 @@ public interface IObjectiveRepository : IRepository<Objective>
 
     Task<(IEnumerable<Objective>, int)> GetByCreatorIdWithPagination(Guid creatorId, int take, int skip, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<Objective>> GetByImplementorIdWithPagination(Guid implementorId, int take, int skip, CancellationToken cancellationToken = default);
+    Task<(IEnumerable<Objective>, int)> GetByImplementorIdWithPagination(Guid implementorId, int take, int skip, CancellationToken cancellationToken = default);
 
     Task<int> GetTotalCountForImplementorTasks(Guid implementorId, CancellationToken cancellationToken = default);
 
