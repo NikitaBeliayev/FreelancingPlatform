@@ -1,5 +1,7 @@
 ﻿using FreelancingPlatform.Models;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace FreelancingPlatform.Middleware
@@ -37,7 +39,8 @@ namespace FreelancingPlatform.Middleware
                 else if (isJsonResponse.GetValueOrDefault())
                 {
                     var bodyAsObject = await ReadResponseStream(responseBody);
-                    var finalResponse = WrapResponse(context.Response, bodyAsObject);
+                    var requestUrl = $"{context.Request.Scheme}://{context.Request.Host.Value}{context.Request.Path.Value}";
+                    var finalResponse = WrapResponse(context.Response, bodyAsObject, requestUrl);
 
                     context.Response.ContentType = "application/json";
 
@@ -67,21 +70,31 @@ namespace FreelancingPlatform.Middleware
             }
         }
 
-        private ApiResponse<object> WrapResponse(HttpResponse response, object? body = null)
+        private ApiResponse<object> WrapResponse(HttpResponse response, object? body = null, string? requsetUrl = null)
         {
             if (body is not null)
             {
-                using (JsonDocument doc = JsonDocument.Parse(body.ToString()))
+                var jsonObject = JsonNode.Parse(body.ToString())!.AsObject();
+       
+                var data = jsonObject["value"] != null ? JsonNode.Parse(jsonObject["value"].DeepClone().ToJsonString()).AsObject() : null;
+
+                if (data != null && data.TryGetPropertyValue("next", out var _next))
                 {
-                    JsonElement root = doc.RootElement;
-
-                    var data = root.GetProperty("value").Clone();
-                    bool isSuccess = root.GetProperty("isSuccess").GetBoolean();
-                    var errorInfo =root.GetProperty("error");
-                    Shared.Error error = new Shared.Error(errorInfo.GetProperty("code").ToString(), errorInfo.GetProperty("message").ToString(), errorInfo.GetProperty("statusCode").GetInt32());
-
-                    return ApiResponse<object>.FromResponseData(data, isSuccess, error, response.StatusCode);
+                    if (data["next"] != null)
+                    {
+                        data["next"].ReplaceWith($"{requsetUrl}{data["next"].GetValue<string>()}");
+                    }
+                    if (data["previous"] != null) 
+                    {
+                        data["previous"].ReplaceWith($"{requsetUrl}{data["previous"].GetValue<string>()}");
+                    }
                 }
+
+                bool isSuccess = jsonObject["isSuccess"].GetValue<bool>();
+                var errorInfo = jsonObject["error"].DeepClone();
+                Shared.Error error = new Shared.Error(errorInfo["code"].GetValue<string>(), errorInfo["message"].GetValue<string>(), errorInfo["statusCode"].GetValue<Int32>());
+
+                return ApiResponse<object>.FromResponseData(data, isSuccess, error, response.StatusCode);
             }
             return new ApiResponse<object>(null, response.StatusCode == StatusCodes.Status200OK ? true : false, "", null, response.StatusCode);
         }

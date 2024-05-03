@@ -1,13 +1,16 @@
 ﻿using Application.Abstraction.Messaging;
+using Application.Models;
 using Application.Objectives.Categories.GetByTitle;
+using Application.Objectives.Types.ResponseDto;
 using AutoMapper;
 using Domain.Repositories;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Shared;
 
 namespace Application.Objectives.Categories.GetCategoryByTitleWithPagination
 {
-    public class GetByTitleWithPaginationQueryHandler : IQueryHandler<GetByTitleWithPaginationQuery, List<CategoryDto>>
+    public class GetByTitleWithPaginationQueryHandler : IQueryHandler<GetByTitleWithPaginationQuery, PaginationModel<CategoryDto>>
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IMapper _mapper;
@@ -20,14 +23,21 @@ namespace Application.Objectives.Categories.GetCategoryByTitleWithPagination
             _logger = logger;
         }
 
-        public async Task<Result<List<CategoryDto>>> Handle(GetByTitleWithPaginationQuery query, CancellationToken cancellationToken)
+        public async Task<Result<PaginationModel<CategoryDto>>> Handle(GetByTitleWithPaginationQuery query, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get multiple categories requested");
-            string search = string.IsNullOrWhiteSpace(query.SearchParams.search) ? "" : query.SearchParams.search;
-            var result = _categoryRepository.GetByTitleWithPagination(category => category.Title.Value.Contains(search), 
-                query.SearchParams.pageSize, query.SearchParams.skip, cancellationToken);
+            var (categories, total) = await _categoryRepository.GetByTitleWithPagination(query.pageSize, (query.pageNum - 1) * query.pageSize, cancellationToken);
 
-            return Result<List<CategoryDto>>.Success(_mapper.Map<List<CategoryDto>>(result));
+            var response = new List<CategoryDto>();
+
+            await foreach (var category in categories)
+            {
+                response.Add(new CategoryDto() { Id = category.Id, Title = category.Title.Value });
+            }
+
+            var result = new PaginationModel<CategoryDto>(total, response, query.pageNum, query.pageSize);
+
+            return Result<PaginationModel<CategoryDto>>.Success(_mapper.Map<PaginationModel<CategoryDto>>(result));
         }
     }
 }

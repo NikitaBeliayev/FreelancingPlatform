@@ -13,5 +13,5 @@ public interface IRepository<TEntity> where TEntity : Entity
     Task<TEntity?> GetByExpressionWithIncludesAsync(Expression<Func<TEntity, bool>> expression,
         CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes);
     
-    IAsyncEnumerable<TEntity> GetAllWithPagination(int take, int skip, CancellationToken cancellationToken = default);
+    Task<(IAsyncEnumerable<TEntity>, int)> GetAllWithPagination(int take, int skip, CancellationToken cancellationToken = default);
 }

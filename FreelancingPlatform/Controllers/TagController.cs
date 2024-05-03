@@ -1,7 +1,6 @@
 ﻿using Application.Objectives.Categories.CreateByTitle;
 using Application.Objectives.Categories.GetById;
 using Application.Objectives.Categories.GetByTitle;
-using Application.Objectives.Categories.RequestDto;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +27,10 @@ namespace FreelancingPlatform.Controllers
             return Ok(result);
         }
 
-        [HttpPost("search")]
-        public async Task<IActionResult> Search([FromBody] CategorySearchDto searchParams, CancellationToken cancellationToken)
+        [HttpGet]
+        public async Task<IActionResult> Search([FromQuery] int pageNum, [FromQuery] int pageSize, CancellationToken cancellationToken)
         {
-            var command = new GetByTitleWithPaginationQuery(searchParams);
+            var command = new GetByTitleWithPaginationQuery(pageNum, pageSize);
             var result = await _sender.Send(command, cancellationToken);
 
             return Ok(result);

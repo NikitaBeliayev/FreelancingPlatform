@@ -26,7 +26,6 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
         return _dbSet.Remove(entity).Entity;
     }
 
-
     public IAsyncEnumerable<TEntity> GetAll()
     {
         return _dbSet.AsAsyncEnumerable();
@@ -50,8 +49,8 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
             FirstOrDefaultAsync(expression, cancellationToken);
     }
 
-    public IAsyncEnumerable<TEntity> GetAllWithPagination(int take, int skip, CancellationToken cancellationToken = default)
+    public async Task<(IAsyncEnumerable<TEntity>, int)> GetAllWithPagination(int take, int skip, CancellationToken cancellationToken = default)
     {
-        return _dbSet.Skip(skip).Take(take).AsAsyncEnumerable();
+        return (_dbSet.Skip(skip).Take(take).AsAsyncEnumerable(), await _dbSet.CountAsync());
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.Objectives.Categories.GetByTitle;
-using Application.Objectives.Categories.RequestDto;
 using Application.Objectives.Types;
 using Application.Objectives.Types.Create;
 using Application.Objectives.Types.Delete;
@@ -35,10 +34,10 @@ namespace FreelancingPlatform.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{take:int}/{skip:int}")]
-        public async Task<IActionResult> Get(int take, int skip, CancellationToken cancellationToken)
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] int pageNum, [FromQuery] int pageSize, CancellationToken cancellationToken)
         {
-            var command = new GetAllObjectiveTypesWithPaginationQuery(take, skip);
+            var command = new GetAllObjectiveTypesWithPaginationQuery(pageNum, pageSize);
             var result = await _sender.Send(command, cancellationToken);
 
             return Ok(result);
