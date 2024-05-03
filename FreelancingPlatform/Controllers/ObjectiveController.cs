@@ -2,9 +2,8 @@ using Application.Objectives;
 using Application.Objectives.CreateObjective;
 using Application.Objectives.GetObjectives.GetAllForCustomer;
 using Application.Objectives.GetObjectives.GetAllWithPagiation;
+using Application.Objectives.GetObjectives.GetAssignedTasksForImplementor;
 using Application.Objectives.RequestDto;
-using Application.Objectives.ResponseDto;
-using Application.Objectives.Types.GetByIdWithPagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +50,19 @@ public class ObjectiveController : ControllerBase
         var id = Guid.Parse(userId);
 
         var command = new GetAllObjectivesByCreatorQuery(id, pageNum, pageSize);
+        var result = await _sender.Send(command, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("/api/implementors/tasks")]
+    [Authorize(Roles = "Implementer")]
+    public async Task<IActionResult> GetAssigned([FromQuery] int pageNum, [FromQuery] int pageSize, CancellationToken cancellationToken)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var id = Guid.Parse(userId);
+
+        var command = new GetAssignedTasksForImplementorQuery(id, pageNum, pageSize);
         var result = await _sender.Send(command, cancellationToken);
 
         return Ok(result);

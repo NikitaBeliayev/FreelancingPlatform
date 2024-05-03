@@ -9,6 +9,10 @@ public interface IObjectiveRepository : IRepository<Objective>
 
     Task<IEnumerable<Objective>> GetByCreatorIdWithPagination(Guid creatorId, int take, int skip, CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<Objective>> GetByImplementorIdWithPagination(Guid implementorId, int take, int skip, CancellationToken cancellationToken = default);
+
+    Task<int> GetTotalCountForImplementorTasks(Guid implementorId, CancellationToken cancellationToken = default);
+
     Task<int> GetTotalCountForCreator(Guid creatorId, CancellationToken cancellationToken = default);
 
     Task<int> GetTotalCountForImplementor(CancellationToken cancellationToken = default);
