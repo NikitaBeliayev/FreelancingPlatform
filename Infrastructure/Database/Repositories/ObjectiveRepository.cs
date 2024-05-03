@@ -34,6 +34,24 @@ public class ObjectiveRepository : Repository<Objective>, IObjectiveRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<Objective>> GetByImplementorIdWithPagination(Guid implementorId, int take, int skip, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(o => o.Categories)
+            .Include(o => o.Creator)
+            .Include(o => o.Type)
+            .Where(o => o.Implementors.Any(i => i.Id == implementorId))
+            .Skip(skip).Take(take)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<int> GetTotalCountForImplementorTasks(Guid implementorId, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Where(o => o.Implementors.Any(i => i.Id == implementorId))
+            .CountAsync(cancellationToken);
+    }
+
     public async Task<int> GetTotalCountForCreator(Guid creatorId, CancellationToken cancellationToken = default)
     {
         return await _dbSet
