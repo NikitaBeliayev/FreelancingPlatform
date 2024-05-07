@@ -18,7 +18,7 @@ public class ObjectiveDescription
         {
             return  Result<ObjectiveDescription>.Failure(null, ObjectiveDescriptionErrors.InvalidName);
         }
-        if (description.Length < 20 || description.Length > 5000)
+        if (description.Length < 10 || description.Length > 5000)
         {
             return  Result<ObjectiveDescription>.Failure(null, ObjectiveDescriptionErrors.InvalidNameLength);
         }

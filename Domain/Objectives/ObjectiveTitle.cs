@@ -18,7 +18,7 @@ public class ObjectiveTitle
         {
             return  Result<ObjectiveTitle>.Failure(null, ObjectiveTitleErrors.InvalidName);
         }
-        if (description.Length < 6)
+        if (description.Length < 10)
         {
             return  Result<ObjectiveTitle>.Failure(null, ObjectiveTitleErrors.InvalidNameLength);
         }
