@@ -18,14 +18,14 @@ namespace FreelancingPlatform.Controllers
             _sender = sender;
         }
         
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
-        {
-            var command = new GetCategoryByIdQuery(id);
-            var result = await _sender.Send(command, cancellationToken);
+        //[HttpGet("{id:guid}")]
+        //public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
+        //{
+        //    var command = new GetCategoryByIdQuery(id);
+        //    var result = await _sender.Send(command, cancellationToken);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Search([FromQuery] int pageNum, [FromQuery] int pageSize, CancellationToken cancellationToken)
