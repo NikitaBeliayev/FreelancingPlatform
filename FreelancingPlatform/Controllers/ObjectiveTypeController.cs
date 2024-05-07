@@ -25,14 +25,14 @@ namespace FreelancingPlatform.Controllers
             _sender = sender;
         }
         
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
-        {
-            var command = new GetByIdQuery(id);
-            var result = await _sender.Send(command, cancellationToken);
+        //[HttpGet("{id:guid}")]
+        //public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
+        //{
+        //    var command = new GetByIdQuery(id);
+        //    var result = await _sender.Send(command, cancellationToken);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageNum, [FromQuery] int pageSize, CancellationToken cancellationToken)
@@ -43,34 +43,34 @@ namespace FreelancingPlatform.Controllers
             return Ok(result);
         }
         
-        [Authorize(Roles = "Admin")] // change this to variable in the future
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TypeDto requestDto, CancellationToken cancellationToken)
-        {
-            var command = new CreateObjectiveTypeCommand(requestDto);
-            var result = await _sender.Send(command, cancellationToken);
+        //[Authorize(Roles = "Admin")]
+        //[HttpPost]
+        //public async Task<IActionResult> Create([FromBody] TypeDto requestDto, CancellationToken cancellationToken)
+        //{
+        //    var command = new CreateObjectiveTypeCommand(requestDto);
+        //    var result = await _sender.Send(command, cancellationToken);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
         
-        [Authorize(Roles = "Admin")] // change this to variable in the future
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
-        {
-            var command = new DeleteObjectiveTypeCommand(id);
-            var result = await _sender.Send(command, cancellationToken);
+        //[Authorize(Roles = "Admin")]
+        //[HttpDelete]
+        //public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        //{
+        //    var command = new DeleteObjectiveTypeCommand(id);
+        //    var result = await _sender.Send(command, cancellationToken);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
         
-        [Authorize(Roles = "Admin")] // change this to variable in the future
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateObjectiveTypeRequestDto requestDto, CancellationToken cancellationToken)
-        {
-            var command = new UpdateObjectiveTypeCommand(requestDto);
-            var result = await _sender.Send(command, cancellationToken);
+        //[Authorize(Roles = "Admin")]
+        //[HttpPut]
+        //public async Task<IActionResult> Update([FromBody] UpdateObjectiveTypeRequestDto requestDto, CancellationToken cancellationToken)
+        //{
+        //    var command = new UpdateObjectiveTypeCommand(requestDto);
+        //    var result = await _sender.Send(command, cancellationToken);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
     }
 }
