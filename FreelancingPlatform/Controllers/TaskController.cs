@@ -13,10 +13,10 @@ namespace FreelancingPlatform.Controllers;
 
 [ApiController]
 [Route("api/tasks")]
-public class ObjectiveController : ControllerBase
+public class TaskController : ControllerBase
 {
     private readonly IMediator _sender;
-    public ObjectiveController(IMediator sender)
+    public TaskController(IMediator sender)
     {
         _sender = sender;
     }
