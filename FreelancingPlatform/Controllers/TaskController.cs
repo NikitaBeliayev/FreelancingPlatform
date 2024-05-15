@@ -24,7 +24,7 @@ public class TaskController : ControllerBase
 
 
     [HttpPost]
-    //[Authorize(Roles = "Admin,Customer")]
+    [Authorize(Roles = "Admin,Customer")]
     public async Task<IActionResult> Create([FromBody] ObjectiveCreateDto requestDto, CancellationToken cancellationToken = default)
     {
         var command = new CreateObjectiveCommand(requestDto);
