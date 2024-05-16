@@ -21,7 +21,7 @@ namespace Application.Objectives.ResponseDto
 		public decimal PaymentAmount { get; set; }
 		public string CreatorPublicContacts { get; set; }
 		public ICollection<CategoryDto> Tags { get; set; }
-		public SimpleUserResponseDto Creator { get; set; }
+		public UserDto Creator { get; set; }
 		public ResponseTypeDto Type { get; set; }
 		public DateTime Deadline { get; set; }
 	}
