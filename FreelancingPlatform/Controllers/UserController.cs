@@ -12,6 +12,7 @@ using Domain.Roles;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.Users.RefreshToken;
 
 namespace FreelancingPlatform.Controllers
 {
@@ -106,5 +107,14 @@ namespace FreelancingPlatform.Controllers
 
 			return Ok(result);
 		}
-	}
+
+        [AllowAnonymous]
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand refreshTokenCommand, CancellationToken cancellationToken)
+        {
+            var result = await _sender.Send(refreshTokenCommand, cancellationToken);
+
+            return Ok(result);
+        }
+    }
 }
