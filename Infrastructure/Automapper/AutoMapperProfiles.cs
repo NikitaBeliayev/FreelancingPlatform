@@ -119,10 +119,10 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description.Value))
                     //.ForMember(dest => dest.PaymentId, opt => opt.MapFrom(src => src.PaymentId))
                     .ForMember(dest => dest.PaymentAmount, opt => opt.MapFrom(src => src.PaymentAmount))
-                    .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Categories.Select(t => new SimpleCategoryResponseDto { Id = t.Id })))
+                    .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Categories.Select(t => new CategoryDto { Id = t.Id, Title = t.Title.Value })))
                     .ForMember(dest => dest.CreatorPublicContacts, opt => opt.MapFrom(src => src.CreatorPublicContacts))
                     .ForMember(dest => dest.Creator, opt => opt.MapFrom(src => new SimpleUserResponseDto { Id = src.Creator.Id }))
-                    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new SimpleResponseTypeDto { Id = src.Type.Id }))
+                    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new ResponseTypeDto { Id = src.Type.Id, Title = src.Type.TypeTitle.Title }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
 
 				//mapping between objective and ojective create dto
@@ -144,7 +144,7 @@ namespace Infrastructure.Automapper
                     //.ForMember(dest => dest.Payment, opt => opt.MapFrom(src => new SimplePaymentDto { Id = src.PaymentId }))
                     .ForMember(dest => dest.PaymentAmount, opt => opt.MapFrom(src => src.PaymentAmount))
                     .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Categories.Select(t => new CategoryDto { Id = t.Id, Title = t.Title.Value })))
-                    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new SimpleResponseTypeDto { Id = src.Type.Id }))
+                    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new ResponseTypeDto { Id = src.Type.Id, Title = src.Type.TypeTitle.Title }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
             }
         }

@@ -19,7 +19,7 @@ namespace Application.Objectives.ResponseDto
         //public SimplePaymentDto Payment { get; set; }
         public decimal PaymentAmount { get; set; }
         public ICollection<CategoryDto> Tags { get; set; }
-        public SimpleResponseTypeDto Type { get; set; }
+        public ResponseTypeDto Type { get; set; }
         public DateTime Deadline { get; set; }
     }
 }

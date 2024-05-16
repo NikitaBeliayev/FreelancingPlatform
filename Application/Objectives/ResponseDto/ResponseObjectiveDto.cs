@@ -20,9 +20,9 @@ namespace Application.Objectives.ResponseDto
 		// public PaymentDto Payment { get; set; }
 		public decimal PaymentAmount { get; set; }
 		public string CreatorPublicContacts { get; set; }
-		public ICollection<SimpleCategoryResponseDto> Tags { get; set; }
+		public ICollection<CategoryDto> Tags { get; set; }
 		public SimpleUserResponseDto Creator { get; set; }
-		public SimpleResponseTypeDto Type { get; set; }
+		public ResponseTypeDto Type { get; set; }
 		public DateTime Deadline { get; set; }
 	}
 }
