@@ -6,6 +6,7 @@ using AutoMapper;
 using Domain.Categories;
 using Domain.Categories.Errors;
 using Domain.Objectives;
+using Domain.Objectives.Errors;
 using Domain.Payments;
 using Domain.Repositories;
 using Domain.Statuses;
@@ -109,6 +110,14 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
 		//var categoriesList = (await Task.WhenAll(categoriesCollection)).ToList();
 
 		List<Category> categoriesList = new List<Category>();
+
+        if (request.RequestDto.Tags.Count == 0)
+        {
+            var error = ObjectiveCategoryErrors.NoTagsProvided;
+            _logger.LogError("Error: No tags provided, {Code}: {Message}", error.Code, error.Message);
+            return Result<SimpleResponseObjectiveDto>.Failure(null, error);
+        }
+
 		foreach (var tag in request.RequestDto.Tags)
 		{
 			var category = await _categoryRepository.GetByIdAsync(tag.Id, cancellationToken);
