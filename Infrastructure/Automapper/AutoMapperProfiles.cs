@@ -146,6 +146,16 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Categories.Select(t => new CategoryDto { Id = t.Id, Title = t.Title.Value })))
                     .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new ResponseTypeDto { Id = src.Type.Id, Title = src.Type.TypeTitle.Title }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
+
+                CreateMap<Objective, GetObjectiveResponseDto>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Value))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description.Value))
+                    .ForMember(dest => dest.PaymentAmount, opt => opt.MapFrom(src => src.PaymentAmount))
+                    .ForMember(dest => dest.CreatorPublicContacts, opt => opt.MapFrom(src => src.CreatorPublicContacts))
+                    .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.Categories.Select(t => new CategoryDto { Id = t.Id, Title = t.Title.Value })))
+                    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => new ResponseTypeDto { Id = src.Type.Id, Title = src.Type.TypeTitle.Title }))
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
             }
         }
     }

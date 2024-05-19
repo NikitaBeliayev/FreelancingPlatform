@@ -1,5 +1,6 @@
 using Application.Objectives;
 using Application.Objectives.CreateObjective;
+using Application.Objectives.GetObjective;
 using Application.Objectives.GetObjectives.GetAllForCustomer;
 using Application.Objectives.GetObjectives.GetAllWithPagiation;
 using Application.Objectives.GetObjectives.GetAssignedTasksForImplementor;
@@ -8,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Threading;
 
 namespace FreelancingPlatform.Controllers;
 
@@ -20,8 +22,6 @@ public class TaskController : ControllerBase
     {
         _sender = sender;
     }
-
-
 
     [HttpPost]
     [Authorize(Roles = "Admin,Customer")]
@@ -63,6 +63,19 @@ public class TaskController : ControllerBase
         var id = Guid.Parse(userId);
 
         var command = new GetAssignedTasksForImplementorQuery(id, pageNum, pageSize);
+        var result = await _sender.Send(command, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("/api/tasks/{id}")]
+    [Authorize(Roles = "Implementer,Customer")]
+    public async Task<IActionResult> GetTask(Guid id, CancellationToken cancellationToken)
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var userRole = User.FindFirstValue(ClaimTypes.Role);
+
+        var command = new GetObjectiveQuery(id, userId, userRole);
         var result = await _sender.Send(command, cancellationToken);
 
         return Ok(result);
