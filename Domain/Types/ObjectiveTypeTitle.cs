@@ -13,7 +13,7 @@ public sealed class ObjectiveTypeTitle
 
 	public static Result<ObjectiveTypeTitle> BuildObjectiveTypeTitle(Guid value)
 	{
-		return value != ObjectiveTypeVariations.Group && value != ObjectiveTypeVariations.Team  && value != ObjectiveTypeVariations.Individual ? 
+		return value != ObjectiveTypeVariations.Team  && value != ObjectiveTypeVariations.Individual ?
 			Result<ObjectiveTypeTitle>.Failure(null, new Error("", "", 500)) 
 			: Result<ObjectiveTypeTitle>.Success(new ObjectiveTypeTitle(ObjectiveTypeVariations.GetValue(value).Value!));
 	}

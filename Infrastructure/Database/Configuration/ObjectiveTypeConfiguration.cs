@@ -24,8 +24,6 @@ namespace Infrastructure.Database.Configuration
             {
                 new ObjectiveType(new Guid("2247d42d-a645-bc96-0b4b-944db2a8b519"), 
                     new List<Objective>(), (ObjectiveTypeTitle)privateConstructor.Invoke(new object[] { ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value! }), 8),
-                new ObjectiveType(new Guid("34719303-dace-07b9-8be3-9a77ee3a48a0"),
-                    new List<Objective>(), (ObjectiveTypeTitle)privateConstructor.Invoke(new object[] { ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Group).Value! }), 8),
                 new ObjectiveType(new Guid("a28f84ac-f428-a29b-b8a5-fbd76596817d"),
                     new List<Objective>(), (ObjectiveTypeTitle)privateConstructor.Invoke(new object[] { ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Team).Value! }), 8)
             });
