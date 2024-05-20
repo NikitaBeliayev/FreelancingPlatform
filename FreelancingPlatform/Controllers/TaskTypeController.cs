@@ -24,7 +24,8 @@ namespace FreelancingPlatform.Controllers
         {
             _sender = sender;
         }
-        
+
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
         {
@@ -42,7 +43,8 @@ namespace FreelancingPlatform.Controllers
 
             return Ok(result);
         }
-        
+
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(Roles = "Admin")] // change this to variable in the future
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] TypeDto requestDto, CancellationToken cancellationToken)
@@ -52,7 +54,8 @@ namespace FreelancingPlatform.Controllers
 
             return Ok(result);
         }
-        
+
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(Roles = "Admin")] // change this to variable in the future
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
@@ -62,7 +65,8 @@ namespace FreelancingPlatform.Controllers
 
             return Ok(result);
         }
-        
+
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Authorize(Roles = "Admin")] // change this to variable in the future
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateObjectiveTypeRequestDto requestDto, CancellationToken cancellationToken)
