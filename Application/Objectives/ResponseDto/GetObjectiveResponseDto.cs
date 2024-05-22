@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Users;
 
 namespace Application.Objectives.ResponseDto
 {
@@ -15,6 +16,7 @@ namespace Application.Objectives.ResponseDto
         public string Description { get; set; }
         public decimal PaymentAmount { get; set; }
         public string CreatorPublicContacts { get; set; }
+        public UserDto Creator { get; set; }
         public ICollection<CategoryDto> Tags { get; set; }
         public ResponseTypeDto Type { get; set; }
         public DateTime Deadline { get; set; }

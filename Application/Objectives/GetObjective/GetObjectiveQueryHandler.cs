@@ -43,14 +43,14 @@ namespace Application.Objectives.GetObjective
             {
                 objective = await _repository.GetByExpressionWithIncludesAsync(
                     obj => obj.Id == request.objectiveId && obj.CreatorId == request.userId, cancellationToken,
-                    objective => objective.Type, objective => objective.Categories);
+                    objective => objective.Type, objective => objective.Categories, objective => objective.Creator);
             }
             else if (RoleNameVariations.GetValue(RoleNameVariations.Implementer).Value == request.userRole)
             {
                 objective = await _repository.GetByExpressionWithIncludesAsync(
                     obj => obj.Id == request.objectiveId && (obj.Implementors.Any(imp => imp.Id == request.userId) ||
                                                              !obj.Implementors.Any()), cancellationToken,
-                    objective => objective.Type, objective => objective.Categories);
+                    objective => objective.Type, objective => objective.Categories, objective => objective.Creator);
             }
 
             if (objective is null)
