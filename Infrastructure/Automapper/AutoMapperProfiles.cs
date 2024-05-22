@@ -161,7 +161,8 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new ResponseTypeDto
                             { Id = src.Type.Id, Title = src.Type.TypeTitle.Title }))
-                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta))
+                    .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
 
                 CreateMap<Objective, GetObjectiveResponseDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -181,7 +182,8 @@ namespace Infrastructure.Automapper
                         {
                             Id = src.Creator.Id, Email = src.Creator.Email.Value,
                             FirstName = src.Creator.FirstName.Value, LastName = src.Creator.LastName.Value
-                        }));
+                        }))
+                    .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
             }
         }
     }

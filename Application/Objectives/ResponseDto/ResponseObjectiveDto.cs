@@ -24,5 +24,6 @@ namespace Application.Objectives.ResponseDto
 		public UserDto Creator { get; set; }
 		public ResponseTypeDto Type { get; set; }
 		public DateTime Deadline { get; set; }
+		public DateTime CreatedAt { get; set; }
 	}
 }

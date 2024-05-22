@@ -26,6 +26,8 @@ public class Objective : Entity
     public Guid CreatorId { get; set; }
     public ICollection<User> Implementors { get; } = new List<User>();
 	public byte[]? Attachments { get; set; }
+
+	public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 	
 	/// <summary>
 	/// The estimated time of arrival
