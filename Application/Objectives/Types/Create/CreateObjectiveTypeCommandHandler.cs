@@ -45,8 +45,9 @@ public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjective
             return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type with this title already exists", new Error("", "", 400));
         }
 
-        var createdObjectiveType = await _typeRepository.CreateAsync(new ObjectiveType(typeDto.Id, new List<Objective>(), 
-            titleBuildResult.Value!, typeDto.Duration), cancellationToken);
+        var createdObjectiveType = await _typeRepository.CreateAsync(new ObjectiveType(typeDto.Id,
+            new List<Objective>(),
+            titleBuildResult.Value!, typeDto.Duration), cancellationToken); //plug to compile
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Created user with Id = {Id}", createdObjectiveType.Id);

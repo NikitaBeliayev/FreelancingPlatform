@@ -14,30 +14,43 @@ using Shared;
 
 namespace Application.Objectives.Types.GetByIdWithPagination;
 
-public class GetAllObjectiveTypesWithPaginationQueryHandler : IQueryHandler<GetAllObjectiveTypesWithPaginationQuery, PaginationModel<ResponseTypeDto>>
+public class GetAllObjectiveTypesWithPaginationQueryHandler : IQueryHandler<GetAllObjectiveTypesWithPaginationQuery,
+    PaginationModel<ResponseTypeDto>>
 {
     private readonly ILogger<GetAllObjectiveTypesWithPaginationQueryHandler> _logger;
     private readonly IMapper _mapper;
     private readonly IObjectiveTypeRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
-    
-    public GetAllObjectiveTypesWithPaginationQueryHandler(ILogger<GetAllObjectiveTypesWithPaginationQueryHandler> logger, IMapper mapper, IObjectiveTypeRepository repository, IUnitOfWork unitOfWork)
+
+    public GetAllObjectiveTypesWithPaginationQueryHandler(
+        ILogger<GetAllObjectiveTypesWithPaginationQueryHandler> logger, IMapper mapper,
+        IObjectiveTypeRepository repository, IUnitOfWork unitOfWork)
     {
         _logger = logger;
         _mapper = mapper;
         _repository = repository;
         _unitOfWork = unitOfWork;
     }
-    
-    public async Task<Result<PaginationModel<ResponseTypeDto>>> Handle(GetAllObjectiveTypesWithPaginationQuery request, CancellationToken cancellationToken)
+
+    public async Task<Result<PaginationModel<ResponseTypeDto>>> Handle(GetAllObjectiveTypesWithPaginationQuery request,
+        CancellationToken cancellationToken)
     {
         _logger.LogInformation("Get all objective types with pagination has been requested");
-        var (types, total) = await _repository.GetAllWithPagination(request.pageSize, (request.pageNum - 1) * request.pageSize, cancellationToken);
+        var (types, total) = await _repository.GetAllWithPagination(request.pageSize,
+            (request.pageNum - 1) * request.pageSize, cancellationToken);
         var response = new List<ResponseTypeDto>();
-        
+
         await foreach (var objectiveType in types)
         {
-            response.Add(new ResponseTypeDto() { Id = objectiveType.Id, Title = objectiveType.TypeTitle.Title });
+            response.Add(new ResponseTypeDto()
+            {
+                Id = objectiveType.Id, Title = objectiveType.TypeTitle.Title,
+                Description =
+                    objectiveType.TypeTitle.Title ==
+                    ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value
+                        ? "Individual"
+                        : "Team"
+            });
         }
 
         var result = new PaginationModel<ResponseTypeDto>(total, response, request.pageNum, request.pageSize);
