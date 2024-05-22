@@ -23,31 +23,40 @@ namespace Application.Objectives.GetObjective
         private readonly ILogger<GetObjectiveQueryHandler> _logger;
         private readonly IMapper _mapper;
 
-        public GetObjectiveQueryHandler(IObjectiveRepository objectiveRepository, ILogger<GetObjectiveQueryHandler> logger, IMapper mapper)
+        public GetObjectiveQueryHandler(IObjectiveRepository objectiveRepository,
+            ILogger<GetObjectiveQueryHandler> logger, IMapper mapper)
         {
             _repository = objectiveRepository;
             _logger = logger;
             _mapper = mapper;
         }
 
-        public async Task<Result<GetObjectiveResponseDto>> Handle(GetObjectiveQuery request, CancellationToken cancellationToken)
+        public async Task<Result<GetObjectiveResponseDto>> Handle(GetObjectiveQuery request,
+            CancellationToken cancellationToken)
         {
             Objective? objective = null;
 
-            _logger.LogInformation("Get objective with Id = {objectiveId} by {userRole} has been requested", request.objectiveId, request.userRole);
+            _logger.LogInformation("Get objective with Id = {objectiveId} by {userRole} has been requested",
+                request.objectiveId, request.userRole);
 
             if (RoleNameVariations.GetValue(RoleNameVariations.Customer).Value == request.userRole)
             {
-                objective = await _repository.GetByExpressionWithIncludesAsync(obj => obj.Id == request.objectiveId && obj.CreatorId == request.userId, cancellationToken);
+                objective = await _repository.GetByExpressionWithIncludesAsync(
+                    obj => obj.Id == request.objectiveId && obj.CreatorId == request.userId, cancellationToken,
+                    objective => objective.Type, objective => objective.Categories);
             }
             else if (RoleNameVariations.GetValue(RoleNameVariations.Implementer).Value == request.userRole)
             {
-                objective = await _repository.GetByExpressionWithIncludesAsync(obj => obj.Id == request.objectiveId && (obj.Implementors.Any(imp => imp.Id == request.userId) || !obj.Implementors.Any()), cancellationToken);
+                objective = await _repository.GetByExpressionWithIncludesAsync(
+                    obj => obj.Id == request.objectiveId && (obj.Implementors.Any(imp => imp.Id == request.userId) ||
+                                                             !obj.Implementors.Any()), cancellationToken,
+                    objective => objective.Type, objective => objective.Categories);
             }
 
             if (objective is null)
             {
-                return ResponseHelper.LogAndReturnError<GetObjectiveResponseDto>("No objective found", new Error("Objective GetObjective.GetObjectiveQueryHandler", "No objective found", 500));
+                return ResponseHelper.LogAndReturnError<GetObjectiveResponseDto>("No objective found",
+                    new Error("Objective GetObjective.GetObjectiveQueryHandler", "No objective found", 500));
             }
 
             var result = _mapper.Map<GetObjectiveResponseDto>(objective);
