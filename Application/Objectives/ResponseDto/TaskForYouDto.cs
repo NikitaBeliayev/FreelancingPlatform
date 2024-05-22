@@ -21,5 +21,6 @@ namespace Application.Objectives.ResponseDto
         public ICollection<CategoryDto> Tags { get; set; }
         public ResponseTypeDto Type { get; set; }
         public DateTime Deadline { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
