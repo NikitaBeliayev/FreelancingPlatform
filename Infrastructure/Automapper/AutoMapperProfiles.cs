@@ -91,7 +91,12 @@ namespace Infrastructure.Automapper
                 //mapping between objective type and all response dto
                 CreateMap<ObjectiveType, ResponseTypeDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.TypeTitle.Title));
+                    .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.TypeTitle.Title))
+                    .ForMember(dest => dest.Description,
+                        opt => opt.MapFrom(src =>
+                            src.TypeTitle.Title == ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Team).Value
+                                ? "Team description"
+                                : "Individual description"));
 
                 CreateMap<TypeDto, ObjectiveType>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -130,7 +135,13 @@ namespace Infrastructure.Automapper
                         }))
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new ResponseTypeDto
-                            { Id = src.Type.Id, Title = src.Type.TypeTitle.Title }))
+                        {
+                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title,
+                            Description = (src.Type.TypeTitle.Title ==
+                                           ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value
+                                ? "Individual description"
+                                : "Team description")
+                        }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
 
                 //mapping between objective and ojective create dto
@@ -160,9 +171,14 @@ namespace Infrastructure.Automapper
                             src.Categories.Select(t => new CategoryDto { Id = t.Id, Title = t.Title.Value })))
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new ResponseTypeDto
-                            { Id = src.Type.Id, Title = src.Type.TypeTitle.Title }))
-                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta))
-                    .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+                        {
+                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title, Description =
+                                src.Type.TypeTitle.Title ==
+                                ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value
+                                    ? "Individual description"
+                                    : "Team description"
+                        }))
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
 
                 CreateMap<Objective, GetObjectiveResponseDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -175,7 +191,14 @@ namespace Infrastructure.Automapper
                             src.Categories.Select(t => new CategoryDto { Id = t.Id, Title = t.Title.Value })))
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new ResponseTypeDto
-                            { Id = src.Type.Id, Title = src.Type.TypeTitle.Title }))
+                        {
+                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title,
+                            Description =
+                                src.Type.TypeTitle.Title == ObjectiveTypeVariations
+                                    .GetValue(ObjectiveTypeVariations.Individual).Value
+                                    ? "Individual description"
+                                    : "Team description"
+                        }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta))
                     .ForMember(dest => dest.Creator,
                         opt => opt.MapFrom(src => new UserDto
