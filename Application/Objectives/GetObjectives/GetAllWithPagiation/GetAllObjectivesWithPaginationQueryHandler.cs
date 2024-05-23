@@ -33,7 +33,7 @@ namespace Application.Objectives.GetObjectives.GetAllWithPagiation
             if (!objectives.Any())
             {
                 return ResponseHelper.LogAndReturnError<PaginationModel<ResponseObjectiveDto>>("No objectives found",
-                    new Error("Objective GetObjectives.GetAllWithPagiation.GetAllObjectivesWithPaginationQueryHandler",
+                    new Error(typeof(GetAllObjectivesWithPaginationQueryHandler).Namespace!,
                         "No objectives found", 422));
             }
 

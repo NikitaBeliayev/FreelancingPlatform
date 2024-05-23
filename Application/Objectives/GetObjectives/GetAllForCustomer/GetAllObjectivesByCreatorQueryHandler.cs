@@ -28,7 +28,7 @@ namespace Application.Objectives.GetObjectives.GetAllForCustomer
             var (objectives, total) = await _repository.GetByCreatorIdWithPagination(request.CreatorId, request.PageSize, (request.PageNum - 1) * request.PageSize, cancellationToken);
             if (!objectives.Any())
             {
-                return ResponseHelper.LogAndReturnError<PaginationModel<ResponseObjectiveDto>>("No objectives found", new Error("Objective GetObjectives.GetAllForCustomer.GetAllObjectivesByCreatorQueryHandler", "No objectives found", 500));
+                return ResponseHelper.LogAndReturnError<PaginationModel<ResponseObjectiveDto>>("No objectives found", new Error(typeof(GetAllObjectivesByCreatorCommandHandler).Namespace!, "No objectives found", 500));
             }
 
             var objectiveDtos = objectives.Select(_mapper.Map<ResponseObjectiveDto>);

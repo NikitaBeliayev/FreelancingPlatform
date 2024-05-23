@@ -36,7 +36,7 @@ public class GetByIdQueryHandler : IQueryHandler<GetByIdQuery, ResponseTypeDto>
         }
         
         _logger.LogError("There are no type with id {id}", request.Id);
-        ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type not found", new Error("", "", 404));
+        ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type not found", new Error(typeof(GetByIdQueryHandler).Namespace!, "", 404));
 
         return Result<ResponseTypeDto>.Success(_mapper.Map<ResponseTypeDto>(result));
     }

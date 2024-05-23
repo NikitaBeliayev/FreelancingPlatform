@@ -42,7 +42,7 @@ public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjective
         if (possibleType is null)
         {
             _logger.LogError("Type with id {id} not found", requestDto.Id);
-            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type not found", new Error("", "", 404));
+            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type not found", new Error(typeof(UpdateObjectiveTypeCommandHandler).Namespace!, "", 404));
         }
 
 
