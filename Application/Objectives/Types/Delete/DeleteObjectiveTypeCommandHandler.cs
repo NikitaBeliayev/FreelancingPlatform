@@ -33,7 +33,7 @@ public class DeleteObjectiveTypeCommandHandler : ICommandHandler<DeleteObjective
         if (possibleObjectiveType is null)
         {
             _logger.LogError("Type with id {id} not found", request.Id);
-            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type not found", new Error("", "", 404));
+            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type not found", new Error(typeof(DeleteObjectiveTypeCommandHandler).Namespace!, "", 404));
         }
 
         _typeRepository.Delete(possibleObjectiveType);

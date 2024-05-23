@@ -6,6 +6,7 @@ using AutoMapper;
 using Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Shared;
+using System.Runtime.CompilerServices;
 
 namespace Application.Objectives.GetObjectives.GetAssignedTasksForImplementor
 {
@@ -29,7 +30,7 @@ namespace Application.Objectives.GetObjectives.GetAssignedTasksForImplementor
 
             if (!objectives.Any())
             {
-                return ResponseHelper.LogAndReturnError<PaginationModel<TaskForYouDto>>("No objectives found", new Error("Objective GetObjectives.GetAssignedTasksForImplementor.GetAssignedTasksForImplementorQueryHandler", "No objectives found", 500));
+                return ResponseHelper.LogAndReturnError<PaginationModel<TaskForYouDto>>("No objectives found", new Error(typeof(GetAssignedTasksForImplementorQueryHandler).Namespace!, "No objectives found", 500));
             }
 
             var objectiveDtos = objectives.Select(_mapper.Map<TaskForYouDto>);

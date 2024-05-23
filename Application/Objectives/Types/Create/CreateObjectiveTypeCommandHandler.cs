@@ -42,7 +42,7 @@ public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjective
         if (possibleObjectiveType is not null)
         {
             _logger.LogError("Type with title {title} already exists", titleBuildResult.Value);
-            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type with this title already exists", new Error("", "", 400));
+            return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Type with this title already exists", new Error(typeof(CreateObjectiveTypeCommandHandler).Namespace!, "", 400));
         }
 
         var createdObjectiveType = await _typeRepository.CreateAsync(new ObjectiveType(typeDto.Id,
