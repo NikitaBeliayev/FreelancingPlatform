@@ -20,15 +20,16 @@ namespace Infrastructure.Authentication
             this._logger = logger;
         }
 
-        public JwtCredentials GenerateCredentials(Guid userId, string email, IEnumerable<string> roles)
+        public JwtCredentials GenerateCredentials(Guid userId, string email, IEnumerable<string> roles, IEnumerable<string> roleIds)
         {
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, email),
-            };
+			};
 
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+            claims.AddRange(roleIds.Select(roleId => new Claim("roleId", roleId)));
 
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),

@@ -71,7 +71,7 @@ namespace Application.Users.RefreshToken
             }
 
             JwtCredentials jwtCredentials = _jwtProvider.GenerateCredentials(possibleUser.Id, possibleUser.Email.Value,
-                possibleUser.Roles.Select(r => r.Name.Value));
+                possibleUser.Roles.Select(r => r.Name.Value), possibleUser.Roles.Select(r => r.Id.ToString()));
 
 
             _logger.LogInformation("User with Id = {Id} successfully refreshed token", possibleUser.Id);

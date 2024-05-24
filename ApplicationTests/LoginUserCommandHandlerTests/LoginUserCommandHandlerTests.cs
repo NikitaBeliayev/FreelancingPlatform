@@ -97,7 +97,7 @@ public class LoginUserCommandHandlerTests
             It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()), Times.Once);
         _hashProviderMock.Verify(hp => hp.GetHash(It.IsAny<string>()), Times.Exactly(2));
         _jwtProviderMock.Verify(jwt => jwt.GenerateCredentials(It.IsAny<Guid>(), It.IsAny<string>(),
-            It.IsAny<IEnumerable<string>>()), Times.Once);
+            It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Once);
     }
     
     
@@ -128,7 +128,7 @@ public class LoginUserCommandHandlerTests
             It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()), Times.Never);
         _hashProviderMock.Verify(hp => hp.GetHash(It.IsAny<string>()), Times.Never);
         _jwtProviderMock.Verify(jwt => jwt.GenerateCredentials(It.IsAny<Guid>(), It.IsAny<string>(),
-            It.IsAny<IEnumerable<string>>()), Times.Never);
+            It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Never);
     }
     
     [Test]
@@ -163,7 +163,7 @@ public class LoginUserCommandHandlerTests
             It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()), Times.Once);
         _hashProviderMock.Verify(hp => hp.GetHash(It.IsAny<string>()), Times.Never);
         _jwtProviderMock.Verify(jwt => jwt.GenerateCredentials(It.IsAny<Guid>(), It.IsAny<string>(),
-            It.IsAny<IEnumerable<string>>()), Times.Never);
+            It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Never);
     }
     
     [Test]
@@ -218,7 +218,7 @@ public class LoginUserCommandHandlerTests
             It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()), Times.Once);
         _hashProviderMock.Verify(hp => hp.GetHash(It.IsAny<string>()), Times.Never);
         _jwtProviderMock.Verify(jwt => jwt.GenerateCredentials(It.IsAny<Guid>(), It.IsAny<string>(),
-            It.IsAny<IEnumerable<string>>()), Times.Never);
+            It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Never);
     }
     
     [Test]
@@ -275,7 +275,7 @@ public class LoginUserCommandHandlerTests
             It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<User, object>>[]>()), Times.Once);
         _hashProviderMock.Verify(hp => hp.GetHash(It.IsAny<string>()), Times.Once);
         _jwtProviderMock.Verify(jwt => jwt.GenerateCredentials(It.IsAny<Guid>(), It.IsAny<string>(),
-            It.IsAny<IEnumerable<string>>()), Times.Never);
+            It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Never);
     }
     
 }
