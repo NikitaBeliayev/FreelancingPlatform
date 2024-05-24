@@ -70,7 +70,7 @@ public class LoginUserCommandHandler : ICommandHandler<LoginUserCommand, UserLog
         }
 
         JwtCredentials jwtCredentials = _jwtProvider.GenerateCredentials(possibleUser.Id, possibleUser.Email.Value, 
-            possibleUser.Roles.Select(r => r.Name.Value));
+            possibleUser.Roles.Select(r => r.Name.Value), possibleUser.Roles.Select(r => r.Id.ToString()));
 
         _logger.LogInformation("User with Id = {id} successfully logged in", possibleUser.Id);
         return Result<UserLoginResponseDto>.Success(_mappper.Map<UserLoginResponseDto>(
