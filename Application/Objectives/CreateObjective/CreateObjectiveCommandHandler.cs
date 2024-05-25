@@ -71,6 +71,12 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
             _logger.LogError("Error: Invalid type, {Code}: {Mesage}", typeResult.Error.Code, typeResult.Error.Message);
             return Result<SimpleResponseObjectiveDto>.Failure(null, typeResult.Error);
         }
+
+        var objectiveDeadlineResult = ObjectiveDeadline.BuildName(request.RequestDto.Deadline);
+        if (!objectiveDeadlineResult.IsSuccess)
+        {
+	        return Result<SimpleResponseObjectiveDto>.Failure(null, objectiveDeadlineResult.Error);
+        }
         
         var creator = await _userRepository.GetByIdAsync(request.RequestDto.Creator.Id, cancellationToken);
         if (creator is null)
@@ -147,7 +153,7 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
             creator: null,
             creatorPublicContacts: request.RequestDto.CreatorPublicContacts,
             typeId: request.RequestDto.Type.Id,
-            eta: request.RequestDto.Deadline);
+            deadline: objectiveDeadlineResult.Value);
         
         
         await _objectiveRepository.CreateAsync(objective, cancellationToken); 

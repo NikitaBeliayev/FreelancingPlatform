@@ -10,7 +10,6 @@ namespace Domain.Objectives;
 
 public class Objective : Entity
 {
-	private DateTime _eta;
 	public ObjectiveTitle Title { get; set; }
 	public ObjectiveDescription Description { get; set; }
 	public Payment Payment { get; set; }
@@ -32,11 +31,7 @@ public class Objective : Entity
 	/// <summary>
 	/// The estimated time of arrival
 	/// </summary>
-	public DateTime Eta //change this to Wrapper
-	{
-		get => _eta;
-		set => _eta = value < DateTime.Now.AddDays(1) ? throw new ArgumentException("ETA must be at least +1 day from now") : value;
-	}
+	public ObjectiveDeadline Deadline { get; set; }
 	
 	public Objective(Guid id) : base(id)
 	{
@@ -44,7 +39,7 @@ public class Objective : Entity
 	}
 	public Objective(Guid id, ObjectiveTitle title, ObjectiveDescription description, Payment payment, decimal paymentAmount, 
 		ObjectiveStatus objectiveStatus, ICollection<Category> categories, ObjectiveType type, byte[] attachments, Guid paymentId,
-		Guid objectiveStatusId, Guid creatorId, User creator, string creatorPublicContacts, Guid typeId, DateTime eta) : base(id)
+		Guid objectiveStatusId, Guid creatorId, User creator, string creatorPublicContacts, Guid typeId, ObjectiveDeadline deadline) : base(id)
 	{
 		Id = id;
 		Title = title;
@@ -61,6 +56,6 @@ public class Objective : Entity
 		Creator = creator;
 		CreatorPublicContacts = creatorPublicContacts;
 		TypeId = typeId;
-		Eta = eta;
+		Deadline = deadline;
 	}
 }

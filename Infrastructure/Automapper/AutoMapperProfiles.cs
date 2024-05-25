@@ -135,7 +135,7 @@ namespace Infrastructure.Automapper
                         {
                             Id = src.Type.Id, Title = src.Type.TypeTitle.Title, Description = src.Type.Description
                         }))
-                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Deadline.Value));
 
                 //mapping between objective and ojective create dto
                 CreateMap<Objective, ObjectiveCreateDto>()
@@ -151,7 +151,7 @@ namespace Infrastructure.Automapper
                         opt => opt.MapFrom(src => new SimpleUserResponseDto { Id = src.Creator.Id }))
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new SimpleResponseTypeDto { Id = src.Type.Id }))
-                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Deadline.Value));
 
                 CreateMap<Objective, TaskForYouDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -167,7 +167,7 @@ namespace Infrastructure.Automapper
                         {
                             Id = src.Type.Id, Title = src.Type.TypeTitle.Title, Description = src.Type.Description
                         }))
-                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Deadline.Value));
 
                 CreateMap<Objective, GetObjectiveResponseDto>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -183,7 +183,7 @@ namespace Infrastructure.Automapper
                         {
                             Id = src.Type.Id, Title = src.Type.TypeTitle.Title, Description = src.Type.Description
                         }))
-                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta))
+                    .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Deadline.Value))
                     .ForMember(dest => dest.Creator,
                         opt => opt.MapFrom(src => new UserDto
                         {

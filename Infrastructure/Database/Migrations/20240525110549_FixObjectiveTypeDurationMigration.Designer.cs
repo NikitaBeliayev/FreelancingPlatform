@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525110549_FixObjectiveTypeDurationMigration")]
+    partial class FixObjectiveTypeDurationMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,12 +116,12 @@ namespace Infrastructure.Database.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("Eta")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ObjectiveStatusId")
                         .HasColumnType("uuid");
@@ -320,7 +323,7 @@ namespace Infrastructure.Database.Migrations
                             CommunicationChannelId = new Guid("dae98ace-7c5b-c3d6-df29-29543a9af92d"),
                             ConfirmationToken = new Guid("9f07d2ac-6009-405d-b329-c517bcc5ef67"),
                             IsConfirmed = true,
-                            LastEmailSentAt = new DateTime(2024, 5, 25, 11, 27, 16, 240, DateTimeKind.Utc).AddTicks(1299),
+                            LastEmailSentAt = new DateTime(2024, 5, 25, 11, 5, 49, 561, DateTimeKind.Utc).AddTicks(5549),
                             UserId = new Guid("d3b8c19b-5d8b-492c-914a-b1b0fa5370ca")
                         },
                         new
@@ -329,7 +332,7 @@ namespace Infrastructure.Database.Migrations
                             CommunicationChannelId = new Guid("dae98ace-7c5b-c3d6-df29-29543a9af92d"),
                             ConfirmationToken = new Guid("6f189094-f7e2-4e40-8d8b-c45054be7b96"),
                             IsConfirmed = true,
-                            LastEmailSentAt = new DateTime(2024, 5, 25, 11, 27, 16, 240, DateTimeKind.Utc).AddTicks(1310),
+                            LastEmailSentAt = new DateTime(2024, 5, 25, 11, 5, 49, 561, DateTimeKind.Utc).AddTicks(5559),
                             UserId = new Guid("88755139-42b8-415b-84df-04c639d9b47a")
                         },
                         new
@@ -338,7 +341,7 @@ namespace Infrastructure.Database.Migrations
                             CommunicationChannelId = new Guid("dae98ace-7c5b-c3d6-df29-29543a9af92d"),
                             ConfirmationToken = new Guid("c24652bd-00bd-48b7-b5e2-59f0094f1e2e"),
                             IsConfirmed = true,
-                            LastEmailSentAt = new DateTime(2024, 5, 25, 11, 27, 16, 240, DateTimeKind.Utc).AddTicks(1313),
+                            LastEmailSentAt = new DateTime(2024, 5, 25, 11, 5, 49, 561, DateTimeKind.Utc).AddTicks(5562),
                             UserId = new Guid("3dc1e776-0e75-4577-ab99-ed85ba86fec5")
                         });
                 });

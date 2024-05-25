@@ -37,6 +37,14 @@ public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjective
             _logger.LogInformation("Invalid title {title} for updating type with id: {id}", requestDto.Title, requestDto.Id);
             return ResponseHelper.LogAndReturnError<ResponseTypeDto>("Invalid title", typeTitleResult.Error);
         }
+
+        var objectiveTypeDurationResult = ObjectiveTypeDuration.BuildObjectiveTypeDuration(request.RequestDto.Duration);
+        if (!objectiveTypeDurationResult.IsSuccess)
+        {
+            return Result<ResponseTypeDto>.Failure(null,
+                new Error(typeof(UpdateObjectiveTypeCommandHandler).Namespace!,
+                    "Duration must be more or equal to 8 hours", 422));
+        }
         
         var possibleType = await _typeRepository.GetByIdAsync(requestDto.Id, cancellationToken);
         if (possibleType is null)
@@ -47,7 +55,7 @@ public class UpdateObjectiveTypeCommandHandler : ICommandHandler<UpdateObjective
 
 
         possibleType.TypeTitle = typeTitleResult.Value!;
-        possibleType.Duration = requestDto.Duration;
+        possibleType.Duration = objectiveTypeDurationResult.Value;
         
         _typeRepository.Update(possibleType);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
