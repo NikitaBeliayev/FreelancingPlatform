@@ -34,7 +34,7 @@ namespace Application.Objectives.GetObjectives.GetAllWithPagiation
             {
                 return ResponseHelper.LogAndReturnError<PaginationModel<ResponseObjectiveDto>>("No objectives found",
                     new Error(typeof(GetAllObjectivesWithPaginationQueryHandler).Namespace!,
-                        "No objectives found", 422));
+                        "No objectives found", 200));
             }
 
             var objectiveDtos = objectives.Select(_mapper.Map<ResponseObjectiveDto>);
