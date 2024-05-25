@@ -93,10 +93,7 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                     .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.TypeTitle.Title))
                     .ForMember(dest => dest.Description,
-                        opt => opt.MapFrom(src =>
-                            src.TypeTitle.Title == ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Team).Value
-                                ? "Team description"
-                                : "Individual description"));
+                        opt => opt.MapFrom(src => src.Description));
 
                 CreateMap<TypeDto, ObjectiveType>()
                     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -136,11 +133,7 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new ResponseTypeDto
                         {
-                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title,
-                            Description = (src.Type.TypeTitle.Title ==
-                                           ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value
-                                ? "Individual description"
-                                : "Team description")
+                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title, Description = src.Type.Description
                         }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
 
@@ -172,11 +165,7 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new ResponseTypeDto
                         {
-                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title, Description =
-                                src.Type.TypeTitle.Title ==
-                                ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value
-                                    ? "Individual description"
-                                    : "Team description"
+                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title, Description = src.Type.Description
                         }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta));
 
@@ -192,12 +181,7 @@ namespace Infrastructure.Automapper
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new ResponseTypeDto
                         {
-                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title,
-                            Description =
-                                src.Type.TypeTitle.Title == ObjectiveTypeVariations
-                                    .GetValue(ObjectiveTypeVariations.Individual).Value
-                                    ? "Individual description"
-                                    : "Team description"
+                            Id = src.Type.Id, Title = src.Type.TypeTitle.Title, Description = src.Type.Description
                         }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Eta))
                     .ForMember(dest => dest.Creator,

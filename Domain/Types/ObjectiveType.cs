@@ -7,16 +7,18 @@ public class ObjectiveType : Entity
 {
 	private int _duration;
 	private DateTime _eta;
+	public string Description { get; set; } = string.Empty;
 
 	public ObjectiveType(Guid id) : base(id)
 	{
 	}
 
-	public ObjectiveType(Guid id, ICollection<Objective> tasks, ObjectiveTypeTitle typeTitle,int duration) : base(id)
+	public ObjectiveType(Guid id, ICollection<Objective> tasks, ObjectiveTypeTitle typeTitle,int duration, string description) : base(id)
 	{
 		Objectives = tasks;
 		TypeTitle = typeTitle;
 		Duration = duration;
+		Description = description;
 	}
 
 

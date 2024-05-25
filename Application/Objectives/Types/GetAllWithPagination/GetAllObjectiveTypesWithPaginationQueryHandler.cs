@@ -45,11 +45,7 @@ public class GetAllObjectiveTypesWithPaginationQueryHandler : IQueryHandler<GetA
             response.Add(new ResponseTypeDto()
             {
                 Id = objectiveType.Id, Title = objectiveType.TypeTitle.Title,
-                Description =
-                    objectiveType.TypeTitle.Title ==
-                    ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value
-                        ? "Individual"
-                        : "Team"
+                Description = objectiveType.Description
             });
         }
 
