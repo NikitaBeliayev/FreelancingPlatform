@@ -27,11 +27,13 @@ namespace Infrastructure.Database.Configuration
                 new ObjectiveType(new Guid("2247d42d-a645-bc96-0b4b-944db2a8b519"),
                     new List<Objective>(),
                     (ObjectiveTypeTitle)privateConstructor.Invoke(new object[]
-                        { ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value! }), 8),
+                        { ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Individual).Value! }), 8,
+                    "Longer term or complex initiatives (ex. design and build a full website)"),
                 new ObjectiveType(new Guid("a28f84ac-f428-a29b-b8a5-fbd76596817d"),
                     new List<Objective>(),
                     (ObjectiveTypeTitle)privateConstructor.Invoke(new object[]
-                        { ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Team).Value! }), 8)
+                        { ObjectiveTypeVariations.GetValue(ObjectiveTypeVariations.Team).Value! }), 8,
+                    "Longer term or complex initiatives (ex. design and build a full website)")
             });
 
             builder.Property(e => e.TypeTitle)

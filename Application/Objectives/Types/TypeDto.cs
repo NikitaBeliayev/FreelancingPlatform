@@ -4,4 +4,5 @@ public class TypeDto
 	public Guid Id { get; set; }
 	public string TypeTitle { get; set; }
 	public int Duration { get; set; }
+	public string Description { get; set; }
 }

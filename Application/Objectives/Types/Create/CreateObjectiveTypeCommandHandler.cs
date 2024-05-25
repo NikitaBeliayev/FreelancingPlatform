@@ -47,7 +47,7 @@ public class CreateObjectiveTypeCommandHandler : ICommandHandler<CreateObjective
 
         var createdObjectiveType = await _typeRepository.CreateAsync(new ObjectiveType(typeDto.Id,
             new List<Objective>(),
-            titleBuildResult.Value!, typeDto.Duration), cancellationToken); //plug to compile
+            titleBuildResult.Value!, typeDto.Duration, ""), cancellationToken); //plug to compile
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Created user with Id = {Id}", createdObjectiveType.Id);
