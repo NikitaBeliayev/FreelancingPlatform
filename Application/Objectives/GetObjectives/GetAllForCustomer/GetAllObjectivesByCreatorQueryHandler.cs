@@ -34,7 +34,7 @@ namespace Application.Objectives.GetObjectives.GetAllForCustomer
             if (!objectives.Any())
             {
                 return ResponseHelper.LogAndReturnError<PaginationModel<ResponseObjectiveDto>>("No objectives found",
-                    new Error(typeof(GetAllObjectivesByCreatorCommandHandler).Namespace!, "No objectives found", 500));
+                    new Error(typeof(GetAllObjectivesByCreatorCommandHandler).Namespace!, "No objectives found", 200));
             }
 
             var objectiveDtos = objectives.Select(_mapper.Map<ResponseObjectiveDto>);

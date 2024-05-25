@@ -37,7 +37,7 @@ namespace Application.Objectives.GetObjectives.GetAssignedTasksForImplementor
             {
                 return ResponseHelper.LogAndReturnError<PaginationModel<TaskForYouDto>>("No objectives found",
                     new Error(typeof(GetAssignedTasksForImplementorQueryHandler).Namespace!, "No objectives found",
-                        500));
+                        200));
             }
 
             var objectiveDtos = objectives.Select(_mapper.Map<TaskForYouDto>);

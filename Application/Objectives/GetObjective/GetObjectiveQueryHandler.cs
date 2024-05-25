@@ -56,7 +56,7 @@ namespace Application.Objectives.GetObjective
             if (objective is null)
             {
                 return ResponseHelper.LogAndReturnError<GetObjectiveResponseDto>("No objective found",
-                    new Error(typeof(GetObjectiveQueryHandler).Namespace!, "No objective found", 500));
+                    new Error(typeof(GetObjectiveQueryHandler).Namespace!, "No objective found", 422));
             }
 
             var result = _mapper.Map<GetObjectiveResponseDto>(objective);
