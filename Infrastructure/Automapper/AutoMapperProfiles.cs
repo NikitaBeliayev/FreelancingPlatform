@@ -147,8 +147,6 @@ namespace Infrastructure.Automapper
                         opt => opt.MapFrom(src =>
                             src.Categories.Select(t => new SimpleCategoryResponseDto { Id = t.Id })))
                     .ForMember(dest => dest.CreatorPublicContacts, opt => opt.MapFrom(src => src.CreatorPublicContacts))
-                    .ForMember(dest => dest.Creator,
-                        opt => opt.MapFrom(src => new SimpleUserResponseDto { Id = src.Creator.Id }))
                     .ForMember(dest => dest.Type,
                         opt => opt.MapFrom(src => new SimpleResponseTypeDto { Id = src.Type.Id }))
                     .ForMember(dest => dest.Deadline, opt => opt.MapFrom(src => src.Deadline.Value));

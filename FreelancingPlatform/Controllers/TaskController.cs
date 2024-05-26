@@ -27,7 +27,7 @@ public class TaskController : ControllerBase
     [Authorize(Roles = "Admin,Customer")]
     public async Task<IActionResult> Create([FromBody] ObjectiveCreateDto requestDto, CancellationToken cancellationToken = default)
     {
-        var command = new CreateObjectiveCommand(requestDto);
+        var command = new CreateObjectiveCommand(requestDto, Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         var result = await _sender.Send(command, cancellationToken);
         return new ObjectResult(result);
     }
