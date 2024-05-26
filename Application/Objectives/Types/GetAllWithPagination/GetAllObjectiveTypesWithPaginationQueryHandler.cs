@@ -2,11 +2,15 @@
 using System.Numerics;
 using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
+using Application.Helpers;
 using Application.Models;
+using Application.Objectives.GetObjective;
+using Application.Objectives.ResponseDto;
 using Application.Objectives.Types.GetById;
 using Application.Objectives.Types.ResponseDto;
 using AutoMapper;
 using Domain.Categories;
+using Domain.Objectives;
 using Domain.Repositories;
 using Domain.Types;
 using Microsoft.Extensions.Logging;
@@ -36,6 +40,13 @@ public class GetAllObjectiveTypesWithPaginationQueryHandler : IQueryHandler<GetA
         CancellationToken cancellationToken)
     {
         _logger.LogInformation("Get all objective types with pagination has been requested");
+
+        if (request.pageNum <= 0)
+        {
+            return ResponseHelper.LogAndReturnError<PaginationModel<ResponseTypeDto>>("The page number must be greater than 0",
+                new Error(typeof(GetAllObjectiveTypesWithPaginationQueryHandler).Namespace!, "The page number must be greater than 0", 400));
+        }
+
         var (types, total) = await _repository.GetAllWithPagination(request.pageSize,
             (request.pageNum - 1) * request.pageSize, cancellationToken);
         var response = new List<ResponseTypeDto>();

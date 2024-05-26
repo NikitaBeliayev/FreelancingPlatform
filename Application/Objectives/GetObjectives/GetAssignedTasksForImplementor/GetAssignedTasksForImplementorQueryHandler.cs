@@ -1,6 +1,7 @@
 ﻿using Application.Abstraction.Messaging;
 using Application.Helpers;
 using Application.Models;
+using Application.Objectives.GetObjectives.GetAllWithPagiation;
 using Application.Objectives.ResponseDto;
 using AutoMapper;
 using Domain.Repositories;
@@ -30,6 +31,13 @@ namespace Application.Objectives.GetObjectives.GetAssignedTasksForImplementor
             CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get all assigned tasks for implementor has been requested");
+
+            if (request.PageNum <= 0)
+            {
+                return ResponseHelper.LogAndReturnError<PaginationModel<TaskForYouDto>>("The page number must be greater than 0",
+                    new Error(typeof(GetAssignedTasksForImplementorQueryHandler).Namespace!, "The page number must be greater than 0", 400));
+            }
+
             var (objectives, total) = await _repository.GetByImplementorIdWithPagination(request.ImplementorId,
                 request.PageSize, (request.PageNum - 1) * request.PageSize, cancellationToken);
 

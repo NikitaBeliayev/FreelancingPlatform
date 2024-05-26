@@ -2,6 +2,8 @@
 using Application.Helpers;
 using Application.Models;
 using Application.Objectives.ResponseDto;
+using Application.Objectives.Types.GetByIdWithPagination;
+using Application.Objectives.Types.ResponseDto;
 using AutoMapper;
 using Domain.Repositories;
 using Microsoft.Extensions.Logging;
@@ -29,6 +31,13 @@ namespace Application.Objectives.GetObjectives.GetAllForCustomer
             CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get all objectives by creator has been requested");
+
+            if (request.PageNum <= 0)
+            {
+                return ResponseHelper.LogAndReturnError<PaginationModel<ResponseObjectiveDto>>("The page number must be greater than 0",
+                    new Error(typeof(GetAllObjectivesByCreatorCommandHandler).Namespace!, "The page number must be greater than 0", 400));
+            }
+
             var (objectives, total) = await _repository.GetByCreatorIdWithPagination(request.CreatorId,
                 request.PageSize, (request.PageNum - 1) * request.PageSize, cancellationToken);
             if (!objectives.Any())

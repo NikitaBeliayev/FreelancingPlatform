@@ -17,8 +17,8 @@ namespace Application.Models
         {
             Total = total;
             Results = results;
-            Next = total > pageSize * page ? $"?pageNum={page + 1}&pageSize={pageSize}" : null;
-            Previous = page > 1 ? $"?pageNum={page - 1}&pageSize={pageSize}" : null;
+            Next = total > pageSize * page ? $"?PageNum={page + 1}&pageSize={pageSize}" : null;
+            Previous = page > 1 ? $"?PageNum={page - 1}&pageSize={pageSize}" : null;
         }
     }
 }
