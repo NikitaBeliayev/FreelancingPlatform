@@ -6,6 +6,8 @@ using Application.Models;
 using Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Shared;
+using Application.Objectives.Types.GetByIdWithPagination;
+using Application.Objectives.Types.ResponseDto;
 
 namespace Application.Objectives.GetObjectives.GetAllWithPagiation
 {
@@ -28,6 +30,13 @@ namespace Application.Objectives.GetObjectives.GetAllWithPagiation
             GetAllObjectivesWithPaginationQuery request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Get all objective types with pagination has been requested");
+
+            if (request.PageNum <= 0)
+            {
+                return ResponseHelper.LogAndReturnError<PaginationModel<ResponseObjectiveDto>>("The page number must be greater than 0",
+                    new Error(typeof(GetAllObjectivesWithPaginationQueryHandler).Namespace!, "The page number must be greater than 0", 400));
+            }
+
             var (objectives, total) = await _repository.GetAllForImplementorWithPagination(request.PageSize,
                 (request.PageNum - 1) * request.PageSize, cancellationToken);
             if (!objectives.Any())
