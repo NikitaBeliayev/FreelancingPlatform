@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Automapper;
+using Infrastructure.Automapper.Profiles;
 
 namespace FreelancingPlatform.Extensions
 {
@@ -6,7 +7,7 @@ namespace FreelancingPlatform.Extensions
     {
         public static IServiceCollection AddCustomAutoMapper(this IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(AutoMapperProfiles));
+            services.AddAutoMapper(typeof(CategoryProfile), typeof(ObjectiveProfile), typeof(ObjectiveTypeProfile), typeof(PaymentProfile), typeof(RoleProfile), typeof(UserProfile));
             return services;
         }
     }
