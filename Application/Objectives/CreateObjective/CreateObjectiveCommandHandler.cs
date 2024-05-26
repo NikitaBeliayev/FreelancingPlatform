@@ -78,10 +78,10 @@ public class CreateObjectiveCommandHandler : ICommandHandler<CreateObjectiveComm
 	        return Result<SimpleResponseObjectiveDto>.Failure(null, objectiveDeadlineResult.Error);
         }
         
-        var creator = await _userRepository.GetByIdAsync(request.RequestDto.Creator.Id, cancellationToken);
+        var creator = await _userRepository.GetByIdAsync(request.CreatorId, cancellationToken);
         if (creator is null)
         {
-            var error = UserErrors.NotFound(request.RequestDto.Creator.Id);
+            var error = UserErrors.NotFound(request.CreatorId);
             _logger.LogError("Error: Invalid creator, {Code}: {Mesage}", error.Code, error.Message);
             return Result<SimpleResponseObjectiveDto>.Failure(null, error);
         }

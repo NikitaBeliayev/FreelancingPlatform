@@ -4,4 +4,4 @@ using Application.Objectives.ResponseDto;
 
 namespace Application.Objectives.CreateObjective;
 
-public record CreateObjectiveCommand(ObjectiveCreateDto RequestDto) : ICommand<SimpleResponseObjectiveDto>;
+public record CreateObjectiveCommand(ObjectiveCreateDto RequestDto, Guid CreatorId) : ICommand<SimpleResponseObjectiveDto>;
