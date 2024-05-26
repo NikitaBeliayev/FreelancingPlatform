@@ -1,6 +1,5 @@
 ﻿using Application.Abstraction;
 using Application.Abstraction.Data;
-using Application.Models;
 using Application.Models.Email;
 using Application.Users.Create;
 using Application.Users.Register;
@@ -14,7 +13,6 @@ using Domain.Users;
 using Domain.Users.Errors;
 using Domain.Users.UserDetails;
 using Infrastructure.Automapper;
-using Infrastructure.EmailProvider;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework.Legacy;
@@ -24,28 +22,28 @@ namespace ApplicationTests.RegisterUserCommandHandlerTests;
 [TestFixture]
 public class RegisterUserCommandHandlerTests
 {
-	private readonly Mock<IUserRepository> _userRepositoryMock = new();
-	private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-	private readonly Mock<ILogger<CreateUserCommandHandler>> _loggerMock = new();
-	private readonly Mock<IEmailProvider> _emailProviderMock = new();
-	private readonly Mock<IRoleRepository> _roleRepositoryMock = new();
-	private readonly Mock<ICommunicationChannelRepository> _communicationChannelRepositoryMock = new();
-	private readonly Mock<IUserCommunicationChannelRepository> _userCommunicationChannelRepositoryMock = new();
-	private Mapper _mapper;
-	private readonly Mock<IHashProvider> _hashProviderMock = new();
-	private RegisterUserCommandHandler _handler;
+    private readonly Mock<IUserRepository> _userRepositoryMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<ILogger<CreateUserCommandHandler>> _loggerMock = new();
+    private readonly Mock<IEmailProvider> _emailProviderMock = new();
+    private readonly Mock<IRoleRepository> _roleRepositoryMock = new();
+    private readonly Mock<ICommunicationChannelRepository> _communicationChannelRepositoryMock = new();
+    private readonly Mock<IUserCommunicationChannelRepository> _userCommunicationChannelRepositoryMock = new();
+    private Mapper _mapper;
+    private readonly Mock<IHashProvider> _hashProviderMock = new();
+    private RegisterUserCommandHandler _handler;
 
-	[SetUp]
-	public void SetUp()
-	{
-		MapperConfiguration configuration =
-			new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles.AutoMapperProfile>());
-		_mapper = new Mapper(configuration);
-		_handler = new RegisterUserCommandHandler(_userRepositoryMock.Object, _unitOfWorkMock.Object, _loggerMock.Object, _mapper, _emailProviderMock.Object,
-			_roleRepositoryMock.Object, _communicationChannelRepositoryMock.Object, _userCommunicationChannelRepositoryMock.Object, _hashProviderMock.Object);
-	}
+    [SetUp]
+    public void SetUp()
+    {
+        MapperConfiguration configuration =
+            new MapperConfiguration(cfg => cfg.AddAutoMapperProfiles());
+        _mapper = new Mapper(configuration);
+        _handler = new RegisterUserCommandHandler(_userRepositoryMock.Object, _unitOfWorkMock.Object, _loggerMock.Object, _mapper, _emailProviderMock.Object,
+            _roleRepositoryMock.Object, _communicationChannelRepositoryMock.Object, _userCommunicationChannelRepositoryMock.Object, _hashProviderMock.Object);
+    }
 
-	[Test]
+    [Test]
 	public async Task Handle_WithValidCommand_ShouldRegisterUserAndReturnUserRegistrationResponseDTO()
 	{
 		//Arrange

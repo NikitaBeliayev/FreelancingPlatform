@@ -20,23 +20,24 @@ namespace ApplicationTests.CreateUserCommandHandlerTests;
 [TestFixture]
 public class CreateUserCommandHandlerTests
 {
-	private readonly Mock<IUserRepository> _userRepositoryMock = new();
-	private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
-	private readonly Mock<ILogger<CreateUserCommandHandler>> _logger = new();
-	private Mapper _mapper;
-	private readonly Mock<IHashProvider> _hashProvider = new Mock<IHashProvider>();
-	private CreateUserCommandHandler _handler;
+    private readonly Mock<IUserRepository> _userRepositoryMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
+    private readonly Mock<ILogger<CreateUserCommandHandler>> _logger = new();
+    private Mapper _mapper;
+    private readonly Mock<IHashProvider> _hashProvider = new Mock<IHashProvider>();
+    private CreateUserCommandHandler _handler;
 
-	[SetUp]
-	public void SetUp()
-	{
-		MapperConfiguration configuration =
-		new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles.AutoMapperProfile>());
-		_mapper = new Mapper(configuration);
-		_handler = new CreateUserCommandHandler(_userRepositoryMock.Object, _unitOfWorkMock.Object, _logger.Object, _mapper,
-			_hashProvider.Object);
-	}
-	[Test]
+    [SetUp]
+    public void SetUp()
+    {
+        MapperConfiguration configuration =
+        new MapperConfiguration(cfg => cfg.AddAutoMapperProfiles());
+        _mapper = new Mapper(configuration);
+        _handler = new CreateUserCommandHandler(_userRepositoryMock.Object, _unitOfWorkMock.Object, _logger.Object, _mapper,
+            _hashProvider.Object);
+    }
+
+    [Test]
 	public async Task Handle_WithValidCommand_ShouldCreateUserAndReturnUserDTO()
 	{
 		// Arrange

@@ -35,15 +35,14 @@ public class LoginUserCommandHandlerTests
         _jwtProviderMock.Reset();
         _hashProviderMock.Reset();
     }
-    
+
     [SetUp]
     public void SetUp()
     {
-        MapperConfiguration configuration =
-            new MapperConfiguration(cfg => cfg.AddProfile<AutoMapperProfiles.AutoMapperProfile>());
+        MapperConfiguration configuration = new MapperConfiguration(cfg => cfg.AddAutoMapperProfiles());
         _mapper = new Mapper(configuration);
     }
-    
+
     [Test]
     public async Task Handle_WithValidCommand_ShouldLoginAndReturnUserLoginResponseDto()
     {
