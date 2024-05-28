@@ -1,6 +1,9 @@
 ﻿using System.Linq.Expressions;
+using Domain.Models;
 using Domain.Repositories;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Shared;
 
 namespace Infrastructure.Database.Repositories;
@@ -49,8 +52,28 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
             FirstOrDefaultAsync(expression, cancellationToken);
     }
 
-    public async Task<(IAsyncEnumerable<TEntity>, int)> GetAllWithPagination(int take, int skip, CancellationToken cancellationToken = default)
+    public async Task<GetPaginatedResultModel<TEntity>> GetAllWithIncludesAndPaginationAsync(int take, int skip, 
+        CancellationToken cancellationToken = default, 
+        params Expression<Func<TEntity, object>>[] includes)
     {
-        return (_dbSet.Skip(skip).Take(take).AsAsyncEnumerable(), await _dbSet.CountAsync());
+        var result = includes.Aggregate(_dbSet.AsQueryable(), (c, p) => c.Include(p));
+        var count = await result.CountAsync(cancellationToken: cancellationToken);
+
+        return new GetPaginatedResultModel<TEntity>() { result = await result.Skip((skip - 1) * take).Take(take).ToListAsync(cancellationToken), count = count };
+    }
+
+    public async Task<GetPaginatedResultModel<TEntity>> GetByExpressionWithIncludesAndPaginationAsync(Expression<Func<TEntity, bool>> expression, 
+        int take, int skip, 
+        CancellationToken cancellationToken = default,
+        params Expression<Func<TEntity, object>>[] includes)
+    {
+        var result = includes.Aggregate(_dbSet.AsQueryable(), (c, p) => c.Include(p)).Where(expression);
+        var count = await result.CountAsync(cancellationToken: cancellationToken);
+        return new GetPaginatedResultModel<TEntity>() { result = await result.Skip((skip - 1) * take).Take(take).ToListAsync(cancellationToken), count = count };
+    }
+
+    public async Task<int> GetTotalCountByExpression (Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet.Where(expression).CountAsync(cancellationToken: cancellationToken);
     }
 }

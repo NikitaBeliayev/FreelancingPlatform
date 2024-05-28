@@ -38,18 +38,18 @@ namespace Application.Objectives.GetObjectives.GetAllForCustomer
                     new Error(typeof(GetAllObjectivesByCreatorCommandHandler).Namespace!, "The page number must be greater than 0", 400));
             }
 
-            var (objectives, total) = await _repository.GetByCreatorIdWithPagination(request.CreatorId,
-                request.PageSize, (request.PageNum - 1) * request.PageSize, cancellationToken);
-            if (!objectives.Any())
+            var objectives = await _repository.GetByExpressionWithIncludesAndPaginationAsync(obj => obj.CreatorId == request.CreatorId, 
+                request.PageSize, request.PageNum, cancellationToken, obj => obj.Categories, obj => obj.Creator, obj => obj.Type);
+
+            if (!objectives.result.Any())
             {
                 return ResponseHelper.LogAndReturnError<PaginationModel<ResponseObjectiveDto>>("No objectives found",
                     new Error(typeof(GetAllObjectivesByCreatorCommandHandler).Namespace!, "No objectives found", 200));
             }
 
-            var objectiveDtos = objectives.Select(_mapper.Map<ResponseObjectiveDto>);
+            var objectiveDtos = objectives.result.OrderByDescending(obj => obj.CreatedAt).Select(_mapper.Map<ResponseObjectiveDto>);
 
-            var result =
-                new PaginationModel<ResponseObjectiveDto>(total, objectiveDtos, request.PageNum, request.PageSize);
+            var result = new PaginationModel<ResponseObjectiveDto>(objectives.count, objectiveDtos, request.PageNum, request.PageSize);
 
             return Result<PaginationModel<ResponseObjectiveDto>>.Success(result);
         }
