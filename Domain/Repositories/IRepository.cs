@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Domain.Models;
 using Shared;
 
 namespace Domain.Repositories;
@@ -12,6 +13,10 @@ public interface IRepository<TEntity> where TEntity : Entity
     TEntity Update(TEntity entity);
     Task<TEntity?> GetByExpressionWithIncludesAsync(Expression<Func<TEntity, bool>> expression,
         CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes);
-    
-    Task<(IAsyncEnumerable<TEntity>, int)> GetAllWithPagination(int take, int skip, CancellationToken cancellationToken = default);
+
+    Task<GetPaginatedResultModel<TEntity>> GetAllWithIncludesAndPaginationAsync(int take, int skip, 
+        CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes);
+
+    Task<GetPaginatedResultModel<TEntity>> GetByExpressionWithIncludesAndPaginationAsync(Expression<Func<TEntity, bool>> expression, int take, int skip, 
+        CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes);
 }

@@ -4,7 +4,7 @@ using Application.Abstraction.Data;
 using Application.Abstraction.Messaging;
 using Application.Helpers;
 using Application.Models;
-using Application.Objectives.GetObjective;
+using Application.Objectives.GetObjectives.GetAllForCustomer;
 using Application.Objectives.ResponseDto;
 using Application.Objectives.Types.GetById;
 using Application.Objectives.Types.ResponseDto;
@@ -47,20 +47,17 @@ public class GetAllObjectiveTypesWithPaginationQueryHandler : IQueryHandler<GetA
                 new Error(typeof(GetAllObjectiveTypesWithPaginationQueryHandler).Namespace!, "The page number must be greater than 0", 400));
         }
 
-        var (types, total) = await _repository.GetAllWithPagination(request.pageSize,
-            (request.pageNum - 1) * request.pageSize, cancellationToken);
-        var response = new List<ResponseTypeDto>();
+        var types = await _repository.GetAllWithIncludesAndPaginationAsync(request.pageSize, request.pageNum, cancellationToken);
 
-        await foreach (var objectiveType in types)
+
+        if (!types.result.Any())
         {
-            response.Add(new ResponseTypeDto()
-            {
-                Id = objectiveType.Id, Title = objectiveType.TypeTitle.Title,
-                Description = objectiveType.Description
-            });
+            return ResponseHelper.LogAndReturnError<PaginationModel<ResponseTypeDto>>("No types found",
+                new Error(typeof(GetAllObjectivesByCreatorCommandHandler).Namespace!, "No types found", 200));
         }
 
-        var result = new PaginationModel<ResponseTypeDto>(total, response, request.pageNum, request.pageSize);
+        var typesDtos = types.result.Select(_mapper.Map<ResponseTypeDto>);
+        var result = new PaginationModel<ResponseTypeDto>(types.count, typesDtos, request.pageNum, request.pageSize);
 
         return Result<PaginationModel<ResponseTypeDto>>.Success(result);
     }

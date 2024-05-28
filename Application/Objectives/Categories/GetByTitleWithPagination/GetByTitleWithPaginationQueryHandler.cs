@@ -2,10 +2,11 @@
 using Application.Helpers;
 using Application.Models;
 using Application.Objectives.Categories.GetByTitle;
-using Application.Objectives.Categories.ResponseDto;
-using Application.Objectives.Types.GetByIdWithPagination;
+using Application.Objectives.GetObjectives.GetAllForCustomer;
+using Application.Objectives.ResponseDto;
 using Application.Objectives.Types.ResponseDto;
 using AutoMapper;
+using Domain.Objectives;
 using Domain.Repositories;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -36,16 +37,16 @@ namespace Application.Objectives.Categories.GetCategoryByTitleWithPagination
                     new Error(typeof(GetByTitleWithPaginationQueryHandler).Namespace!, "The page number must be greater than 0", 400));
             }
 
-            var (categories, total) = await _categoryRepository.GetByTitleWithPagination(query.pageSize, (query.pageNum - 1) * query.pageSize, cancellationToken);
+            var categories = await _categoryRepository.GetAllWithIncludesAndPaginationAsync(query.pageSize, query.pageNum, cancellationToken);
 
-            var response = new List<CategoryDto>();
-
-            await foreach (var category in categories)
+            if (!categories.result.Any())
             {
-                response.Add(new CategoryDto() { Id = category.Id, Title = category.Title.Value });
+                return ResponseHelper.LogAndReturnError<PaginationModel<CategoryDto>>("No categories found",
+                    new Error(typeof(GetAllObjectivesByCreatorCommandHandler).Namespace!, "No categories found", 200));
             }
 
-            var result = new PaginationModel<CategoryDto>(total, response, query.pageNum, query.pageSize);
+            var objectiveDtos = categories.result.Select(_mapper.Map<CategoryDto>);
+            var result = new PaginationModel<CategoryDto>(categories.count, objectiveDtos, query.pageNum, query.pageSize);
 
             return Result<PaginationModel<CategoryDto>>.Success(_mapper.Map<PaginationModel<CategoryDto>>(result));
         }
