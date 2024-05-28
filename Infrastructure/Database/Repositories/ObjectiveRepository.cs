@@ -21,9 +21,11 @@ public class ObjectiveRepository : Repository<Objective>, IObjectiveRepository
             .Where(x => x.ObjectiveStatusId.ToString() == "2f2f54aa-46dd-29d0-6459-2afdb5e950ee" ||
                         x.ObjectiveStatusId.ToString() == "327db9d4-0282-c319-b047-dcf22483e225");
         var total = await objectives.CountAsync(cancellationToken: cancellationToken);
-        var result =
-            (await objectives.Skip(skip).Take(take).ToListAsync(cancellationToken)).OrderByDescending(objective =>
-                objective.CreatedAt);
+        var result = await objectives
+            .OrderByDescending(objective => objective.CreatedAt)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync(cancellationToken);
 
         return (result, total);
     }
@@ -37,9 +39,11 @@ public class ObjectiveRepository : Repository<Objective>, IObjectiveRepository
             .Include(o => o.Type)
             .Where(o => o.CreatorId == creatorId);
         var total = await objectives.CountAsync(cancellationToken: cancellationToken);
-        var result =
-            (await objectives.Skip(skip).Take(take).ToListAsync(cancellationToken)).OrderByDescending(objective =>
-                objective.CreatedAt);
+        var result = await objectives
+            .OrderByDescending(objective => objective.CreatedAt)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync(cancellationToken);
 
         return (result, total);
     }
@@ -53,9 +57,11 @@ public class ObjectiveRepository : Repository<Objective>, IObjectiveRepository
             .Include(o => o.Type)
             .Where(o => o.Implementors.Any(i => i.Id == implementorId));
         var total = await objectives.CountAsync(cancellationToken: cancellationToken);
-        var result =
-            (await objectives.Skip(skip).Take(take).ToListAsync(cancellationToken)).OrderByDescending(objective =>
-                objective.CreatedAt);
+        var result = await objectives
+            .OrderByDescending(objective => objective.CreatedAt)
+            .Skip(skip)
+            .Take(take)
+            .ToListAsync(cancellationToken);
 
         return (result, total);
     }
