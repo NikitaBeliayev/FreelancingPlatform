@@ -7,6 +7,7 @@ using Application.Users;
 using Application.Users.ResponseDto;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
